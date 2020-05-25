@@ -5,7 +5,9 @@
         Money Wizard
       </div>
     </header>
-    <router-view/>
+    <div class="wrapper">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -21,5 +23,10 @@ export default {
     color: #fff;
     font-size: 1.5rem;
     padding: 0.5rem 0;
+  }
+
+  .wrapper {
+    width: 960px;
+    margin: 0 auto;
   }
 </style>
