@@ -4,7 +4,7 @@
       class="accounts__account"
       :key="account.id">
       <div class="accounts__name">{{ account.name }}</div>
-      <div class="accounts__balance">${{ account.balance }}</div>
+      <div class="accounts__balance">{{ account.balance | dollarAmount }}</div>
     </li>
   </ul>
 </template>
@@ -16,6 +16,14 @@ export default {
     accounts: {
       required: true,
       type: Array
+    }
+  },
+  filters: {
+    dollarAmount (amount) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(amount)
     }
   }
 }
