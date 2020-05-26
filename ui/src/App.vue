@@ -19,10 +19,11 @@ export default {
 
 <style scoped>
   header {
-    background-color: #607D8B;
+    background-color: #4CAF50;
     color: #fff;
     font-size: 1.5rem;
     padding: 0.5rem 0;
+    margin: 0 0 2rem;
   }
 
   .wrapper {
