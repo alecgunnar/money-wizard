@@ -6,6 +6,10 @@
       <div class="accounts__name">{{ account.name }}</div>
       <div class="accounts__balance">{{ account.balance | dollarAmount }}</div>
     </li>
+    <li class="accounts__account accounts__account--totalBalance">
+      <div class="accounts__name accounts__name--totalBalance">Total</div>
+      <div class="accounts__balance accounts__balance--totalBalance">{{ totalBalance | dollarAmount }}</div>
+    </li>
   </ul>
 </template>
 
@@ -16,6 +20,11 @@ export default {
     accounts: {
       required: true,
       type: Array
+    }
+  },
+  computed: {
+    totalBalance () {
+      return this.accounts.reduce((balance, account) => balance + account.balance, 0)
     }
   },
   filters: {
@@ -44,5 +53,9 @@ export default {
 
 .accounts__name {
   flex: 1;
+}
+
+.accounts__account--totalBalance {
+  font-weight: bold;
 }
 </style>
