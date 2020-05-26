@@ -1,19 +1,13 @@
 <template>
   <div>
     <h1>Accounts</h1>
-    <ul class="accounts">
-      <li v-for="account in accounts"
-        class="accounts__account"
-        :key="account.id">
-        <div class="accounts__name">{{ account.name }}</div>
-        <div class="accounts__balance">${{ account.balance }}</div>
-      </li>
-    </ul>
+    <ListOfAccounts :accounts="accounts" />
   </div>
 </template>
 
 <script>
 import {mapActions, mapState} from 'vuex'
+import ListOfAccounts from '../lists/ListOfAccounts'
 
 export default {
   name: 'Accounts',
@@ -21,24 +15,7 @@ export default {
   mounted () {
     this.loadAccounts()
   },
-  methods: mapActions(['loadAccounts'])
+  methods: mapActions(['loadAccounts']),
+  components: { ListOfAccounts }
 }
 </script>
-
-<style scoped>
-.accounts {
-  font-size: 1.6rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.accounts__account {
-  margin: 0 0 0.5em;
-  display: flex;
-}
-
-.accounts__name {
-  flex: 1;
-}
-</style>
