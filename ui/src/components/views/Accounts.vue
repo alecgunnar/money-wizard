@@ -1,7 +1,13 @@
 <template>
   <div>
     <h1>Accounts</h1>
-    <ListOfAccounts :accounts="accounts" />
+    <h2>Checking &amp; Savings</h2>
+    <ListOfAccounts
+      :accounts="debitAccounts"
+      class="accountsGroup" />
+    <h2>Credit Cards</h2>
+    <ListOfAccounts :accounts="creditAccounts"
+      class="accountsGroup" />
   </div>
 </template>
 
@@ -11,7 +17,15 @@ import ListOfAccounts from '../lists/ListOfAccounts'
 
 export default {
   name: 'Accounts',
-  computed: mapState(['accounts']),
+  computed: {
+    ...mapState(['accounts']),
+    debitAccounts () {
+      return this.accounts.filter((account) => ['checking', 'savings'].indexOf(account.type) > -1)
+    },
+    creditAccounts () {
+      return this.accounts.filter((account) => ['credit-card'].indexOf(account.type) > -1)
+    }
+  },
   mounted () {
     this.loadAccounts()
   },
@@ -19,3 +33,9 @@ export default {
   components: { ListOfAccounts }
 }
 </script>
+
+<style scoped>
+.accountsGroup {
+  margin: 0 0 2rem;
+}
+</style>

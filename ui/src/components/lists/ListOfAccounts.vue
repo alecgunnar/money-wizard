@@ -1,16 +1,18 @@
 <template>
-  <ul class="accounts">
-    <li v-for="account in accounts"
-      class="accounts__account"
-      :key="account.id">
-      <div class="accounts__name">{{ account.name }}</div>
-      <div class="accounts__balance">{{ account.balance | dollarAmount }}</div>
-    </li>
-    <li class="accounts__account accounts__account--totalBalance">
-      <div class="accounts__name accounts__name--totalBalance">Total</div>
-      <div class="accounts__balance accounts__balance--totalBalance">{{ totalBalance | dollarAmount }}</div>
-    </li>
-  </ul>
+  <div>
+    <ul class="accounts">
+      <li v-for="account in accounts"
+        class="accounts__account"
+        :key="account.id">
+        <div class="accounts__name">{{ account.name }}</div>
+        <div class="accounts__balance">{{ account.balance | dollarAmount }}</div>
+      </li>
+      <li class="accounts__account accounts__account--totalBalance">
+        <div class="accounts__name accounts__name--totalBalance">Total</div>
+        <div class="accounts__balance accounts__balance--totalBalance">{{ totalBalance | dollarAmount }}</div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
