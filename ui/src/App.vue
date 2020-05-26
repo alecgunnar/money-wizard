@@ -21,7 +21,7 @@ export default {
   header {
     background-color: #4CAF50;
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 3rem;
     padding: 0.5rem 0;
     margin: 0 0 2rem;
   }
