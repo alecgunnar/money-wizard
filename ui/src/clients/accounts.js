@@ -18,6 +18,18 @@ export default {
         name: 'Amex Card',
         type: 'credit-card',
         balance: 45.00
+      },
+      {
+        id: 'ef9f90af-d92e-4576-a801-e414e91a026e',
+        name: 'Wallet',
+        type: 'cash',
+        balance: 100.00
+      },
+      {
+        id: '58a20494-1a41-4e0b-b34b-420604ce5a1e',
+        name: 'Coin Jar',
+        type: 'cash',
+        balance: 0.32
       }
     ]
   }

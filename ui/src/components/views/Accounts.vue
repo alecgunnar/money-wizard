@@ -5,6 +5,10 @@
     <ListOfAccounts
       :accounts="debitAccounts"
       class="accountsGroup" />
+    <h2>Cash on Hand</h2>
+    <ListOfAccounts
+      :accounts="cashAccounts"
+      class="accountsGroup" />
     <h2>Credit Cards</h2>
     <ListOfAccounts :accounts="creditAccounts"
       class="accountsGroup" />
@@ -24,6 +28,9 @@ export default {
     },
     creditAccounts () {
       return this.accounts.filter((account) => ['credit-card'].indexOf(account.type) > -1)
+    },
+    cashAccounts () {
+      return this.accounts.filter((account) => ['cash'].indexOf(account.type) > -1)
     }
   },
   mounted () {
