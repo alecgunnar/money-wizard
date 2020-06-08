@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Accounts</h1>
-    <h2>Checking &amp; Savings</h2>
+    <h2>Bank Accounts</h2>
     <ListOfAccounts
       :accounts="debitAccounts"
       class="accountsGroup" />
