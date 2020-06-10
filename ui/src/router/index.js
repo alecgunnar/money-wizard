@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Summary from '@/components/views/Summary'
+import Transactions from '@/views/Transactions'
 
 Vue.use(Router)
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'summary',
-      component: Summary
+      name: 'transactions',
+      component: Transactions
     }
   ]
 })

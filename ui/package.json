@@ -11,7 +11,7 @@
     "e2e": "node test/e2e/runner.js",
     "start": "npm run dev",
     "test": "npm run unit && npm run e2e",
-    "unit": "jest --config test/unit/jest.conf.js --coverage"
+    "unit": "jest --config test/unit/jest.conf.js --watch"
   },
   "dependencies": {
     "vue": "^2.5.2",
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-vuex": "^4.3.1",
+    "@vue/test-utils": "^1.0.3",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",

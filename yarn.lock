@@ -128,6 +128,15 @@
   resolved "https://registry.yarnpkg.com/@vue/cli-plugin-vuex/-/cli-plugin-vuex-4.3.1.tgz#2b73aff56f9e1be31018873d5ed2d59f155e7476"
   integrity sha512-mukwOlhZGBJhkqO2b3wHFFHjK5aP00b1WUHdrOfLR7M18euhaTyb4kA5nwZwEOmU3EzZx6kHzSFCRy/XaMkLug==
 
+"@vue/test-utils@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@vue/test-utils/-/test-utils-1.0.3.tgz#587c4dd9b424b66022f188c19bc605da2ce91c6f"
+  integrity sha512-mmsKXZSGfvd0bH05l4SNuczZ2MqlJH2DWhiul5wJXFxbf/gRRd2UL4QZgozEMQ30mRi9i4/+p4JJat8S4Js64Q==
+  dependencies:
+    dom-event-types "^1.0.0"
+    lodash "^4.17.15"
+    pretty "^2.0.0"
+
 abab@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.3.tgz#623e2075e02eb2d3f2475e49f99c91846467907a"
@@ -2841,6 +2850,11 @@ dom-converter@^0.2:
   integrity sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA==
   dependencies:
     utila "~0.4"
+
+dom-event-types@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/dom-event-types/-/dom-event-types-1.0.0.tgz#5830a0a29e1bf837fe50a70cd80a597232813cae"
+  integrity sha512-2G2Vwi2zXTHBGqXHsJ4+ak/iP0N8Ar+G8a7LiD2oup5o4sQWytwqqrZu/O6hIMV0KMID2PL69OhpshLO0n7UJQ==
 
 dom-serializer@0:
   version "0.2.2"
@@ -7533,7 +7547,7 @@ pretty-format@^22.4.0, pretty-format@^22.4.3:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
-pretty@2.0.0:
+pretty@2.0.0, pretty@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/pretty/-/pretty-2.0.0.tgz#adbc7960b7bbfe289a557dc5f737619a220d06a5"
   integrity sha1-rbx5YLe7/iiaVX3F9zdhmiINBqU=
