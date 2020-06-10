@@ -26,7 +26,7 @@
 <script>
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionRow from '@/components/lists/TransactionRow'
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 
 export default {
   name: 'transactions',
@@ -36,7 +36,11 @@ export default {
     }
   },
   computed: mapState(['transactions']),
+  mounted () {
+    this.loadTransactions()
+  },
   methods: {
+    ...mapActions(['loadTransactions']),
     addTransaction () {
       this.addingTransaction = true
     }

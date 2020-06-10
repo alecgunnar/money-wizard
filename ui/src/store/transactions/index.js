@@ -11,5 +11,9 @@ export default {
     }
   },
   getters: {},
-  actions: {}
+  actions: {
+    loadTransactions () {
+      
+    }
+  }
 }

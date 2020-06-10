@@ -8,13 +8,29 @@ import {shallowMount, createLocalVue} from '@vue/test-utils'
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
+const loadTransactions = jest.fn()
+
 const store = new Vuex.Store({
   modules: {
-    transactions
+    transactions: {
+      ...transactions,
+      actions: {
+        loadTransactions
+      }
+    }
   }
 });
 
 describe('Transactions', () => {
+  beforeEach(() => {
+    store.commit('clearTransactions')
+  })
+
+  it('loads transactions', () => {
+    shallowMount(Transactions, {localVue, store})
+    expect(loadTransactions).toHaveBeenCalled()
+  })
+
   it('has a button to create new transaction', () => {
     const subject = shallowMount(Transactions, {localVue, store})
     expect(subject.find('button[data-qa=new-transaction]').exists()).toBeTruthy()
@@ -57,13 +73,11 @@ describe('Transactions', () => {
   })
 
   it('renders a message stating no transactions are available', () => {
-    store.commit('clearTransactions')
     const subject = shallowMount(Transactions, {localVue, store})
     expect(subject.find('[data-qa=no-transactions-msg]').exists()).toBeTruthy()
   })
 
   it('does not render transactions list', () => {
-    store.commit('clearTransactions')
     const subject = shallowMount(Transactions, {localVue, store})
     expect(subject.find('[data-qa=transactions-list]').exists()).toBeFalsy()
   })
