@@ -11,11 +11,22 @@
     <div v-if="addingTransaction">
       <NewTransactionForm />
     </div>
+    <ol v-if="transactions.transactions.length"
+      data-qa="transactions-list">
+      <li v-for="transaction in transactions.transactions"
+        :key="transaction.id">
+          <TransactionRow :transaction="transaction" />
+        </li>
+    </ol>
+    <p v-else
+      data-qa="no-transactions-msg">There are no transactions to display.</p>
   </div>
 </template>
 
 <script>
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
+import TransactionRow from '@/components/lists/TransactionRow'
+import {mapState} from 'vuex'
 
 export default {
   name: 'transactions',
@@ -24,13 +35,15 @@ export default {
       addingTransaction: false
     }
   },
+  computed: mapState(['transactions']),
   methods: {
     addTransaction () {
       this.addingTransaction = true
     }
   },
   components: {
-    NewTransactionForm
+    NewTransactionForm,
+    TransactionRow
   }
 }
 </script>
