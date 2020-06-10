@@ -86,5 +86,10 @@ export default {
 
 .transactions {
   list-style: none;
+  padding: 0;
+}
+
+.transaction {
+  margin: 0 0 1rem;
 }
 </style>

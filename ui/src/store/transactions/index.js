@@ -20,13 +20,15 @@ export default {
           id: '535a274e-d874-421b-8202-1ec49cf0ce38',
           date: moment().toISOString(),
           amount: 10.00,
-          type: 'debit'
+          type: 'debit',
+          reason: 'Who Knows?'
         },
         {
           id: '912470fa-7d93-49e1-a3b2-81a2dfcfe982',
           date: moment().toISOString(),
-          amount: 44.12,
-          type: 'credit'
+          amount: -44.12,
+          type: 'credit',
+          reason: 'Refund'
         }
       ])
     }
