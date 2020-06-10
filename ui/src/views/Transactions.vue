@@ -12,6 +12,7 @@
       <NewTransactionForm />
     </div>
     <ol v-if="transactions.transactions.length"
+      class="transactions"
       data-qa="transactions-list">
       <li v-for="transaction in transactions.transactions"
         :key="transaction.id">
@@ -81,5 +82,9 @@ export default {
   padding: 0.5rem 1rem;
   border-radius: 3px;
   cursor: pointer;
+}
+
+.transactions {
+  list-style: none;
 }
 </style>
