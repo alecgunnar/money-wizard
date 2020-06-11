@@ -3,11 +3,6 @@ const app = express()
 
 const serverPort = 8081
 
-app.use((req, _, next) => {
-  console.log(`Request for: ${req.originalUrl}`)
-  next()
-})
-
 app.get('/', (_, res) => {
   res.json({
     name: 'Money Wizard'
