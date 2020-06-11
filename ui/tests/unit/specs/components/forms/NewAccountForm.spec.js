@@ -102,4 +102,22 @@ describe('NewAccountForm', () => {
     subject.find('form[data-qa=new-account-form]').trigger('submit')
     expect(subject.emitted('submitted')).not.toBeUndefined()
   })
+
+  it('shows an error when the submission fails', async () => {
+    AccountsClient.createAccount.mockReturnValueOnce(
+      SynchronousPromise.reject()
+    )
+
+    const subject = shallowMount(NewAccountForm)
+    subject.find('[data-qa=name-input]').setValue('sample')
+    subject.find('[data-qa=account-type]').setValue('asset')
+    subject.find('form[data-qa=new-account-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=submit-error]').exists()).toBeTruthy()
+  })
+
+  it('does not show submission failure error by default', () => {
+    const subject = shallowMount(NewAccountForm)
+    expect(subject.find('[data-qa=submit-error]').exists()).toBeFalsy()
+  })
 })

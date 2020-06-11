@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="failedToSubmit"
+      class="submitFailure"
+      data-qa="submit-error">The account could not be added.</div>
     <form class="form"
       data-qa="new-account-form"
       @submit="submit">
@@ -59,7 +62,8 @@ export default {
       name: '',
       type: '',
       emptyNameErr: false,
-      withoutTypeErr: false
+      withoutTypeErr: false,
+      failedToSubmit: false
     }
   },
   methods: {
@@ -75,15 +79,26 @@ export default {
 
       AccountsClient.createAccount(this.name, this.type)
         .then(this.submitted)
+        .catch(this.failed)
     },
     submitted () {
       this.$emit('submitted')
+    },
+    failed () {
+      this.failedToSubmit = true
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.submitFailure {
+  background-color: #FFCDD2;
+  color: #D50000;
+  padding: 0.5em;
+  margin: 0 0 2em;
+}
+
 .form__row {
   display: flex;
   margin: 0 0 2em;
