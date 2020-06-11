@@ -15,6 +15,7 @@
         -moz-osx-font-smoothing: grayscale;
         color: #000;
         margin: 0;
+        font-size: 1.6rem;
       }
 
       h1 {
@@ -28,12 +29,40 @@
         margin: 0 0 0.5rem;
       }
 
-      li, p {
-        font-size: 1.6rem;
+      li, p, label, input, select {
+        font-size: 1em;
       }
 
       a, a:visited {
         color: #000;
+      }
+
+      input, select, button {
+        border: none;
+        outline: none;
+        padding: 0.5em;
+        border-radius: 3px;
+      }
+
+      select,
+      input[type=text] {
+        background-color: #fafafa;
+        border: 1px solid #c1c1c1;
+        min-width: 300px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #e1e1e1;
+        font-size: 1em;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+
+      button[type=submit] {
+        background-color: #4CAF50;
+        color: #fff;
       }
     </style>
   </head>
