@@ -7,7 +7,9 @@
           <h2>Add an Account</h2>
         </div>
       </div>
-      <NewAccountForm @cancel="cancelAddAccount" />
+      <NewAccountForm
+        @submitted="accountAdded"
+        @cancel="cancelAddAccount" />
     </div>
     <div class="header">
       <div class="header__title">
@@ -56,6 +58,10 @@ export default {
     },
     cancelAddAccount () {
       this.addingAccount = false
+    },
+    accountAdded () {
+      this.addingAccount = false
+      this.loadAccounts()
     }
   },
   components: {

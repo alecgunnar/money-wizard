@@ -22,6 +22,10 @@ const store = new Vuex.Store({
 })
 
 describe('Accounts', () => {
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('loads all accounts', () => {
     const subject = shallowMount(Accounts, {store, localVue})
     expect(loadAccounts).toBeCalled()
@@ -118,5 +122,22 @@ describe('Accounts', () => {
     subject.findComponent(NewAccountForm).vm.$emit('cancel')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
+  })
+
+  it('the form emitting submitted causes form to go away', async () => {
+    const subject = shallowMount(Accounts, {store, localVue})
+    subject.find('button[data-qa=add-account-btn]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewAccountForm).vm.$emit('submitted')
+    await subject.vm.$nextTick()
+    expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
+  })
+
+  it('the form emitting submitted causes accounts to be reloaded', async () => {
+    const subject = shallowMount(Accounts, {store, localVue})
+    subject.find('button[data-qa=add-account-btn]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewAccountForm).vm.$emit('submitted')
+    expect(loadAccounts).toBeCalledTimes(2)
   })
 })
