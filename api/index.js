@@ -20,4 +20,19 @@ app.get('/transactions', (_, res) => {
   ])
 })
 
+app.get('/accounts', (_, res) => {
+  res.json([
+    {
+      id: '32f4ccf3-8d3c-4182-b0ca-8139bf0233ba',
+      name: 'Checking Account',
+      balance: 1421.45
+    },
+    {
+      id: '12263d1a-f875-4505-ab53-7c40d1991039',
+      name: 'Savings Account',
+      balance: 422532.57
+    }
+  ])
+})
+
 app.listen(serverPort, () => console.log(`Server running on port ${serverPort}`));
