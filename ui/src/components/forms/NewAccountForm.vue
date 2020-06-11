@@ -74,6 +74,10 @@ export default {
       if (this.emptyNameErr || this.withoutTypeErr) return
 
       AccountsClient.createAccount(this.name, this.type)
+        .then(this.submitted)
+    },
+    submitted () {
+      this.$emit('submitted')
     }
   }
 }

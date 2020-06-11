@@ -1,6 +1,7 @@
 import NewAccountForm from '@/components/forms/NewAccountForm'
 import AccountsClient from '@/clients/accounts'
 import {shallowMount} from '@vue/test-utils'
+import {SynchronousPromise} from 'synchronous-promise'
 
 jest.mock('@/clients/accounts')
 
@@ -76,6 +77,7 @@ describe('NewAccountForm', () => {
   })
 
   it('submits the new account details', () => {
+    AccountsClient.createAccount.mockResolvedValueOnce()
     const subject = shallowMount(NewAccountForm)
     subject.find('[data-qa=name-input]').setValue('sample')
     subject.find('[data-qa=account-type]').setValue('asset')
@@ -87,5 +89,17 @@ describe('NewAccountForm', () => {
     const subject = shallowMount(NewAccountForm)
     subject.find('form[data-qa=new-account-form]').trigger('submit')
     expect(AccountsClient.createAccount).not.toBeCalled()
+  })
+
+  it('emits event when the submission is successful', () => {
+    AccountsClient.createAccount.mockReturnValueOnce(
+      SynchronousPromise.resolve()
+    )
+
+    const subject = shallowMount(NewAccountForm)
+    subject.find('[data-qa=name-input]').setValue('sample')
+    subject.find('[data-qa=account-type]').setValue('asset')
+    subject.find('form[data-qa=new-account-form]').trigger('submit')
+    expect(subject.emitted('submitted')).not.toBeUndefined()
   })
 })
