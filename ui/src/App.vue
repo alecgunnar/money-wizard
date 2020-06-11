@@ -37,6 +37,8 @@ export default {
   .wrapper {
     width: 960px;
     margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
 
   .serverError__message {

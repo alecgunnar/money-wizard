@@ -1,6 +1,19 @@
 <template>
-  <div>
-    <NewAccountForm v-if="addingAccount" />
+  <div class="page">
+    <div v-if="addingAccount"
+      class="addAccount">
+      <div class="addAccount__header">
+        <div class="addAccount__title">
+          <h2>Add an Account</h2>
+        </div>
+        <div class="addAccount__cancel">
+          <button data-qa="close-form-btn"
+            @click="cancelAddAccount"
+            title="Cancel">&cross;</button>
+        </div>
+      </div>
+      <NewAccountForm />
+    </div>
     <div class="header">
       <div class="header__title">
         <h1>Accounts</h1>
@@ -45,6 +58,9 @@ export default {
     ...mapActions(['loadAccounts']),
     addAccount () {
       this.addingAccount = true
+    },
+    cancelAddAccount () {
+      this.addingAccount = false
     }
   },
   components: {
@@ -55,6 +71,10 @@ export default {
 </script>
 
 <style scoped>
+.page {
+  position: relative;
+}
+
 .header {
   display: flex;
   margin: 0 0 2rem;
@@ -92,5 +112,32 @@ export default {
 
 .account {
   margin: 0 0 1rem;
+}
+
+.addAccount {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  box-sizing: border-box;
+}
+
+.addAccount__header {
+  display: flex;
+  align-items: center;
+}
+
+.addAccount__title {
+  flex: 1;
+}
+
+.addAccount__cancel button {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 2rem;
+  cursor: pointer;
 }
 </style>
