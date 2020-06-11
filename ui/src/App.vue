@@ -85,7 +85,7 @@ export default {
     padding: 0 0.5rem;
   }
 
-  .navigation__link a.router-link-exact-active {
+  .navigation__link a.router-link-active {
     text-decoration: underline;
   }
 </style>

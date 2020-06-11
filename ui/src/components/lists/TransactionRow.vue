@@ -40,6 +40,7 @@ export default {
   margin: 0 1rem 0 0;
   color: #aaa;
   padding: 1rem 0;
+  width: 20%;
 }
 
 .transaction__field--reason,

@@ -2,6 +2,10 @@
   <div class="account">
     <div class="account__field account__field--name"
       data-qa="name">{{ account.name }}</div>
+    <div class="account__field account__field--options">
+      <RouterLink :to="{name: 'account-transactions', params: {id: account.id}}"
+        data-qa="account-transactions-link">See Transactions</RouterLink>
+    </div>
     <div class="account__field account__field--balance"
       data-qa="balance">{{ account.balance | dollarAmount }}</div>
   </div>
@@ -23,7 +27,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .account {
   display: flex;
 }
@@ -35,11 +39,37 @@ export default {
   width: 20%;
 }
 
+.account__field--options,
+.account__field--balance {
+  background-color: #efefef;
+}
+
+.account__field--options {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+
+  a {
+    color: #999;
+    text-decoration: none;
+    padding: 1rem;
+    display: inline-block;
+
+    &:hover {
+      background-color: #eaeaea;
+    }
+
+    &:first-of-type {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+    }
+  }
+}
+
 .account__field--balance {
   text-align: right;
-  background-color: #efefef;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
   padding: 1rem;
-  border-radius: 3px;
   flex: 1;
 }
 </style>

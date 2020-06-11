@@ -1,7 +1,12 @@
 import AccountRow from '@/components/lists/AccountRow'
-import {shallowMount} from '@vue/test-utils'
+import Router from 'vue-router'
+import {shallowMount, createLocalVue} from '@vue/test-utils'
+
+const localVue = createLocalVue()
+localVue.use(Router)
 
 const account = {
+  id: 'dfc2a92a-429f-4518-92fa-d919af6ad704',
   name: 'Sample Test',
   balance: 10245.45
 }
@@ -9,6 +14,7 @@ const account = {
 describe('AccountRow', () => {
   it('shows the account name', () => {
     const subject = shallowMount(AccountRow, {
+      localVue,
       propsData: {
         account
       }
@@ -19,11 +25,28 @@ describe('AccountRow', () => {
 
   it('shows the account balance', () => {
     const subject = shallowMount(AccountRow, {
+      localVue,
       propsData: {
         account
       }
     })
 
     expect(subject.find('[data-qa=balance]').text()).toBe('$10,245.45')
+  })
+
+  it('shows link to account specific transactions', () => {
+    const subject = shallowMount(AccountRow, {
+      localVue,
+      propsData: {
+        account
+      }
+    })
+
+    expect(subject.find('[data-qa=account-transactions-link]').props('to')).toStrictEqual({
+      name: 'account-transactions',
+      params: {
+        id: 'dfc2a92a-429f-4518-92fa-d919af6ad704'
+      }
+    })
   })
 })

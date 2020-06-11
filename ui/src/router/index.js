@@ -8,7 +8,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/transactions',
       name: 'transactions',
       component: Transactions
     },
@@ -16,6 +16,15 @@ export default new Router({
       path: '/accounts',
       name: 'accounts',
       component: Accounts
+    },
+    {
+      path: '/transactions/account-:id',
+      name: 'account-transactions',
+      component: Transactions
+    },
+    {
+      path: '/',
+      redirect: '/accounts'
     }
   ]
 })
