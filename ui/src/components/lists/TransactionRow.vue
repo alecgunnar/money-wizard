@@ -5,11 +5,12 @@
     <div class="transaction__field transaction__field--reason"
       data-qa="reason">{{ transaction.reason }}</div>
     <div class="transaction__field transaction__field--amount"
-      data-qa="amount">{{ amount }}</div>
+      data-qa="amount">{{ transaction.amount | dollarAmount }}</div>
   </div>
 </template>
 
 <script>
+import dollarAmount from '@/filters/dollarAmount'
 import moment from 'moment'
 
 export default {
@@ -22,13 +23,10 @@ export default {
   computed: {
     date () {
       return moment(this.transaction.date).format('MMM D, YYYY')
-    },
-    amount () {
-      return Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD'
-      }).format(this.transaction.amount)
     }
+  },
+  filters: {
+    dollarAmount
   }
 }
 </script>
