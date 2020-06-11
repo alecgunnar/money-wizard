@@ -1,8 +1,7 @@
 import transactions from '@/store/transactions'
-import store from '@/store'
-import axios from 'axios'
+import client from '@/clients'
 
-jest.mock('axios')
+jest.mock('@/clients')
 
 describe('transactions module', () => {
   it('makes a request to load transactions', () => {
@@ -10,7 +9,7 @@ describe('transactions module', () => {
       {id: '123', reason: 'test'}
     ]
 
-    axios.get.mockResolvedValueOnce({
+    client.get.mockResolvedValueOnce({
       data: fetchedTransactions
     })
 
@@ -18,7 +17,7 @@ describe('transactions module', () => {
       commit: jest.fn()
     })
 
-    expect(axios.get).toBeCalledWith('/transactions')
+    expect(client.get).toBeCalledWith('/transactions')
   })
 
   it('stores the transactions that are loaded', async () => {
@@ -26,7 +25,7 @@ describe('transactions module', () => {
       {id: '123', reason: 'test'}
     ]
 
-    axios.get.mockResolvedValueOnce({
+    client.get.mockResolvedValueOnce({
       data: fetchedTransactions
     })
 
@@ -38,7 +37,7 @@ describe('transactions module', () => {
   })
 
   it('stores error when loading transactions fails', async () => {
-    axios.get.mockRejectedValueOnce({
+    client.get.mockRejectedValueOnce({
       msg: 'err'
     })
 

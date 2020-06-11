@@ -1,4 +1,4 @@
-import axios from 'axios'
+import client from '@/clients'
 
 export default {
   state: {
@@ -15,7 +15,7 @@ export default {
   getters: {},
   actions: {
     loadTransactions ({commit}) {
-      return axios.get('/transactions')
+      return client.get('/transactions')
         .then(resp => resp.data)
         .then(transactions => commit('transactionsLoaded', transactions))
         .catch(_ => commit('encounteredServerError', 'Could not load transactions.'))
