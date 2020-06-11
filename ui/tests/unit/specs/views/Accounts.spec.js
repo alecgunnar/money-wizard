@@ -1,5 +1,6 @@
 import Accounts from '@/views/Accounts'
 import AccountRow from '@/components/lists/AccountRow'
+import NewAccountForm from '@/components/forms/NewAccountForm'
 import accounts from '@/store/accounts'
 import Vuex from 'vuex'
 import {shallowMount, createLocalVue} from '@vue/test-utils'
@@ -41,7 +42,6 @@ describe('Accounts', () => {
     ])
 
     const subject = shallowMount(Accounts, {store, localVue})
-
     expect(subject.find('[data-qa=list-of-accounts]').exists()).toBeTruthy()
   })
 
@@ -60,7 +60,6 @@ describe('Accounts', () => {
     ])
 
     const subject = shallowMount(Accounts, {store, localVue})
-
     expect(subject.findAllComponents(AccountRow).length).toBe(2)
   })
 
@@ -72,9 +71,7 @@ describe('Accounts', () => {
     }
 
     store.commit('loadedAccounts', [account])
-
     const subject = shallowMount(Accounts, {store, localVue})
-
     expect(subject.findComponent(AccountRow).props('account')).toBe(account)
   })
 
@@ -88,15 +85,29 @@ describe('Accounts', () => {
     ])
 
     const subject = shallowMount(Accounts, {store, localVue})
-
     expect(subject.find('[data-qa=no-accounts-msg]').exists()).toBeFalsy()
   })
 
   it('does not show the accounts list', () => {
     store.commit('loadedAccounts', [])
-
     const subject = shallowMount(Accounts, {store, localVue})
-
     expect(subject.find('[data-qa=list-of-accounts]').exists()).toBeFalsy()
+  })
+
+  it('there is a button for adding accounts', () => {
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.find('button[data-qa=add-account-btn]').exists()).toBeTruthy()
+  })
+
+  it('clicking the add account button opens the form', async () => {
+    const subject = shallowMount(Accounts, {store, localVue})
+    subject.find('button[data-qa=add-account-btn]').trigger('click')
+    await subject.vm.$nextTick()
+    expect(subject.findComponent(NewAccountForm).exists()).toBeTruthy()
+  })
+
+  it('does not show the new account form by default', () => {
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
   })
 })
