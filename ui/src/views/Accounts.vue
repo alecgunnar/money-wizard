@@ -9,7 +9,7 @@
         <div class="addAccount__cancel">
           <button data-qa="close-form-btn"
             @click="cancelAddAccount"
-            title="Cancel">&cross;</button>
+            title="Cancel">Cancel</button>
         </div>
       </div>
       <NewAccountForm />
@@ -134,10 +134,12 @@ export default {
 }
 
 .addAccount__cancel button {
-  background: transparent;
+  background: #e1e1e1;
   border: none;
   outline: none;
-  font-size: 2rem;
+  font-size: 1.5em;
   cursor: pointer;
+  padding: 0.25em 0.5em;
+  border-radius: 3px;
 }
 </style>
