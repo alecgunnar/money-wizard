@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    <div v-if="serverError"
+      class="serverError"
+      data-qa="server-error-message">
+      <p class="serverError__message">{{ serverError }}</p>
+    </div>
     <header>
       <div class="wrapper">
         Money Wizard
@@ -12,8 +17,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
 export default {
-  name: 'App'
+  name: 'App',
+  computed: mapState(['serverError'])
 }
 </script>
 
@@ -29,5 +37,14 @@ export default {
   .wrapper {
     width: 960px;
     margin: 0 auto;
+  }
+
+  .serverError__message {
+    background-color: #EF5350;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    margin: 0;
   }
 </style>
