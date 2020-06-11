@@ -111,18 +111,11 @@ describe('Accounts', () => {
     expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
   })
 
-  it('has a button to close the form', async () => {
+  it('the form emits cancel caused form to go away', async () => {
     const subject = shallowMount(Accounts, {store, localVue})
     subject.find('button[data-qa=add-account-btn]').trigger('click')
     await subject.vm.$nextTick()
-    expect(subject.find('button[data-qa=close-form-btn]').exists()).toBeTruthy()
-  })
-
-  it('clicking close form button closes form', async () => {
-    const subject = shallowMount(Accounts, {store, localVue})
-    subject.find('button[data-qa=add-account-btn]').trigger('click')
-    await subject.vm.$nextTick()
-    subject.find('button[data-qa=close-form-btn]').trigger('click')
+    subject.findComponent(NewAccountForm).vm.$emit('cancel')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
   })

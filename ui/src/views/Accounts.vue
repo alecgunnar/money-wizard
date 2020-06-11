@@ -6,13 +6,8 @@
         <div class="addAccount__title">
           <h2>Add an Account</h2>
         </div>
-        <div class="addAccount__cancel">
-          <button data-qa="close-form-btn"
-            @click="cancelAddAccount"
-            title="Cancel">Cancel</button>
-        </div>
       </div>
-      <NewAccountForm />
+      <NewAccountForm @cancel="cancelAddAccount" />
     </div>
     <div class="header">
       <div class="header__title">
@@ -96,13 +91,7 @@ export default {
 
 .button {
   background: #4CAF50;
-  font-size: 1.5rem;
   color: #fff;
-  border: none;
-  outline: none;
-  padding: 0.5rem 1rem;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
 .accounts {
@@ -127,19 +116,10 @@ export default {
 .addAccount__header {
   display: flex;
   align-items: center;
+  margin: 0 0 1em;
 }
 
 .addAccount__title {
   flex: 1;
-}
-
-.addAccount__cancel button {
-  background: #e1e1e1;
-  border: none;
-  outline: none;
-  font-size: 1.5em;
-  cursor: pointer;
-  padding: 0.25em 0.5em;
-  border-radius: 3px;
 }
 </style>
