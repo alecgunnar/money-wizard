@@ -2,8 +2,11 @@
   <div>
     <h1>Accounts</h1>
     <ol v-if="accounts.accounts.length"
+      class="accounts"
       data-qa="list-of-accounts">
-      <li v-for="account in accounts.accounts" :key="account.id">
+      <li v-for="account in accounts.accounts"
+        :key="account.id"
+        class="account">
         <AccountRow :account="account" />
       </li>
     </ol>
@@ -28,3 +31,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.accounts {
+  list-style: none;
+  padding: 0;
+}
+
+.account {
+  margin: 0 0 1rem;
+}
+</style>
