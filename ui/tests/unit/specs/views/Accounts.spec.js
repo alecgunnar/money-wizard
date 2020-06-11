@@ -111,7 +111,7 @@ describe('Accounts', () => {
     expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
   })
 
-  it('the form emits cancel caused form to go away', async () => {
+  it('the form emitting cancel causes form to go away', async () => {
     const subject = shallowMount(Accounts, {store, localVue})
     subject.find('button[data-qa=add-account-btn]').trigger('click')
     await subject.vm.$nextTick()
