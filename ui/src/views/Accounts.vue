@@ -12,9 +12,7 @@
         @cancel="cancelAddAccount" />
     </div>
     <div class="header">
-      <div class="header__title">
-        <h1>Accounts</h1>
-      </div>
+      <h1 class="header__title">Accounts</h1>
       <div class="header__buttons">
         <button data-qa="add-account-btn"
           class="button"

@@ -75,13 +75,7 @@ export default {
 
 .button {
   background: #4CAF50;
-  font-size: 1.5rem;
   color: #fff;
-  border: none;
-  outline: none;
-  padding: 0.5rem 1rem;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
 .transactions {
