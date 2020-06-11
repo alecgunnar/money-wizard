@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import AccountsClient from '@/clients/accounts'
+
 export default {
   name: 'new-account-form',
   data () {
@@ -68,6 +70,10 @@ export default {
       e.preventDefault()
       this.emptyNameErr = this.name === ''
       this.withoutTypeErr = this.type === ''
+
+      if (this.emptyNameErr || this.withoutTypeErr) return
+
+      AccountsClient.createAccount(this.name, this.type)
     }
   }
 }

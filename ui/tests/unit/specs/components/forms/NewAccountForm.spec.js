@@ -1,7 +1,14 @@
 import NewAccountForm from '@/components/forms/NewAccountForm'
+import AccountsClient from '@/clients/accounts'
 import {shallowMount} from '@vue/test-utils'
 
+jest.mock('@/clients/accounts')
+
 describe('NewAccountForm', () => {
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('has a field to enter the name of the account', () => {
     const subject = shallowMount(NewAccountForm)
     expect(subject.find('input[data-qa=name-input]').exists()).toBeTruthy()
@@ -66,5 +73,19 @@ describe('NewAccountForm', () => {
     subject.find('form[data-qa=new-account-form]').trigger('submit')
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=without-type-error]').exists()).toBeFalsy()
+  })
+
+  it('submits the new account details', () => {
+    const subject = shallowMount(NewAccountForm)
+    subject.find('[data-qa=name-input]').setValue('sample')
+    subject.find('[data-qa=account-type]').setValue('asset')
+    subject.find('form[data-qa=new-account-form]').trigger('submit')
+    expect(AccountsClient.createAccount).toBeCalledWith('sample', 'asset')
+  })
+
+  it('does not submit the account details when input is invalid', () => {
+    const subject = shallowMount(NewAccountForm)
+    subject.find('form[data-qa=new-account-form]').trigger('submit')
+    expect(AccountsClient.createAccount).not.toBeCalled()
   })
 })
