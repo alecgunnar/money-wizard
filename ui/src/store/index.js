@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import transactions from './transactions'
+import accounts from './accounts'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
   getters: {},
   actions: {},
   modules: {
-    transactions
+    transactions,
+    accounts
   }
 })
