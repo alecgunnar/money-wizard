@@ -8,12 +8,10 @@ app.get('/', (_, res) => {
     name: 'Money Wizard'
   })
 })
-
-app.get('/transactions', (_, res) => {
-  res.json([])
-})
-
 const accounts = require('./src/accounts')
 app.use(...accounts)
+
+const transactions = require('./src/transactions')
+app.use(...transactions)
 
 app.listen(serverPort, () => console.log(`Server running on port ${serverPort}`));
