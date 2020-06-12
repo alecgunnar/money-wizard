@@ -13,8 +13,7 @@ app.get('/transactions', (_, res) => {
   res.json([])
 })
 
-app.get('/accounts', (_, res) => {
-  res.json([])
-})
+const accounts = require('./src/accounts')
+app.use(...accounts)
 
 app.listen(serverPort, () => console.log(`Server running on port ${serverPort}`));
