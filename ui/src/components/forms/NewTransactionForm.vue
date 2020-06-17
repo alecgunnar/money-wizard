@@ -1,70 +1,79 @@
 <template>
   <div>
-    <div class="form">
-      <div class="form__row">
-        <div class="form__label">
-          <label for="account">
-            Account
-          </label>
-        </div>
-        <div class="form__input">
-          <select data-qa="choose-account"
-            id="account"
-            v-model="account">
-            <option :value="null"
-              disabled>Choose an Account</option>
-            <option v-for="account in accounts"
-              :key="account.id">{{ account.name }}</option>
-          </select>
-        </div>
-      </div>
-      <div class="form__row">
-        <div class="form__label">
-          <label for="amount">
-            Amount
-          </label>
-        </div>
-        <div class="form__input form__input--right form__input--withPrefix">
-          <div class="form__inputPrefix">
-            $
+    <form data-qa="add-transaction-form"
+      @submit="submit">
+      <div class="form">
+        <div class="form__row">
+          <div class="form__label">
+            <label for="account">
+              Account
+            </label>
           </div>
-          <input type="text"
-            id="amount"
-            v-model="amount"
-            data-qa="amount" />
+          <div class="form__input">
+            <select data-qa="choose-account"
+              id="account"
+              v-model="account">
+              <option :value="null"
+                disabled>Choose an Account</option>
+              <option v-for="account in accounts"
+                :value="account.id"
+                :key="account.id">{{ account.name }}</option>
+            </select>
+            <div v-if="accountIsEmpty"
+              class="form__fieldError"
+              data-qa="choose-account-error">An account must be chosen.</div>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="form__label">
+            <label for="amount">
+              Amount
+            </label>
+          </div>
+          <div class="form__input form__input--right form__input--withPrefix">
+            <div class="form__inputPrefix">
+              $
+            </div>
+            <input type="text"
+              id="amount"
+              v-model="amount"
+              data-qa="amount" />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="form__label">
+            <label for="date">
+              Date
+            </label>
+          </div>
+          <div class="form__input form__input--right">
+            <input type="text"
+              id="date"
+              v-model="date"
+              data-qa="date" />
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="form__label">
+            <label for="notes">
+              Notes
+            </label>
+          </div>
+          <div class="form__input form__input--right">
+            <textarea data-qa="notes"
+              v-model="notes"
+              id="notes"></textarea>
+          </div>
+        </div>
+        <div class="form__footer">
+          <button type="submit"
+            data-qa="submit">Save Transaction</button>
+          <button type="button"
+            data-qa="cancel"
+            @click="cancel">Cancel</button>
         </div>
       </div>
-      <div class="form__row">
-        <div class="form__label">
-          <label for="date">
-            Date
-          </label>
-        </div>
-        <div class="form__input form__input--right">
-          <input type="text"
-            id="date"
-            v-model="date"
-            data-qa="date" />
-        </div>
-      </div>
-      <div class="form__row">
-        <div class="form__label">
-          <label for="notes">
-            Notes
-          </label>
-        </div>
-        <div class="form__input form__input--right">
-          <textarea data-qa="notes"
-            v-model="notes"
-            id="notes"></textarea>
-        </div>
-      </div>
-      <div class="form__footer">
-        <button type="button"
-          data-qa="cancel"
-          @click="cancel">Cancel</button>
-      </div>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -80,6 +89,7 @@ export default {
       amount: '0.00',
       date: '',
       notes: '',
+      accountIsEmpty: false,
       accounts: []
     }
   },
@@ -94,6 +104,11 @@ export default {
     },
     cancel () {
       this.$emit('cancel')
+    },
+    submit (e) {
+      e.preventDefault()
+
+      if (this.account === null) this.accountIsEmpty = true
     }
   }
 }

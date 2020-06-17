@@ -65,6 +65,27 @@ describe('NewTransactionForm', () => {
     expect(subject.find('textarea[data-qa=notes]').exists()).toBeTruthy()
   })
 
+  it('there is a submit button', () => {
+    const subject = shallowMount(NewTransactionForm)
+    expect(subject.find('button[type=submit][data-qa=submit]').exists()).toBeTruthy()
+  })
+
+  it('submiting without choosing an account results in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=choose-account-error]').exists()).toBeTruthy()
+  })
+
+  it('submiting with an account does not result in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=choose-account-error]').exists()).toBeFalsy()
+  })
+
   it('there is a cancel button', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('button[type=button][data-qa=cancel]').exists()).toBeTruthy()
