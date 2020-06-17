@@ -24,11 +24,27 @@
             Amount
           </label>
         </div>
-        <div class="form__input form__input--right">
+        <div class="form__input form__input--right form__input--withPrefix">
+          <div class="form__inputPrefix">
+            $
+          </div>
           <input type="text"
             id="amount"
             v-model="amount"
             data-qa="amount" />
+        </div>
+      </div>
+      <div class="form__row">
+        <div class="form__label">
+          <label for="date">
+            Date
+          </label>
+        </div>
+        <div class="form__input form__input--right">
+          <input type="text"
+            id="date"
+            v-model="date"
+            data-qa="date" />
         </div>
       </div>
       <div class="form__footer">
@@ -42,17 +58,20 @@
 
 <script>
 import AccountsClient from '@/clients/accounts'
+import moment from 'moment'
 
 export default {
   name: 'new-transaction-form',
   data () {
     return {
       account: null,
-      amount: '$0.00',
+      amount: '0.00',
+      date: '',
       accounts: []
     }
   },
   mounted () {
+    this.date = moment().format('MM/DD/YYYY')
     AccountsClient.getAccounts()
       .then(this.accountsLoaded)
   },
@@ -94,11 +113,31 @@ export default {
 }
 
 .form__input {
-  flex: 1;
+  width: 300px;
 }
 
 .form__input--right input {
   text-align: right;
+}
+
+.form__input--withPrefix {
+  display: flex;
+
+  input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    min-width: unset;
+    flex: 1;
+  }
+}
+
+.form__inputPrefix {
+  background-color: #eaeaea;
+  border: 1px solid #c1c1c1;
+  border-right: none;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  padding: 0.5em 0.75em;
 }
 
 .form__footer {

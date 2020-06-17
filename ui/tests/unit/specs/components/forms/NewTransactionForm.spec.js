@@ -1,6 +1,6 @@
-
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import AccountsClient from '@/clients/accounts'
+import moment from 'moment'
 import {shallowMount} from '@vue/test-utils'
 
 jest.mock('@/clients/accounts')
@@ -47,6 +47,17 @@ describe('NewTransactionForm', () => {
   it('has a field to enter an amount', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('input[data-qa=amount]').exists()).toBeTruthy()
+  })
+
+  it('has a field to enter the date of the transaction', () => {
+    const subject = shallowMount(NewTransactionForm)
+    expect(subject.find('input[data-qa=date]').exists()).toBeTruthy()
+  })
+
+  it.skip('the date field is pre-filled with the current date', () => {
+    const todaysDate = moment().format('MM/DD/YYYY')
+    const subject = shallowMount(NewTransactionForm)
+    expect(subject.find('[data-qa=date]').element.value).toBe(todaysDate)
   })
 
   it('there is a cancel button', () => {

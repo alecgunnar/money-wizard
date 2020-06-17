@@ -118,7 +118,7 @@ export default {
 }
 
 .form__input {
-  flex: 1;
+  width: 300px;
 }
 
 .form__footer {
