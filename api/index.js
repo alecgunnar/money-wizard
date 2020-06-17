@@ -1,11 +1,10 @@
 require('dotenv').config()
 
-const startApp = async () => {
-  const Sequelize = require('sequelize')
-  const connection = new Sequelize(process.env['DB_CONNECTION'])
+const db = require('./models')
 
+const startApp = async () => {
   try {
-    await connection.authenticate()
+    await db.sequelize.authenticate()
     console.log('DB Connection: SUCCESS')
 
     const serverPort = process.env['SERVER_PORT']
