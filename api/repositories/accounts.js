@@ -1,6 +1,7 @@
 const db = require('../models')
 
 const fromModel = (account) => ({
+  id: account.id,
   name: account.name,
   type: account.type
 })

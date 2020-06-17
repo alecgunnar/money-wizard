@@ -15,15 +15,17 @@ describe('Accounts repository', () => {
     const id = await accounts.createAccount('Sample Account', 'asset')
     const account = await accounts.getAccount(id)
     expect(account).toEqual({
+      id,
       name: 'Sample Account',
       type: 'asset'
     })
   })
 
   it('gets all accounts', async () => {
-    await accounts.createAccount('Sample Account', 'asset')
+    const id = await accounts.createAccount('Sample Account', 'asset')
     const account = await accounts.getAccounts()
     expect(account).toEqual([{
+      id,
       name: 'Sample Account',
       type: 'asset'
     }])
