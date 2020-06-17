@@ -86,6 +86,30 @@ describe('NewTransactionForm', () => {
     expect(subject.find('[data-qa=choose-account-error]').exists()).toBeFalsy()
   })
 
+  it('submitting with amount less than zero results in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=amount]').setValue('-10')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=amount-too-low-error]').exists()).toBeTruthy()
+  })
+
+  it('submitting with amount equal to zero results in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=amount]').setValue('0')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=amount-too-low-error]').exists()).toBeTruthy()
+  })
+
+  it('submitting with amount greater than zero does not result in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=amount]').setValue('100.53')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=amount-too-low-error]').exists()).toBeFalsy()
+  })
+
   it('there is a cancel button', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('button[type=button][data-qa=cancel]').exists()).toBeTruthy()

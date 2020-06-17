@@ -30,14 +30,19 @@
               Amount
             </label>
           </div>
-          <div class="form__input form__input--right form__input--withPrefix">
-            <div class="form__inputPrefix">
-              $
+          <div class="form__input form__input--right">
+            <div class="form__input--withPrefix">
+              <div class="form__inputPrefix">
+                $
+              </div>
+              <input type="text"
+                id="amount"
+                v-model="amount"
+                data-qa="amount" />
             </div>
-            <input type="text"
-              id="amount"
-              v-model="amount"
-              data-qa="amount" />
+            <div v-if="amountTooLowError"
+              class="form__fieldError"
+              data-qa="amount-too-low-error">The amount must be greater than zero.</div>
           </div>
         </div>
         <div class="form__row">
@@ -90,6 +95,7 @@ export default {
       date: '',
       notes: '',
       accountIsEmpty: false,
+      amountTooLowError: false,
       accounts: []
     }
   },
@@ -108,7 +114,8 @@ export default {
     submit (e) {
       e.preventDefault()
 
-      if (this.account === null) this.accountIsEmpty = true
+      this.accountIsEmpty = this.account === null
+      this.amountTooLowError = this.amount <= 0
     }
   }
 }
