@@ -7,7 +7,7 @@
           <h2>Add a Transaction</h2>
         </div>
       </div>
-      <NewTransactionForm />
+      <NewTransactionForm @cancel="addingTransactionCanceled" />
     </div>
     <div class="header">
       <h1 class="header__title">Transactions</h1>
@@ -17,6 +17,7 @@
           @click="addTransaction">Add Transaction</button>
       </div>
     </div>
+
     <ol v-if="transactions.transactions.length"
       class="transactions"
       data-qa="transactions-list">
@@ -50,6 +51,9 @@ export default {
     ...mapActions(['loadTransactions']),
     addTransaction () {
       this.addingTransaction = true
+    },
+    addingTransactionCanceled () {
+      this.addingTransaction = false
     }
   },
   components: {

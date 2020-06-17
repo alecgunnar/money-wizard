@@ -43,6 +43,15 @@ describe('Transactions', () => {
     expect(subject.findComponent(NewTransactionForm).exists()).toBeTruthy()
   })
 
+  it('hides the form when the form is canceled', async () => {
+    const subject = shallowMount(Transactions, {localVue, store})
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewTransactionForm).vm.$emit('cancel')
+    await subject.vm.$nextTick()
+    expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
+  })
+
   it('does not show new transaction form by default', () => {
     const subject = shallowMount(Transactions, {localVue, store})
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
