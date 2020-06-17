@@ -56,6 +56,9 @@
               id="date"
               v-model="date"
               data-qa="date" />
+            <div v-if="dateIsEmptyError"
+              class="form__fieldError"
+              data-qa="date-is-empty-error">A date must be entered.</div>
           </div>
         </div>
         <div class="form__row">
@@ -96,6 +99,7 @@ export default {
       notes: '',
       accountIsEmpty: false,
       amountTooLowError: false,
+      dateIsEmptyError: false,
       accounts: []
     }
   },
@@ -116,6 +120,7 @@ export default {
 
       this.accountIsEmpty = this.account === null
       this.amountTooLowError = this.amount <= 0
+      this.dateIsEmptyError = this.date === ''
     }
   }
 }

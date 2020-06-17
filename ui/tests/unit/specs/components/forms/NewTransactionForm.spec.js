@@ -110,6 +110,22 @@ describe('NewTransactionForm', () => {
     expect(subject.find('[data-qa=amount-too-low-error]').exists()).toBeFalsy()
   })
 
+  it('submitting without a date results in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=date]').setValue('')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=date-is-empty-error]').exists()).toBeTruthy()
+  })
+
+  it('submitting with a date does not result in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=date-is-empty-error]').exists()).toBeFalsy()
+  })
+
   it('there is a cancel button', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('button[type=button][data-qa=cancel]').exists()).toBeTruthy()
