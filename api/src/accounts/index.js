@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const repo = require('./repository')
 
 const express = require('express')

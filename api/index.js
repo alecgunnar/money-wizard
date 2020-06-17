@@ -1,4 +1,20 @@
-const serverPort = 8081
+require('dotenv').config()
 
-require('./app')
-  .listen(serverPort, () => console.log(`Server running on port ${serverPort}`));
+const Sequelize = require('sequelize')
+const connection = new Sequelize(process.env['DB_CONNECTION'])
+
+const startApp = async () => {
+  try {
+    await connection.authenticate()
+    console.log('DB Connection: SUCCESS')
+
+    const serverPort = process.env['SERVER_PORT']
+    require('./app')
+      .listen(serverPort, () => console.log(`Server running on port ${serverPort}`));
+  } catch (err) {
+    console.error('DB Connection: FAILURE')
+    process.exit()
+  }
+}
+
+startApp()
