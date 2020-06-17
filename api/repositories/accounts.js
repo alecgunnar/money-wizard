@@ -2,8 +2,7 @@ const db = require('../models')
 
 const fromModel = (account) => ({
   name: account.name,
-  type: account.type,
-  balance: 0
+  type: account.type
 })
 
 module.exports = {

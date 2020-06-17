@@ -16,8 +16,7 @@ describe('Accounts repository', () => {
     const account = await accounts.getAccount(id)
     expect(account).toEqual({
       name: 'Sample Account',
-      type: 'asset',
-      balance: 0
+      type: 'asset'
     })
   })
 
@@ -26,8 +25,7 @@ describe('Accounts repository', () => {
     const account = await accounts.getAccounts()
     expect(account).toEqual([{
       name: 'Sample Account',
-      type: 'asset',
-      balance: 0
+      type: 'asset'
     }])
   })
 })
