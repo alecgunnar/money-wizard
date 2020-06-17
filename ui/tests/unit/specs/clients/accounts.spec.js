@@ -22,4 +22,26 @@ describe('Accounts Client', () => {
     RootClient.post.mockRejectedValueOnce()
     expect(AccountsClient.createAccount('sample', 'something')).rejects.toBeUndefined()
   })
+
+  it('makes a request to load all accounts', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: []
+    })
+    await AccountsClient.getAccounts()
+    expect(RootClient.get).toBeCalledWith('/accounts')
+  })
+
+  it('resolves when the request is successful', () => {
+    const accounts = [
+      {name: 'sample', id: 123, balance: 456}
+    ]
+
+    RootClient.get.mockResolvedValueOnce({data: accounts})
+    expect(AccountsClient.getAccounts()).resolves.toEqual(accounts)
+  })
+
+  it('rejects when the request fails', () => {
+    RootClient.get.mockRejectedValueOnce()
+    expect(AccountsClient.getAccounts()).rejects.toBeUndefined()
+  })
 })

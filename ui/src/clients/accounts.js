@@ -8,6 +8,7 @@ export default {
     }).then(_ => 'Success.')
   },
   async getAccounts () {
-    
+    return RootClient.get('/accounts')
+      .then((resp) => resp.data)
   }
 }
