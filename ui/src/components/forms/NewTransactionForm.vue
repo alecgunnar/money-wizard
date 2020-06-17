@@ -47,6 +47,18 @@
             data-qa="date" />
         </div>
       </div>
+      <div class="form__row">
+        <div class="form__label">
+          <label for="notes">
+            Notes
+          </label>
+        </div>
+        <div class="form__input form__input--right">
+          <textarea data-qa="notes"
+            v-model="notes"
+            id="notes"></textarea>
+        </div>
+      </div>
       <div class="form__footer">
         <button type="button"
           data-qa="cancel"
@@ -67,6 +79,7 @@ export default {
       account: null,
       amount: '0.00',
       date: '',
+      notes: '',
       accounts: []
     }
   },

@@ -60,6 +60,11 @@ describe('NewTransactionForm', () => {
     expect(subject.find('[data-qa=date]').element.value).toBe(todaysDate)
   })
 
+  it('has a field to enter notes', () => {
+    const subject = shallowMount(NewTransactionForm)
+    expect(subject.find('textarea[data-qa=notes]').exists()).toBeTruthy()
+  })
+
   it('there is a cancel button', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('button[type=button][data-qa=cancel]').exists()).toBeTruthy()
