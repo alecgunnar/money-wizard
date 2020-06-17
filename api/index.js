@@ -3,6 +3,8 @@ const app = express()
 
 const serverPort = 8081
 
+app.use(express.json())
+
 app.get('/', (_, res) => {
   res.json({
     name: 'Money Wizard'
