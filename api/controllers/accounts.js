@@ -1,4 +1,4 @@
-const repo = require('./repository')
+const repo = require('../repositories/accounts')
 
 const express = require('express')
 const router = express.Router()

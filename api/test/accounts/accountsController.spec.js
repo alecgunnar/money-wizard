@@ -1,9 +1,9 @@
 const app = require('../../app')
-const repo = require('../../src/accounts/repository')
+const repo = require('../../repositories/accounts')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 
-jest.mock('../../src/accounts/repository')
+jest.mock('../../repositories/accounts')
 
 chai.use(chaiHttp)
 
