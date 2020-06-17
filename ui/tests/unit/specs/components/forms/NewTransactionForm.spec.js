@@ -1,3 +1,4 @@
+
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import AccountsClient from '@/clients/accounts'
 import {shallowMount} from '@vue/test-utils'
@@ -46,5 +47,16 @@ describe('NewTransactionForm', () => {
   it('has a field to enter an amount', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('input[data-qa=amount]').exists()).toBeTruthy()
+  })
+
+  it('there is a cancel button', () => {
+    const subject = shallowMount(NewTransactionForm)
+    expect(subject.find('button[type=button][data-qa=cancel]').exists()).toBeTruthy()
+  })
+
+  it('clicking the cancel button causes event to be emitted', () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=cancel]').trigger('click')
+    expect(subject.emitted('cancel')).not.toBeUndefined()
   })
 })

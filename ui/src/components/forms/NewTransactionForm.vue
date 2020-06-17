@@ -24,11 +24,17 @@
             Amount
           </label>
         </div>
-        <div class="form__input">
+        <div class="form__input form__input--right">
           <input type="text"
             id="amount"
+            v-model="amount"
             data-qa="amount" />
         </div>
+      </div>
+      <div class="form__footer">
+        <button type="button"
+          data-qa="cancel"
+          @click="cancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -42,6 +48,7 @@ export default {
   data () {
     return {
       account: null,
+      amount: '$0.00',
       accounts: []
     }
   },
@@ -52,6 +59,9 @@ export default {
   methods: {
     accountsLoaded (accounts) {
       this.accounts = accounts
+    },
+    cancel () {
+      this.$emit('cancel')
     }
   }
 }
@@ -85,6 +95,10 @@ export default {
 
 .form__input {
   flex: 1;
+}
+
+.form__input--right input {
+  text-align: right;
 }
 
 .form__footer {
