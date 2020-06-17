@@ -8,7 +8,9 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const db = {};
 
-const sequelize = new Sequelize(process.env['DB_CONNECTION'])
+const sequelize = new Sequelize(process.env['DB_CONNECTION'], {
+  logging: false
+})
 
 fs
   .readdirSync(__dirname)
