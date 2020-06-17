@@ -1,5 +1,14 @@
 <template>
-  <div>
+  <div class="page">
+    <div v-if="addingTransaction"
+      class="addTransaction">
+      <div class="addTransaction__header">
+        <div class="addTransaction__title">
+          <h2>Add a Transaction</h2>
+        </div>
+      </div>
+      <NewTransactionForm />
+    </div>
     <div class="header">
       <h1 class="header__title">Transactions</h1>
       <div class="header__buttons">
@@ -7,9 +16,6 @@
           class="button"
           @click="addTransaction">Add Transaction</button>
       </div>
-    </div>
-    <div v-if="addingTransaction">
-      <NewTransactionForm />
     </div>
     <ol v-if="transactions.transactions.length"
       class="transactions"
@@ -54,6 +60,10 @@ export default {
 </script>
 
 <style scoped>
+.page {
+  position: relative;
+}
+
 .header {
   display: flex;
   margin: 0 0 2rem;
@@ -85,5 +95,25 @@ export default {
 
 .transaction {
   margin: 0 0 1rem;
+}
+
+.addTransaction {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  box-sizing: border-box;
+}
+
+.addTransaction__header {
+  display: flex;
+  align-items: center;
+  margin: 0 0 1em;
+}
+
+.addTransaction__title {
+  flex: 1;
 }
 </style>
