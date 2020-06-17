@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "serve": "nodemon index.js",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "migrate:test": "NODE_ENV=test sequelize-cli db:migrate",
+    "migrate:dev": "NODE_ENV=development sequelize-cli db:migrate"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
