@@ -6,5 +6,8 @@ export default {
       name,
       type
     }).then(_ => 'Success.')
+  },
+  async getAccounts () {
+    
   }
 }
