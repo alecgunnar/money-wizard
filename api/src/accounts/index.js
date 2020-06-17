@@ -4,7 +4,14 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', (_, res) => {
-  res.json(repo.getAccounts())
+  repo.getAccounts()
+    .then((accounts) => res.send(accounts))
+    .catch(() => {
+      res.status(500)
+        .send({
+          msg: 'Could not retrieve all accounts for an unknown reason.'
+        })
+    })
 })
 
 router.post('/', (req, res) => {
@@ -12,13 +19,13 @@ router.post('/', (req, res) => {
 
   if (typeof name === 'undefined') {
     return res.status(401).send({
-      msg: 'A name is required'
+      msg: 'A name is required.'
     })
   }
 
   if (typeof type === 'undefined') {
     return res.status(401).send({
-      msg: 'A type is required'
+      msg: 'A type is required.'
     })
   }
 
@@ -29,7 +36,13 @@ router.post('/', (req, res) => {
   }
 
   repo.createAccount(name, type)
-  res.sendStatus(201)
+    .then(() => res.sendStatus(201))
+    .catch(() => {
+      res.status(500)
+        .send({
+          msg: 'Account creation failed for an unknown reason.'
+        })
+    })
 })
 
 module.exports = ['/accounts', router]
