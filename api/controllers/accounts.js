@@ -5,6 +5,10 @@ const router = express.Router()
 
 router.get('/', (_, res) => {
   repo.getAccounts()
+    .then((accounts) => accounts.map((account) => ({
+      ...account,
+      balance: 0
+    })))
     .then((accounts) => res.send(accounts))
     .catch(() => {
       res.status(500)

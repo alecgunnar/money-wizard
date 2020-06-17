@@ -159,7 +159,10 @@ describe('Accounts Controller', () => {
       .then((res) => {
         expect(repo.getAccounts).toBeCalled()
         expect(res.statusCode).toBe(200)
-        expect(res.body).toEqual(accounts)
+        expect(res.body).toEqual([{
+          ...accounts[0],
+          balance: 0
+        }])
       })
   })
 
