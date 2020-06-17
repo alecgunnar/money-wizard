@@ -1,9 +1,9 @@
 require('dotenv').config()
 
-const Sequelize = require('sequelize')
-const connection = new Sequelize(process.env['DB_CONNECTION'])
-
 const startApp = async () => {
+  const Sequelize = require('sequelize')
+  const connection = new Sequelize(process.env['DB_CONNECTION'])
+
   try {
     await connection.authenticate()
     console.log('DB Connection: SUCCESS')
