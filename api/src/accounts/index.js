@@ -23,6 +23,12 @@ router.post('/', (req, res) => {
     })
   }
 
+  if (name === '') {
+    return res.status(401).send({
+      msg: 'A non-empty name is required.'
+    })
+  }
+
   if (typeof type === 'undefined') {
     return res.status(401).send({
       msg: 'A type is required.'

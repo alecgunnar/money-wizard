@@ -83,6 +83,26 @@ describe('Accounts Controller', () => {
       })
   })
 
+  it('does not create an account when a the name is empty', () => {
+    expect.assertions(3)
+
+    return chai.request(app)
+      .post('/accounts')
+      .set('content-type', 'application/json')
+      .send({
+        name: '',
+        type: 'asset'
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(401)
+        expect(res.body).toEqual({
+          msg: 'A non-empty name is required.'
+        })
+
+        expect(repo.createAccount).not.toBeCalled()
+      })
+  })
+
   it('does not create an account when a type is not supplied', () => {
     expect.assertions(3)
 
