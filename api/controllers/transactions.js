@@ -7,7 +7,14 @@ const accountsRepo = require('../repositories/accounts')
 const transactionsRepo = require('../repositories/transactions')
 
 router.get('/', (_, res) => {
-  res.json([])
+  transactionsRepo.getTransactions()
+    .then((transactions) => res.json(transactions))
+    .catch(() => {
+      res.status(500)
+        .json({
+          msg: 'Transactions could not be loaded for an unknown reason.'
+        })
+    })
 })
 
 router.post('/', async (req, res) => {
