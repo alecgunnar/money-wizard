@@ -36,6 +36,12 @@ router.post('/', async (req, res) => {
     })
   }
 
+  if (amount <= 0) {
+    return res.status(400).json({
+      msg: 'An amount which is greater than zero is required.'
+    })
+  }
+
   res.json({})
 })
 

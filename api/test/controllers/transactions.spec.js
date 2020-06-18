@@ -142,4 +142,56 @@ describe('Transactions Controller', () => {
         })
       })
   })
+
+  it('fails to add transaction if the amount is zero', () => {
+    expect.assertions(2)
+
+    accountsRepo.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        type: 'debit',
+        amount: '0',
+        date: '05/28/1994',
+        notes: ''
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400)
+        expect(res.body).toEqual({
+          msg: 'An amount which is greater than zero is required.'
+        })
+      })
+  })
+
+  it('fails to add transaction if the amount is less than zero', () => {
+    expect.assertions(2)
+
+    accountsRepo.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        type: 'debit',
+        amount: '-10',
+        date: '05/28/1994',
+        notes: ''
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400)
+        expect(res.body).toEqual({
+          msg: 'An amount which is greater than zero is required.'
+        })
+      })
+  })
 })
