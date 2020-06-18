@@ -24,6 +24,12 @@ router.post('/', async (req, res) => {
     })
   }
 
+  if (typeof type === 'undefined') {
+    return res.status(400).json({
+      msg: 'A type is required.'
+    })
+  }
+
   res.json({})
 })
 

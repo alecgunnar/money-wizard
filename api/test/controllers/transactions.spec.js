@@ -38,11 +38,6 @@ describe('Transactions Controller', () => {
 
     accountsRepo.getAccount.mockResolvedValueOnce(null)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
-      id: 456,
-      name: 'Sample'
-    })
-
     return chai.request(app)
       .post('/transactions')
       .set('content-type', 'application/json')
@@ -64,13 +59,6 @@ describe('Transactions Controller', () => {
   it('does not load account if the account is missing', () => {
     expect.assertions(1)
 
-    accountsRepo.getAccount.mockResolvedValueOnce(null)
-
-    accountsRepo.getAccount.mockResolvedValueOnce({
-      id: 456,
-      name: 'Sample'
-    })
-
     return chai.request(app)
       .post('/transactions')
       .set('content-type', 'application/json')
@@ -88,13 +76,6 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the account is missing', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce(null)
-
-    accountsRepo.getAccount.mockResolvedValueOnce({
-      id: 456,
-      name: 'Sample'
-    })
-
     return chai.request(app)
       .post('/transactions')
       .set('content-type', 'application/json')
@@ -108,6 +89,31 @@ describe('Transactions Controller', () => {
         expect(res.statusCode).toBe(400)
         expect(res.body).toEqual({
           msg: 'An account is required.'
+        })
+      })
+  })
+
+  it('fails to add transaction if the type is missing', () => {
+    expect.assertions(2)
+
+    accountsRepo.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        amount: '10',
+        date: '05/28/1994',
+        notes: ''
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400)
+        expect(res.body).toEqual({
+          msg: 'A type is required.'
         })
       })
   })
