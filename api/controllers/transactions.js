@@ -8,7 +8,7 @@ router.get('/', (_, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const {account: accountId} = req.body
+  const {account: accountId, type, amount} = req.body
 
   if (typeof accountId === 'undefined') {
     return res.status(400).json({
@@ -27,6 +27,12 @@ router.post('/', async (req, res) => {
   if (typeof type === 'undefined') {
     return res.status(400).json({
       msg: 'A type is required.'
+    })
+  }
+
+  if (typeof amount === 'undefined') {
+    return res.status(400).json({
+      msg: 'An amount is required.'
     })
   }
 

@@ -117,4 +117,29 @@ describe('Transactions Controller', () => {
         })
       })
   })
+
+  it('fails to add transaction if the amount is missing', () => {
+    expect.assertions(2)
+
+    accountsRepo.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        type: 'debit',
+        date: '05/28/1994',
+        notes: ''
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400)
+        expect(res.body).toEqual({
+          msg: 'An amount is required.'
+        })
+      })
+  })
 })
