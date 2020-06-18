@@ -1,5 +1,5 @@
 export default {
   addTransaction () {
-    return Promise.resolve()
+    return Promise.reject()
   }
 }

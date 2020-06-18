@@ -202,6 +202,7 @@ describe('NewTransactionForm', () => {
   })
 
   it('submitting with valid input results in a service call', async () => {
+    TransactionsClient.addTransaction.mockResolvedValueOnce()
     const subject = shallowMount(NewTransactionForm)
     await subject.vm.$nextTick()
     subject.find('[data-qa=choose-account]').setValue(123)
@@ -214,6 +215,66 @@ describe('NewTransactionForm', () => {
     expect(TransactionsClient.addTransaction).toBeCalledWith(
       123, 'debit', '10', '05/28/1994', 'Something about the transaction'
     )
+  })
+
+  it('when the transaction creation succeeds an event is emitted', async () => {
+    TransactionsClient.addTransaction.mockResolvedValueOnce()
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=debit-opt]').setChecked(true)
+    subject.find('[data-qa=amount]').setValue('10')
+    subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=notes]').setValue('Something about the transaction')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.emitted('submitted')).not.toBeUndefined()
+  })
+
+  it('when the transaction creation fails an event is not emitted', async () => {
+    TransactionsClient.addTransaction.mockRejectedValueOnce()
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=debit-opt]').setChecked(true)
+    subject.find('[data-qa=amount]').setValue('10')
+    subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=notes]').setValue('Something about the transaction')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.emitted('submitted')).toBeUndefined()
+  })
+
+  it('when the transaction creation fails an error is shown', async () => {
+    TransactionsClient.addTransaction.mockRejectedValueOnce()
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=debit-opt]').setChecked(true)
+    subject.find('[data-qa=amount]').setValue('10')
+    subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=notes]').setValue('Something about the transaction')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=submit-error]').exists()).toBeTruthy()
+  })
+
+  it('when the transaction creation succeeds an error is not shown', async () => {
+    TransactionsClient.addTransaction.mockResolvedValueOnce()
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=debit-opt]').setChecked(true)
+    subject.find('[data-qa=amount]').setValue('10')
+    subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=notes]').setValue('Something about the transaction')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=submit-error]').exists()).toBeFalsy()
   })
 
   it('submitting with invalid input does not result in a service call', async () => {

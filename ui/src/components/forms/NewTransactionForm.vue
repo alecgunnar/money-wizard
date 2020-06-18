@@ -2,6 +2,9 @@
   <div>
     <form data-qa="add-transaction-form"
       @submit="submit">
+      <div v-if="failedToSubmit"
+        class="submitFailure"
+        data-qa="submit-error">The transaction could not be added.</div>
       <div class="form">
         <div class="form__row">
           <div class="form__label">
@@ -171,7 +174,8 @@ export default {
       typeIsEmptyError: false,
       amountTooLowError: false,
       dateIsEmptyError: false,
-      accounts: []
+      accounts: [],
+      failedToSubmit: false
     }
   },
   mounted () {
@@ -205,7 +209,14 @@ export default {
         this.amount,
         this.date,
         this.notes
-      )
+      ).then(this.transactionAdded)
+        .catch(this.transactionNotAdded)
+    },
+    transactionAdded () {
+      this.$emit('submitted')
+    },
+    transactionNotAdded () {
+      this.failedToSubmit = true
     },
     accountTypeIsSelected (type) {
       return this.accounts.filter((account) => account.id === this.account && account.type === type).length === 1
