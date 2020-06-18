@@ -6,30 +6,31 @@ describe('Accounts repository', () => {
     db.sequelize.query('DELETE FROM Accounts')
   })
 
-  it('creates an account', async () => {
-    const id = await accounts.createAccount('Sample Account', 'asset')
-    expect(typeof id === 'number').toBeTruthy()
+  it('creates an account', () => {
+    expect.assertions(1)
+    
+    return accounts.createAccount('Sample Account', 'asset')
+      .then((id) => {
+        expect(typeof id === 'number').toBeTruthy()
+      })
   })
 
-  it('gets an accounts', async () => {
+  it('gets an account', async () => {
     const id = await accounts.createAccount('Sample Account', 'asset')
-    const account = await accounts.getAccount(id)
-    expect(account).toEqual({
+    return expect(accounts.getAccount(id)).resolves.toEqual({
       id,
       name: 'Sample Account',
       type: 'asset'
     })
   })
 
-  it('returns null when the account does not exist', async () => {
-    const account = await accounts.getAccount(12452)
-    expect(account).toBeNull()
+  it('returns null when the account does not exist', () => {
+    expect(accounts.getAccount(12452)).resolves.toBeNull()
   })
 
   it('gets all accounts', async () => {
     const id = await accounts.createAccount('Sample Account', 'asset')
-    const account = await accounts.getAccounts()
-    expect(account).toEqual([{
+    return expect(accounts.getAccounts()).resolves.toEqual([{
       id,
       name: 'Sample Account',
       type: 'asset'
