@@ -21,6 +21,11 @@ describe('Accounts repository', () => {
     })
   })
 
+  it('returns null when the account does not exist', async () => {
+    const account = await accounts.getAccount(12452)
+    expect(account).toBeNull()
+  })
+
   it('gets all accounts', async () => {
     const id = await accounts.createAccount('Sample Account', 'asset')
     const account = await accounts.getAccounts()

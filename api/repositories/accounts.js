@@ -1,10 +1,11 @@
+
 const db = require('../models')
 
-const fromModel = (account) => ({
+const fromModel = (account) => account !== null ? ({
   id: account.id,
   name: account.name,
   type: account.type
-})
+}) : null
 
 module.exports = {
   createAccount (name, type) {
