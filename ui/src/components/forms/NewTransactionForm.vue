@@ -284,13 +284,13 @@ export default {
 }
 
 .form__radio {
-  background-color: #eaeaea;
-  border: 1px solid #c1c1c1;
-  border-right-width: 0px;
   flex: 1;
   position: relative;
 
   label {
+    background-color: #fafafa;
+    border: 1px solid #c1c1c1;
+    border-right-width: 0px;
     text-align: center;
     display: block;
     padding: 0.5em;
@@ -302,17 +302,17 @@ export default {
     visibility: hidden;
 
     &:checked + label {
+      background-color: #eaeaea;
       font-weight: bold;
-      text-decoration: underline;
     }
   }
 
-  &:first-of-type {
+  &:first-of-type label {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
   }
 
-  &:last-of-type {
+  &:last-of-type label {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     border-right-width: 1px;
