@@ -1,14 +1,17 @@
+const moment = require('moment')
+
 const express = require('express')
 const router = express.Router()
 
 const accountsRepo = require('../repositories/accounts')
+const transactionsRepo = require('../repositories/transactions')
 
 router.get('/', (_, res) => {
   res.json([])
 })
 
 router.post('/', async (req, res) => {
-  const {account: accountId, type, amount} = req.body
+  const {account: accountId, type, amount, date, notes} = req.body
 
   if (typeof accountId === 'undefined') {
     return res.status(400).json({
@@ -42,7 +45,32 @@ router.post('/', async (req, res) => {
     })
   }
 
-  res.json({})
+  if (typeof date === 'undefined') {
+    return res.status(400).json({
+      msg: 'A date is required.'
+    })
+  }
+
+  moment.suppressDeprecationWarnings = true;
+  const parsedDate = moment(date)
+
+  if (!parsedDate.isValid()) {
+    return res.status(400).json({
+      msg: 'A properly formatted date date is required. Try a format like: MM/DD/YYYY'
+    })
+  }
+
+  const parsedAmount = parseFloat(amount)
+
+  try {
+    await transactionsRepo.createTransaction(accountId, type, parsedAmount, date, notes)
+    res.sendStatus(201)
+  } catch (err) {
+    res.status(500)
+      .json({
+        msg: 'Transaction creation failed for an unknown reason.'
+      })
+  }
 })
 
 module.exports = ['/transactions', router]
