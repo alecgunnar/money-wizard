@@ -155,6 +155,7 @@
 
 <script>
 import AccountsClient from '@/clients/accounts'
+import TransactionsClient from '@/clients/transactions'
 import moment from 'moment'
 
 export default {
@@ -192,6 +193,19 @@ export default {
       this.typeIsEmptyError = this.type === null
       this.amountTooLowError = this.amount <= 0
       this.dateIsEmptyError = this.date === ''
+
+      if (this.accountIsEmptyError ||
+        this.typeIsEmptyError ||
+        this.amountTooLowError ||
+        this.dateIsEmptyError) return
+
+      TransactionsClient.addTransaction(
+        this.account,
+        this.type,
+        this.amount,
+        this.date,
+        this.notes
+      )
     },
     accountTypeIsSelected (type) {
       return this.accounts.filter((account) => account.id === this.account && account.type === type).length === 1

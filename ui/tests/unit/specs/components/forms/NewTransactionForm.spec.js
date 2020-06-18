@@ -1,12 +1,16 @@
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import AccountsClient from '@/clients/accounts'
+import TransactionsClient from '@/clients/transactions'
 import moment from 'moment'
 import {shallowMount} from '@vue/test-utils'
 
 jest.mock('@/clients/accounts')
+jest.mock('@/clients/transactions')
 
 describe('NewTransactionForm', () => {
   beforeEach(() => {
+    jest.resetAllMocks()
+
     AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: 123,
@@ -195,6 +199,28 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=date-is-empty-error]').exists()).toBeFalsy()
+  })
+
+  it('submitting with valid input results in a service call', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=debit-opt]').setChecked(true)
+    subject.find('[data-qa=amount]').setValue('10')
+    subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=notes]').setValue('Something about the transaction')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    expect(TransactionsClient.addTransaction).toBeCalledWith(
+      123, 'debit', '10', '05/28/1994', 'Something about the transaction'
+    )
+  })
+
+  it('submitting with invalid input does not result in a service call', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    expect(TransactionsClient.addTransaction).not.toBeCalled()
   })
 
   it('there is a cancel button', () => {
