@@ -10,11 +10,13 @@ describe('NewTransactionForm', () => {
     AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: 123,
-        name: 'Sample'
+        name: 'Sample',
+        type: 'asset'
       },
       {
         id: 456,
-        name: 'Other'
+        name: 'Other',
+        type: 'credit'
       }
     ])
   })
@@ -70,6 +72,56 @@ describe('NewTransactionForm', () => {
     expect(subject.find('button[type=submit][data-qa=submit]').exists()).toBeTruthy()
   })
 
+  it('when an asset type account is selected, the asset transaction type fields are shown', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=asset-types]').exists()).toBeTruthy()
+  })
+
+  it('when a credit type account is selected, the credit transaction type fields are shown', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(456)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=credit-types]').exists()).toBeTruthy()
+  })
+
+  it('when a credit type account is selected, the asset transaction type fields are not shown', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(456)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
+  })
+
+  it('when a asset type account is selected, the credit transaction type fields are not shown', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=credit-types]').exists()).toBeFalsy()
+  })
+
+  it('when no account is selected, the disabled types appear', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=choose-account-types]').exists()).toBeTruthy()
+  })
+
+  it('when no account is selected, the asset types do not appear', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
+  })
+
+  it('when no account is selected, the credit types do not appear', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=credit-types]').exists()).toBeFalsy()
+  })
+
   it('submiting without choosing an account results in an error', async () => {
     const subject = shallowMount(NewTransactionForm)
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
@@ -84,6 +136,25 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=choose-account-error]').exists()).toBeFalsy()
+  })
+
+  it('submiting without choosing a type results in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=choose-type-error]').exists()).toBeTruthy()
+  })
+
+  it('submiting with a type does not result in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(123)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=debit-opt]').setChecked(true)
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=choose-type-error]').exists()).toBeFalsy()
   })
 
   it('submitting with amount less than zero results in an error', async () => {

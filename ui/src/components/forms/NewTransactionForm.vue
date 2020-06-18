@@ -19,9 +19,77 @@
                 :value="account.id"
                 :key="account.id">{{ account.name }}</option>
             </select>
-            <div v-if="accountIsEmpty"
+            <div v-if="accountIsEmptyError"
               class="form__fieldError"
               data-qa="choose-account-error">An account must be chosen.</div>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="form__label">
+            <label for="amount">
+              Type
+            </label>
+          </div>
+          <div class="form__input form__input--right">
+            <div v-if="accountTypeIsSelected('asset')"
+              class="form__radios"
+              data-qa="asset-types">
+              <div class="form__radio">
+                <label for="debit">Withdrawl</label>
+                <input type="radio"
+                  data-qa="debit-opt"
+                  value="debit"
+                  v-model="type"
+                  id="debit" />
+              </div>
+              <div class="form__radio">
+                <label for="credit">Deposit</label>
+                <input type="radio"
+                  data-qa="credit-opt"
+                  value="credit"
+                  v-model="type"
+                  id="credit" />
+              </div>
+            </div>
+            <div v-else-if="accountTypeIsSelected('credit')"
+              class="form__radios"
+              data-qa="credit-types">
+              <div class="form__radio">
+                <label for="debit">Charge</label>
+                <input type="radio"
+                  data-qa="debit-opt"
+                  value="debit"
+                  v-model="type"
+                  id="debit" />
+              </div>
+              <div class="form__radio">
+                <label for="credit">Payment</label>
+                <input type="radio"
+                  data-qa="credit-opt"
+                  value="credit"
+                  v-model="type"
+                  id="credit" />
+              </div>
+            </div>
+            <div v-else
+              class="form__radios"
+              data-qa="choose-account-types">
+              <div class="form__radio">
+                <label for="debit">Debit</label>
+                <input type="radio"
+                  disabled
+                  id="debit" />
+              </div>
+              <div class="form__radio">
+                <label for="credit">Credit</label>
+                <input type="radio"
+                  disabled
+                  id="credit" />
+              </div>
+            </div>
+            <div v-if="typeIsEmptyError"
+              class="form__fieldError"
+              data-qa="choose-type-error">A type must be chosen.</div>
           </div>
         </div>
         <div class="form__row">
@@ -94,10 +162,12 @@ export default {
   data () {
     return {
       account: null,
+      type: null,
       amount: '0.00',
       date: '',
       notes: '',
-      accountIsEmpty: false,
+      accountIsEmptyError: false,
+      typeIsEmptyError: false,
       amountTooLowError: false,
       dateIsEmptyError: false,
       accounts: []
@@ -118,9 +188,13 @@ export default {
     submit (e) {
       e.preventDefault()
 
-      this.accountIsEmpty = this.account === null
+      this.accountIsEmptyError = this.account === null
+      this.typeIsEmptyError = this.type === null
       this.amountTooLowError = this.amount <= 0
       this.dateIsEmptyError = this.date === ''
+    },
+    accountTypeIsSelected (type) {
+      return this.accounts.filter((account) => account.id === this.account && account.type === type).length === 1
     }
   }
 }
@@ -178,6 +252,28 @@ export default {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   padding: 0.5em 0.75em;
+}
+
+.form__radios {
+  display: flex;
+}
+
+.form__radio {
+  background-color: #eaeaea;
+  border: 1px solid #c1c1c1;
+  border-right-width: 0px;
+  padding: 0.5em;
+
+  &:first-of-type {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+  }
+
+  &:last-of-type {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right-width: 1px;
+  }
 }
 
 .form__footer {
