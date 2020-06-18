@@ -38,40 +38,40 @@
               class="form__radios"
               data-qa="asset-types">
               <div class="form__radio">
-                <label for="debit">Withdrawl</label>
                 <input type="radio"
                   data-qa="debit-opt"
                   value="debit"
                   v-model="type"
                   id="debit" />
+                <label for="debit">Withdrawl</label>
               </div>
               <div class="form__radio">
-                <label for="credit">Deposit</label>
                 <input type="radio"
                   data-qa="credit-opt"
                   value="credit"
                   v-model="type"
                   id="credit" />
+                <label for="credit">Deposit</label>
               </div>
             </div>
             <div v-else-if="accountTypeIsSelected('credit')"
               class="form__radios"
               data-qa="credit-types">
               <div class="form__radio">
-                <label for="debit">Charge</label>
                 <input type="radio"
                   data-qa="debit-opt"
                   value="debit"
                   v-model="type"
                   id="debit" />
+                <label for="debit">Charge</label>
               </div>
               <div class="form__radio">
-                <label for="credit">Payment</label>
                 <input type="radio"
                   data-qa="credit-opt"
                   value="credit"
                   v-model="type"
                   id="credit" />
+                <label for="credit">Payment</label>
               </div>
             </div>
             <div v-else
@@ -287,7 +287,23 @@ export default {
   background-color: #eaeaea;
   border: 1px solid #c1c1c1;
   border-right-width: 0px;
-  padding: 0.5em;
+  flex: 1;
+
+  label {
+    text-align: center;
+    display: block;
+    padding: 0.5em;
+    cursor: pointer;
+  }
+
+  input {
+    display: none;
+
+    &:checked + label {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
 
   &:first-of-type {
     border-top-left-radius: 3px;
