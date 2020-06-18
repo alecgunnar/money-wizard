@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
   const parsedAmount = parseFloat(amount)
 
   try {
-    await transactionsRepo.createTransaction(accountId, type, parsedAmount, date, notes)
+    await transactionsRepo.createTransaction(accountId, type, parsedAmount, date, notes || '')
     res.sendStatus(201)
   } catch (err) {
     res.status(500)

@@ -279,6 +279,36 @@ describe('Transactions Controller', () => {
       })
   })
 
+  it('saves the transaction when the notes are left out', () => {
+    expect.assertions(1)
+
+    accountsRepo.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    transactionsRepo.createTransaction.mockResolvedValueOnce()
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        type: 'debit',
+        amount: '10.57',
+        date: '05/28/1994',
+      })
+      .then(() => {
+        expect(transactionsRepo.createTransaction).toBeCalledWith(
+          456,
+          'debit',
+          10.57,
+          '05/28/1994',
+          ''
+        )
+      })
+  })
+
   it('when the transaction is successfully saved the request is resolved', () => {
     expect.assertions(1)
 
