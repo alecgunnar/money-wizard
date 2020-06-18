@@ -9,6 +9,13 @@ router.get('/', (_, res) => {
 
 router.post('/', async (req, res) => {
   const {account: accountId} = req.body
+
+  if (typeof accountId === 'undefined') {
+    return res.status(400).json({
+      msg: 'An account is required.'
+    })
+  }
+
   const account =  await accountsRepo.getAccount(accountId)
 
   if (account === null) {
