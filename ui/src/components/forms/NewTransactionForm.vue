@@ -288,6 +288,7 @@ export default {
   border: 1px solid #c1c1c1;
   border-right-width: 0px;
   flex: 1;
+  position: relative;
 
   label {
     text-align: center;
@@ -297,7 +298,8 @@ export default {
   }
 
   input {
-    display: none;
+    position: absolute;
+    visibility: hidden;
 
     &:checked + label {
       font-weight: bold;
