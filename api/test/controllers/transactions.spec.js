@@ -319,7 +319,7 @@ describe('Transactions Controller', () => {
           456,
           'debit',
           10.57,
-          '05/28/1994',
+          '1994-05-28',
           'these are some notes'
         )
       })
@@ -349,7 +349,7 @@ describe('Transactions Controller', () => {
           456,
           'debit',
           10.57,
-          '05/28/1994',
+          '1994-05-28',
           ''
         )
       })
