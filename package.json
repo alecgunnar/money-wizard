@@ -1,5 +1,0 @@
-{
-  "name": "money-wizard",
-  "private": true,
-  "workspaces": ["ui", "api"]
-}
