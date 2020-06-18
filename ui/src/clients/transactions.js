@@ -1,5 +1,9 @@
+import RootClient from './'
+
 export default {
-  addTransaction () {
-    return Promise.reject()
+  addTransaction (account, type, amount, date, notes) {
+    return RootClient.post('/transactions', {
+      account, type, amount, date, notes
+    }).then(() => 'Created')
   }
 }
