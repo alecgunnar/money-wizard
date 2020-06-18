@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:watch": "vue-cli-service test:unit --watch",
+    "test:unit": "vue-cli-service test:unit",
+    "test:watch": "yarn test:unit --watch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
