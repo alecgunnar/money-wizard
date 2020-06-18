@@ -52,6 +52,24 @@ describe('Transactions', () => {
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
   })
 
+  it('hides the form when the form is submitted', async () => {
+    const subject = shallowMount(Transactions, {localVue, store})
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
+    await subject.vm.$nextTick()
+    expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
+  })
+
+  it('reloads the transactions when the form is submitted', async () => {
+    const subject = shallowMount(Transactions, {localVue, store})
+    jest.resetAllMocks()
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
+    expect(loadTransactions).toHaveBeenCalled()
+  })
+
   it('does not show new transaction form by default', () => {
     const subject = shallowMount(Transactions, {localVue, store})
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()

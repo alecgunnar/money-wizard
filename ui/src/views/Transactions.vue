@@ -7,7 +7,8 @@
           <h2>Add a Transaction</h2>
         </div>
       </div>
-      <NewTransactionForm @cancel="addingTransactionCanceled" />
+      <NewTransactionForm @submitted="transactionAdded"
+        @cancel="addingTransactionCanceled" />
     </div>
     <div class="header">
       <h1 class="header__title">Transactions</h1>
@@ -54,6 +55,10 @@ export default {
     },
     addingTransactionCanceled () {
       this.addingTransaction = false
+    },
+    transactionAdded () {
+      this.addingTransaction = false
+      this.loadTransactions()
     }
   },
   components: {
