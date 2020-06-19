@@ -20,7 +20,8 @@ export default new Router({
     {
       path: '/transactions/account-:id',
       name: 'account-transactions',
-      component: Transactions
+      component: Transactions,
+      props: true
     },
     {
       path: '/',

@@ -8,7 +8,8 @@
         </div>
       </div>
       <NewTransactionForm @submitted="transactionAdded"
-        @cancel="addingTransactionCanceled" />
+        @cancel="addingTransactionCanceled"
+        :preselect="this.id" />
     </div>
     <div class="header">
       <h1 class="header__title">Transactions</h1>
@@ -42,6 +43,12 @@ export default {
   data () {
     return {
       addingTransaction: false
+    }
+  },
+  props: {
+    id: {
+      required: false,
+      default: null
     }
   },
   computed: mapState(['transactions']),
