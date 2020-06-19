@@ -178,7 +178,14 @@ export default {
       failedToSubmit: false
     }
   },
+  props: {
+    preselect: {
+      required: false,
+      default: null
+    }
+  },
   mounted () {
+    this.account = this.preselect
     this.date = moment().format('MM/DD/YYYY')
     AccountsClient.getAccounts()
       .then(this.accountsLoaded)

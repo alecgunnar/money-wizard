@@ -50,6 +50,16 @@ describe('NewTransactionForm', () => {
     expect(options.at(2).text()).toBe('Other')
   })
 
+  it('preselects the propped account', async () => {
+    const subject = shallowMount(NewTransactionForm, {
+      propsData: {
+        preselect: 456
+      }
+    })
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=choose-account]').element.value).toBe('456')
+  })
+
   it('has a field to enter an amount', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('input[data-qa=amount]').exists()).toBeTruthy()
