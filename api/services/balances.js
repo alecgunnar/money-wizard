@@ -1,5 +1,8 @@
+const TransactionsRepository = require('../repositories/transactions')
+
 module.exports = {
-  calculateBalanceForAccount () {
-    return Promise.resolve(0)
+  calculateBalanceForAccount (accountId) {
+    return TransactionsRepository.getBalanceForAccount(accountId)
+      .catch(() => null)
   }
 }

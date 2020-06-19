@@ -26,5 +26,8 @@ module.exports = {
   getTransactions () {
     return db['Transaction'].findAll()
       .then((transactions) => transactions.map(fromModel))
+  },
+  getBalanceForAccount (accountId) {
+    return Promise.resolve(0)
   }
 }
