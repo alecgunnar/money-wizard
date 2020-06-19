@@ -9,4 +9,7 @@ app.use(...accounts)
 const transactions = require('./controllers/transactions')
 app.use(...transactions)
 
+const controllers = require('./controllers')
+app.use(controllers)
+
 module.exports = app
