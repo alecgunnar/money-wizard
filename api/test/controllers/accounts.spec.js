@@ -1,9 +1,11 @@
 const app = require('../../app')
-const repo = require('../../repositories/accounts')
+const AccountsRepository = require('../../repositories/accounts')
+const BalancesService = require('../../services/balances')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 
 jest.mock('../../repositories/accounts')
+jest.mock('../../services/balances')
 
 chai.use(chaiHttp)
 
@@ -11,7 +13,7 @@ describe('Accounts Controller', () => {
   it('creates an asset account', () => {
     expect.assertions(2)
 
-    repo.createAccount.mockResolvedValueOnce()
+    AccountsRepository.createAccount.mockResolvedValueOnce()
 
     return chai.request(app)
       .post('/accounts')
@@ -21,7 +23,7 @@ describe('Accounts Controller', () => {
         type: 'asset'
       })
       .then((res) => {
-        expect(repo.createAccount).toBeCalledWith('Sample Account', 'asset')
+        expect(AccountsRepository.createAccount).toBeCalledWith('Sample Account', 'asset')
         expect(res.statusCode).toBe(201)
       })
   })
@@ -29,7 +31,7 @@ describe('Accounts Controller', () => {
   it('creates a credit account', () => {
     expect.assertions(2)
 
-    repo.createAccount.mockResolvedValueOnce()
+    AccountsRepository.createAccount.mockResolvedValueOnce()
 
     return chai.request(app)
       .post('/accounts')
@@ -39,7 +41,7 @@ describe('Accounts Controller', () => {
         type: 'credit'
       })
       .then((res) => {
-        expect(repo.createAccount).toBeCalledWith('Sample Account', 'credit')
+        expect(AccountsRepository.createAccount).toBeCalledWith('Sample Account', 'credit')
         expect(res.statusCode).toBe(201)
       })
   })
@@ -47,7 +49,7 @@ describe('Accounts Controller', () => {
   it('account creation fails', () => {
     expect.assertions(2)
 
-    repo.createAccount.mockRejectedValueOnce()
+    AccountsRepository.createAccount.mockRejectedValueOnce()
 
     return chai.request(app)
       .post('/accounts')
@@ -79,7 +81,7 @@ describe('Accounts Controller', () => {
           msg: 'A name is required.'
         })
 
-        expect(repo.createAccount).not.toBeCalled()
+        expect(AccountsRepository.createAccount).not.toBeCalled()
       })
   })
 
@@ -99,7 +101,7 @@ describe('Accounts Controller', () => {
           msg: 'A non-empty name is required.'
         })
 
-        expect(repo.createAccount).not.toBeCalled()
+        expect(AccountsRepository.createAccount).not.toBeCalled()
       })
   })
 
@@ -118,7 +120,7 @@ describe('Accounts Controller', () => {
           msg: 'A type is required.'
         })
 
-        expect(repo.createAccount).not.toBeCalled()
+        expect(AccountsRepository.createAccount).not.toBeCalled()
       })
   })
 
@@ -138,7 +140,7 @@ describe('Accounts Controller', () => {
           msg: 'The supplied type is not valid. Valid types are "asset" and "credit".'
         })
 
-        expect(repo.createAccount).not.toBeCalled()
+        expect(AccountsRepository.createAccount).not.toBeCalled()
       })
   })
 
@@ -150,31 +152,74 @@ describe('Accounts Controller', () => {
       }
     ]
 
-    repo.getAccounts.mockResolvedValueOnce(accounts)
+    AccountsRepository.getAccounts.mockResolvedValueOnce(accounts)
+    BalancesService.calculateBalanceForAccount.mockResolvedValueOnce(10)
 
-    expect.assertions(3)
+    expect.assertions(1)
+
+    return chai.request(app)
+      .get('/accounts')
+      .then(() => {
+        expect(AccountsRepository.getAccounts).toBeCalled()
+      })
+  })
+
+  it('fetches the balance for each account', () => {
+    BalancesService.calculateBalanceForAccount.mockResolvedValueOnce(10)
+
+    const accounts = [
+      {
+        id: 123512,
+        name: 'Sample Account',
+        type: 'asset'
+      }
+    ]
+
+    AccountsRepository.getAccounts.mockResolvedValueOnce(accounts)
+    BalancesService.calculateBalanceForAccount.mockResolvedValueOnce(10)
+
+    expect.assertions(1)
+
+    return chai.request(app)
+      .get('/accounts')
+      .then(() => {
+        expect(BalancesService.calculateBalanceForAccount).toBeCalledWith(123512)
+      })
+  })
+
+  it('responds with each account', () => {
+    const accounts = [
+      {
+        name: 'Sample Account',
+        type: 'asset'
+      }
+    ]
+
+    AccountsRepository.getAccounts.mockResolvedValueOnce(accounts)
+    BalancesService.calculateBalanceForAccount.mockResolvedValueOnce(10)
+
+    expect.assertions(2)
 
     return chai.request(app)
       .get('/accounts')
       .then((res) => {
-        expect(repo.getAccounts).toBeCalled()
         expect(res.statusCode).toBe(200)
         expect(res.body).toEqual([{
           ...accounts[0],
-          balance: 0
+          balance: 10
         }])
       })
   })
 
   it('fails to retrieve all of the accounts', () => {
-    repo.getAccounts.mockRejectedValueOnce()
+    AccountsRepository.getAccounts.mockRejectedValueOnce()
 
     expect.assertions(3)
 
     return chai.request(app)
       .get('/accounts')
       .then((res) => {
-        expect(repo.getAccounts).toBeCalled()
+        expect(AccountsRepository.getAccounts).toBeCalled()
         expect(res.statusCode).toBe(500)
         expect(res.body).toEqual({
           msg: 'Could not retrieve all accounts for an unknown reason.'
