@@ -1,6 +1,6 @@
 const app = require('../../app')
-const accountsRepo = require('../../repositories/accounts')
-const transactionsRepo = require('../../repositories/transactions')
+const AccountsRepository = require('../../repositories/accounts')
+const TransactionsRepository = require('../../repositories/transactions')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 
@@ -10,61 +10,15 @@ jest.mock('../../repositories/transactions')
 chai.use(chaiHttp)
 
 describe('Transactions Controller', () => {
-  it('gets all transactions', () => {
-    expect.assertions(1)
-
-    transactionsRepo.getTransactions.mockResolvedValueOnce([])
-
-    return chai.request(app)
-    .get('/transactions')
-    .then(() => {
-      expect(transactionsRepo.getTransactions).toBeCalled()
-    })
-  })
-
-  it('resolves when all transactions are loaded', () => {
-    expect.assertions(1)
-
-    const transaction = {
-      id: 13,
-      amount: 23.12
-    }
-
-    transactionsRepo.getTransactions.mockResolvedValueOnce([
-      transaction
-    ])
-
-    return chai.request(app)
-    .get('/transactions')
-    .then((res) => {
-      expect(res.body).toEqual([transaction])
-    })
-  })
-
-  it('rejects when transactions cannot be loaded', () => {
-    expect.assertions(2)
-
-    transactionsRepo.getTransactions.mockRejectedValueOnce()
-
-    return chai.request(app)
-    .get('/transactions')
-    .then((res) => {
-      expect(res.status).toBe(500)
-      expect(res.body).toEqual({
-        msg: 'Transactions could not be loaded for an unknown reason.'
-      })
-    })
-  })
-
   it('looks up account before adding transaction', () => {
     expect.assertions(1)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
 
-    transactionsRepo.createTransaction.mockResolvedValueOnce()
+    TransactionsRepository.createTransaction.mockResolvedValueOnce()
 
     return chai.request(app)
       .post('/transactions')
@@ -77,14 +31,14 @@ describe('Transactions Controller', () => {
         notes: ''
       })
       .then(() => {
-        expect(accountsRepo.getAccount).toBeCalledWith(456)
+        expect(AccountsRepository.getAccount).toBeCalledWith(456)
       })
   })
 
   it('fails to add transaction if the account does not exist', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce(null)
+    AccountsRepository.getAccount.mockResolvedValueOnce(null)
 
     return chai.request(app)
       .post('/transactions')
@@ -117,7 +71,7 @@ describe('Transactions Controller', () => {
         notes: ''
       })
       .then(() => {
-        expect(accountsRepo.getAccount).not.toBeCalled()
+        expect(AccountsRepository.getAccount).not.toBeCalled()
       })
   })
 
@@ -144,7 +98,7 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the type is missing', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
@@ -169,7 +123,7 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the amount is missing', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
@@ -194,7 +148,7 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the amount is zero', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
@@ -220,7 +174,7 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the amount is less than zero', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
@@ -246,7 +200,7 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the date is not present', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
@@ -271,7 +225,7 @@ describe('Transactions Controller', () => {
   it('fails to add transaction if the date is not formatted correctly', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
@@ -297,12 +251,12 @@ describe('Transactions Controller', () => {
   it('saves the transaction when the input is valid', () => {
     expect.assertions(1)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
 
-    transactionsRepo.createTransaction.mockResolvedValueOnce()
+    TransactionsRepository.createTransaction.mockResolvedValueOnce()
 
     return chai.request(app)
       .post('/transactions')
@@ -315,7 +269,7 @@ describe('Transactions Controller', () => {
         notes: 'these are some notes'
       })
       .then(() => {
-        expect(transactionsRepo.createTransaction).toBeCalledWith(
+        expect(TransactionsRepository.createTransaction).toBeCalledWith(
           456,
           'debit',
           10.57,
@@ -328,12 +282,12 @@ describe('Transactions Controller', () => {
   it('saves the transaction when the notes are left out', () => {
     expect.assertions(1)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
 
-    transactionsRepo.createTransaction.mockResolvedValueOnce()
+    TransactionsRepository.createTransaction.mockResolvedValueOnce()
 
     return chai.request(app)
       .post('/transactions')
@@ -345,7 +299,7 @@ describe('Transactions Controller', () => {
         date: '05/28/1994',
       })
       .then(() => {
-        expect(transactionsRepo.createTransaction).toBeCalledWith(
+        expect(TransactionsRepository.createTransaction).toBeCalledWith(
           456,
           'debit',
           10.57,
@@ -358,12 +312,12 @@ describe('Transactions Controller', () => {
   it('when the transaction is successfully saved the request is resolved', () => {
     expect.assertions(1)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
 
-    transactionsRepo.createTransaction.mockResolvedValueOnce()
+    TransactionsRepository.createTransaction.mockResolvedValueOnce()
 
     return chai.request(app)
       .post('/transactions')
@@ -383,12 +337,12 @@ describe('Transactions Controller', () => {
   it('when the transaction fails to be saved the request is rejected', () => {
     expect.assertions(2)
 
-    accountsRepo.getAccount.mockResolvedValueOnce({
+    AccountsRepository.getAccount.mockResolvedValueOnce({
       id: 456,
       name: 'Sample'
     })
 
-    transactionsRepo.createTransaction.mockRejectedValueOnce()
+    TransactionsRepository.createTransaction.mockRejectedValueOnce()
 
     return chai.request(app)
       .post('/transactions')
