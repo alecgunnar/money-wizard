@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING
   }, {});
   Account.associate = function(models) {
-    // associations can be defined here
+    Account.hasMany(models.Transaction)
   };
   return Account;
 };

@@ -47,8 +47,6 @@ describe('Transactions Repository', () => {
   })
 
   it('gets all transactions', async () => {
-    expect.assertions(1)
-
     const accountId = await accountsRepo.createAccount('Sample', 'asset')
     const transactionId = await transactionsRepo.createTransaction(
       accountId,
@@ -66,5 +64,26 @@ describe('Transactions Repository', () => {
       date: '2020-06-18',
       notes: 'some notes'
     }])
+  })
+
+  it('gets the sum of all transactions for an account', async () => {
+    const accountId = await accountsRepo.createAccount('Sample', 'asset')
+    await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      10.57,
+      '2020-06-18',
+      ''
+    )
+
+    await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      44.02,
+      '2020-06-18',
+      ''
+    )
+
+    return expect(transactionsRepo.getBalanceForAccount(accountId)).resolves.toEqual(54.59)
   })
 })
