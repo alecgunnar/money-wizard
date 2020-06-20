@@ -36,30 +36,75 @@ describe('Accounts', () => {
     expect(subject.find('[data-qa=no-accounts-msg]').exists()).toBeTruthy()
   })
 
-  it('shows the list of accounts', () => {
+  it('shows the list of asset accounts', () => {
     store.commit('loadedAccounts', [
       {
         id: '123',
         name: 'Sample',
-        balance: 10.33
+        balance: 10.33,
+        type: 'asset'
       }
     ])
 
     const subject = shallowMount(Accounts, {store, localVue})
-    expect(subject.find('[data-qa=list-of-accounts]').exists()).toBeTruthy()
+    expect(subject.find('[data-qa=list-of-asset-accounts]').exists()).toBeTruthy()
   })
 
-  it('shows each of the accounts', () => {
+  it('does not show the list of asset accounts when there are no asset accounts', () => {
     store.commit('loadedAccounts', [
       {
         id: '123',
         name: 'Sample',
-        balance: 10.33
+        balance: 10.33,
+        type: 'credit'
+      }
+    ])
+
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.find('[data-qa=list-of-asset-accounts]').exists()).toBeFalsy()
+  })
+
+  it('shows the list of credit accounts', () => {
+    store.commit('loadedAccounts', [
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'credit'
+      }
+    ])
+
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.find('[data-qa=list-of-credit-accounts]').exists()).toBeTruthy()
+  })
+
+  it('does not show the list of credit accounts when there are no credit accounts', () => {
+    store.commit('loadedAccounts', [
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'asset'
+      }
+    ])
+
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.find('[data-qa=list-of-credit-accounts]').exists()).toBeFalsy()
+  })
+
+  it('shows each of the asset accounts', () => {
+    store.commit('loadedAccounts', [
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'asset'
       },
       {
         id: '456',
         name: 'other',
-        balance: 9.99
+        balance: 9.99,
+        type: 'asset'
       }
     ])
 
@@ -67,11 +112,12 @@ describe('Accounts', () => {
     expect(subject.findAllComponents(AccountRow).length).toBe(2)
   })
 
-  it('supplies the account data to the row', () => {
+  it('supplies the asset account data to the row', () => {
     const account = {
       id: '123',
       name: 'Sample',
-      balance: 10.33
+      balance: 10.33,
+      type: 'asset'
     }
 
     store.commit('loadedAccounts', [account])
@@ -79,7 +125,40 @@ describe('Accounts', () => {
     expect(subject.findComponent(AccountRow).props('account')).toBe(account)
   })
 
-  it('does not show the no accounts message', () => {
+  it('shows each of the credit accounts', () => {
+    store.commit('loadedAccounts', [
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'credit'
+      },
+      {
+        id: '456',
+        name: 'other',
+        balance: 9.99,
+        type: 'credit'
+      }
+    ])
+
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.findAllComponents(AccountRow).length).toBe(2)
+  })
+
+  it('supplies the credit account data to the row', () => {
+    const account = {
+      id: '123',
+      name: 'Sample',
+      balance: 10.33,
+      type: 'credit'
+    }
+
+    store.commit('loadedAccounts', [account])
+    const subject = shallowMount(Accounts, {store, localVue})
+    expect(subject.findComponent(AccountRow).props('account')).toBe(account)
+  })
+
+  it('does not show the no accounts message when there is only an asset account', () => {
     store.commit('loadedAccounts', [
       {
         id: '123',

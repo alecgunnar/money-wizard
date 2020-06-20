@@ -19,16 +19,29 @@
           @click="addAccount">Add Account</button>
       </div>
     </div>
-    <ol v-if="accounts.accounts.length"
-      class="accounts"
-      data-qa="list-of-accounts">
-      <li v-for="account in accounts.accounts"
-        :key="account.id"
-        class="account">
-        <AccountRow :account="account" />
-      </li>
-    </ol>
-    <p v-else
+    <div v-if="assetAccounts.length">
+      <h2>Bank Accounts and Cash</h2>
+      <ul class="accounts"
+        data-qa="list-of-asset-accounts">
+        <li v-for="account in assetAccounts"
+          :key="account.id"
+          class="account">
+          <AccountRow :account="account" />
+        </li>
+      </ul>
+    </div>
+    <div v-if="creditAccounts.length">
+      <h2>Credit Cards</h2>
+      <ul class="accounts"
+        data-qa="list-of-credit-accounts">
+        <li v-for="account in creditAccounts"
+          :key="account.id"
+          class="account">
+          <AccountRow :account="account" />
+        </li>
+      </ul>
+    </div>
+    <p v-if="accounts.length === 0"
       data-qa="no-accounts-msg">There are no accounts to display.</p>
   </div>
 </template>
@@ -45,7 +58,19 @@ export default {
       addingAccount: false
     }
   },
-  computed: mapState(['accounts']),
+  computed: {
+    ...mapState({
+      accounts (state) {
+        return state.accounts.accounts
+      }
+    }),
+    assetAccounts () {
+      return this.accounts.filter((account) => account.type === 'asset')
+    },
+    creditAccounts () {
+      return this.accounts.filter((account) => account.type === 'credit')
+    }
+  },
   mounted () {
     this.loadAccounts()
   },
