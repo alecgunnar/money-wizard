@@ -10,8 +10,13 @@
         <div class="branding">
           Money Wizard
         </div>
-        <nav class="navigation">
-          <ul class="navigations__links">
+        <nav class="navigation"
+          :class="{triggered: mobileNavTriggered}"
+          data-qa="nav-menu">
+          <div class="navigation__trigger"
+            data-qa="mobile-nav-trigger"
+            @click="toggleMobileNav"></div>
+          <ul class="navigation__links">
             <li class="navigation__link"><RouterLink :to="{name: 'accounts'}">Accounts</RouterLink></li>
             <li class="navigation__link"><RouterLink :to="{name: 'transactions'}">Transactions</RouterLink></li>
           </ul>
@@ -29,14 +34,29 @@ import {mapState} from 'vuex'
 
 export default {
   name: 'App',
-  computed: mapState(['serverError'])
+  data () {
+    return {
+      mobileNavTriggered: false
+    }
+  },
+  computed: mapState(['serverError']),
+  mounted () {
+    this.$router.beforeEach(this.disableMobileNav)
+  },
+  methods: {
+    toggleMobileNav () {
+      this.mobileNavTriggered = !this.mobileNavTriggered
+    },
+    disableMobileNav (to, from, next) {
+      this.mobileNavTriggered = false
+      next()
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .wrapper {
-    width: 960px;
-    margin: 0 auto;
     padding: 0 1rem;
     box-sizing: border-box;
   }
@@ -52,33 +72,106 @@ export default {
 
   .header {
     background-color: #4CAF50;
-    margin: 0 0 2rem;
+    margin: 0 0 1rem;
   }
 
   .header__wrapper {
     display: flex;
     align-items: center;
+    padding: 0 1em;
   }
 
   .branding {
     color: #fff;
-    font-size: 3rem;
-    line-height: 5rem;
-    margin: 0 2rem 0 0;
+    font-size: 1.5em;
+    line-height: 2em;
   }
 
   .navigation {
     flex: 1;
+    position: relative;
+    height: 1.5em;
+
+    &.triggered {
+      .navigation__trigger {
+        z-index: 1001;
+        &::before,
+        &::after {
+          background-color: #4CAF50;
+        }
+
+
+        &::before {
+          transform: rotate(45deg);
+          transform-origin: left;
+          top: 0.25em;
+          left: 0.25em;
+        }
+
+        &::after {
+          transform: rotate(-45deg);
+          transform-origin: left;
+          bottom: 0.25em;
+          left: 0.25em;
+        }
+      }
+
+      .navigation__links {
+        background-color: #fff;
+        display: block;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        padding: 2em 0 0 1em;
+
+        a {
+          color: #4CAF50;
+          font-size: 2em;
+
+          &.router-link-exact-active {
+            text-decoration: none;
+          }
+        }
+      }
+    }
   }
 
-  .navigations__links {
+  .navigation__trigger {
+    position: absolute;
+    width: 1.5em;
+    height: 1.5em;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    &::before,
+    &::after {
+      background-color: #fff;
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      content: " ";
+      transition: 0.5s;
+    }
+
+    &::before {
+      top: 0.4em;
+    }
+
+    &::after {
+      bottom: 0.4em;
+    }
+  }
+
+  .navigation__links {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-
-  .navigation__link {
-    display: inline;
+    display: none;
   }
 
   .navigation__link a {
@@ -89,5 +182,53 @@ export default {
 
   .navigation__link a.router-link-active {
     text-decoration: underline;
+  }
+
+  @media screen and (min-width: 480px) {
+    .branding {
+      margin: 0 2rem 0 0;
+    }
+
+    .navigation.triggered {
+      .navigation__links {
+        background-color: transparent;
+        display: block;
+        position: static;
+        padding: 0;
+
+        a {
+          color: #fff;
+          font-size: 1em;
+
+          &.router-link-exact-active {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .navigation__trigger {
+      display: none;
+    }
+
+    .navigation__links {
+      display: block;
+    }
+
+    .navigation__link {
+      display: inline;
+    }
+  }
+
+  @media screen and (min-width: 960px) {
+    .wrapper {
+      width: 960px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .header__wrapper {
+      padding: 0;
+    }
   }
 </style>
