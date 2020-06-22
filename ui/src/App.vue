@@ -126,14 +126,18 @@ export default {
         right: 0;
         z-index: 1000;
         padding: 2em 0 0 1em;
+      }
 
-        a {
-          color: #4CAF50;
-          font-size: 2em;
+      .navigation__link {
+        margin: 0 0 0.5em;
+      }
 
-          &.router-link-exact-active {
-            text-decoration: none;
-          }
+      a {
+        color: #4CAF50;
+        font-size: 2em;
+
+        &.router-link-exact-active {
+          text-decoration: none;
         }
       }
     }
@@ -195,14 +199,18 @@ export default {
         display: block;
         position: static;
         padding: 0;
+      }
 
-        a {
-          color: #fff;
-          font-size: 1em;
+      .navigation__link {
+        margin: 0;
+      }
 
-          &.router-link-exact-active {
-            text-decoration: underline;
-          }
+      a {
+        color: #fff;
+        font-size: 1em;
+
+        &.router-link-exact-active {
+          text-decoration: underline;
         }
       }
     }
