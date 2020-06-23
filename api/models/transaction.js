@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     amount: DataTypes.INTEGER,
     type: DataTypes.ENUM('debit', 'credit'),
     date: DataTypes.DATEONLY,
+    reason: DataTypes.STRING,
     notes: DataTypes.STRING
   }, {});
   Transaction.associate = function(models) {
