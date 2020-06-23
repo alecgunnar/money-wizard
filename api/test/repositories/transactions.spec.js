@@ -119,6 +119,33 @@ describe('Transactions Repository', () => {
     })
   })
 
+  it('gets all transactions and groups them in order', async () => {
+    const accountId = await accountsRepo.createAccount('Sample', 'asset')
+    await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      10.57,
+      '2020-06-17',
+      'sample',
+      ''
+    )
+
+    await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      44.02,
+      '2020-06-18',
+      'sample',
+      ''
+    )
+
+    const transactions = await transactionsRepo.getGroupedTransactions()
+    const dates = Object.keys(transactions)
+
+    expect(dates[0]).toBe('2020-06-18')
+    expect(dates[1]).toBe('2020-06-17')
+  })
+
   it('gets the transactions for an account', async () => {
     const accountId = await accountsRepo.createAccount('Sample', 'asset')
     const firstTransactionId = await transactionsRepo.createTransaction(
