@@ -135,7 +135,7 @@
         <div class="form__row">
           <div class="form__label">
             <label for="notes">
-              Notes
+              Additional Notes
             </label>
           </div>
           <div class="form__input form__input--right">
