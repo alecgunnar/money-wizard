@@ -1,25 +1,10 @@
 import Accounts from '@/views/Accounts'
 import AccountRow from '@/components/lists/AccountRow'
 import NewAccountForm from '@/components/forms/NewAccountForm'
-import accounts from '@/store/accounts'
-import Vuex from 'vuex'
-import {shallowMount, createLocalVue} from '@vue/test-utils'
+import AccountsClient from '@/clients/accounts'
+import {shallowMount} from '@vue/test-utils'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-
-const loadAccounts = jest.fn()
-
-const store = new Vuex.Store({
-  modules: {
-    accounts: {
-      ...accounts,
-      actions: {
-        loadAccounts
-      }
-    }
-  }
-})
+jest.mock('@/clients/accounts')
 
 describe('Accounts', () => {
   afterEach(() => {
@@ -27,17 +12,19 @@ describe('Accounts', () => {
   })
 
   it('loads all accounts', () => {
-    const subject = shallowMount(Accounts, {store, localVue})
-    expect(loadAccounts).toBeCalled()
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    shallowMount(Accounts)
+    expect(AccountsClient.getAccounts).toBeCalled()
   })
 
   it('show no accounts available message', () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     expect(subject.find('[data-qa=no-accounts-msg]').exists()).toBeTruthy()
   })
 
-  it('shows the list of asset accounts', () => {
-    store.commit('loadedAccounts', [
+  it('shows the list of asset accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -46,12 +33,13 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.find('[data-qa=list-of-asset-accounts]').exists()).toBeTruthy()
   })
 
-  it('does not show the list of asset accounts when there are no asset accounts', () => {
-    store.commit('loadedAccounts', [
+  it('does not show the list of asset accounts when there are no asset accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -60,12 +48,13 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.find('[data-qa=list-of-asset-accounts]').exists()).toBeFalsy()
   })
 
-  it('shows the list of credit accounts', () => {
-    store.commit('loadedAccounts', [
+  it('shows the list of credit accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -74,12 +63,13 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.find('[data-qa=list-of-credit-accounts]').exists()).toBeTruthy()
   })
 
-  it('does not show the list of credit accounts when there are no credit accounts', () => {
-    store.commit('loadedAccounts', [
+  it('does not show the list of credit accounts when there are no credit accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -88,12 +78,13 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.find('[data-qa=list-of-credit-accounts]').exists()).toBeFalsy()
   })
 
-  it('shows each of the asset accounts', () => {
-    store.commit('loadedAccounts', [
+  it('shows each of the asset accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -108,11 +99,12 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.findAllComponents(AccountRow).length).toBe(2)
   })
 
-  it('supplies the asset account data to the row', () => {
+  it('supplies the asset account data to the row', async () => {
     const account = {
       id: '123',
       name: 'Sample',
@@ -120,13 +112,14 @@ describe('Accounts', () => {
       type: 'asset'
     }
 
-    store.commit('loadedAccounts', [account])
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([account])
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.findComponent(AccountRow).props('account')).toBe(account)
   })
 
-  it('shows each of the credit accounts', () => {
-    store.commit('loadedAccounts', [
+  it('shows each of the credit accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -141,11 +134,12 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.findAllComponents(AccountRow).length).toBe(2)
   })
 
-  it('supplies the credit account data to the row', () => {
+  it('supplies the credit account data to the row', async () => {
     const account = {
       id: '123',
       name: 'Sample',
@@ -153,13 +147,14 @@ describe('Accounts', () => {
       type: 'credit'
     }
 
-    store.commit('loadedAccounts', [account])
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([account])
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.findComponent(AccountRow).props('account')).toBe(account)
   })
 
-  it('does not show the no accounts message when there is only an asset account', () => {
-    store.commit('loadedAccounts', [
+  it('does not show the no accounts message when there is only an asset account', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
       {
         id: '123',
         name: 'Sample',
@@ -167,35 +162,40 @@ describe('Accounts', () => {
       }
     ])
 
-    const subject = shallowMount(Accounts, {store, localVue})
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
     expect(subject.find('[data-qa=no-accounts-msg]').exists()).toBeFalsy()
   })
 
   it('does not show the accounts list', () => {
-    store.commit('loadedAccounts', [])
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     expect(subject.find('[data-qa=list-of-accounts]').exists()).toBeFalsy()
   })
 
   it('there is a button for adding accounts', () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     expect(subject.find('button[data-qa=add-account-btn]').exists()).toBeTruthy()
   })
 
   it('clicking the add account button opens the form', async () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     subject.find('button[data-qa=add-account-btn]').trigger('click')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewAccountForm).exists()).toBeTruthy()
   })
 
   it('does not show the new account form by default', () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
   })
 
   it('the form emitting cancel causes form to go away', async () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     subject.find('button[data-qa=add-account-btn]').trigger('click')
     await subject.vm.$nextTick()
     subject.findComponent(NewAccountForm).vm.$emit('cancel')
@@ -204,19 +204,23 @@ describe('Accounts', () => {
   })
 
   it('the form emitting submitted causes form to go away', async () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     subject.find('button[data-qa=add-account-btn]').trigger('click')
     await subject.vm.$nextTick()
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
     subject.findComponent(NewAccountForm).vm.$emit('submitted')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewAccountForm).exists()).toBeFalsy()
   })
 
   it('the form emitting submitted causes accounts to be reloaded', async () => {
-    const subject = shallowMount(Accounts, {store, localVue})
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+    const subject = shallowMount(Accounts)
     subject.find('button[data-qa=add-account-btn]').trigger('click')
     await subject.vm.$nextTick()
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
     subject.findComponent(NewAccountForm).vm.$emit('submitted')
-    expect(loadAccounts).toBeCalledTimes(2)
+    expect(AccountsClient.getAccounts).toBeCalled()
   })
 })

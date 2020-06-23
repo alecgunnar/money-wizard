@@ -47,21 +47,17 @@
 <script>
 import AccountRow from '@/components/lists/AccountRow'
 import NewAccountForm from '@/components/forms/NewAccountForm'
-import {mapActions, mapState} from 'vuex'
+import AccountsClient from '@/clients/accounts'
 
 export default {
   name: 'accounts',
   data () {
     return {
+      accounts: [],
       addingAccount: false
     }
   },
   computed: {
-    ...mapState({
-      accounts (state) {
-        return state.accounts.accounts
-      }
-    }),
     assetAccounts () {
       return this.accounts.filter((account) => account.type === 'asset')
     },
@@ -73,7 +69,13 @@ export default {
     this.loadAccounts()
   },
   methods: {
-    ...mapActions(['loadAccounts']),
+    loadAccounts () {
+      AccountsClient.getAccounts()
+        .then(this.accountsLoaded)
+    },
+    accountsLoaded (accounts) {
+      this.accounts = accounts
+    },
     addAccount () {
       this.addingAccount = true
     },
