@@ -9,14 +9,14 @@ const transaction = {
 }
 
 describe('TransactionRow', () => {
-  it('shows the date', () => {
+  it('shows the reason', () => {
     const subject = shallowMount(TransactionRow, {
       propsData: {
         transaction
       }
     })
 
-    expect(subject.find('[data-qa=date]').text()).toBe('May 28, 2020')
+    expect(subject.find('[data-qa=reason]').text()).toBe('just because')
   })
 
   it('shows the amount', () => {

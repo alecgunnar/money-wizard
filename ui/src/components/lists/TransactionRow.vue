@@ -1,7 +1,7 @@
 <template>
   <div class="transaction">
-    <div class="transaction__field transaction__field--date"
-      data-qa="date">{{ date }}</div>
+    <div class="transaction__field transaction__field--reason"
+      data-qa="reason">{{ transaction.reason }}</div>
     <div class="transaction__field transaction__field--amount"
       data-qa="amount">{{ transaction.amount | dollarAmount }}</div>
   </div>
@@ -9,18 +9,12 @@
 
 <script>
 import dollarAmount from '@/filters/dollarAmount'
-import moment from 'moment'
 
 export default {
   name: 'transaction-row',
   props: {
     transaction: {
       required: true
-    }
-  },
-  computed: {
-    date () {
-      return moment(this.transaction.date).format('MMM D, YYYY')
     }
   },
   filters: {
@@ -37,7 +31,7 @@ export default {
   box-sizing: border-box;
 }
 
-.transaction__field--date {
+.transaction__field--reason {
   flex: 1;
 }
 
@@ -53,7 +47,7 @@ export default {
     margin: 0 0 1em;
   }
 
-  .transaction__field--date {
+  .transaction__field--reason {
     padding: 1em 0;
   }
 
