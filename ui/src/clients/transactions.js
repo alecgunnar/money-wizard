@@ -1,9 +1,9 @@
 import RootClient from './'
 
 export default {
-  addTransaction (account, type, amount, date, notes) {
+  addTransaction (account, type, amount, date, reason, notes) {
     return RootClient.post('/transactions', {
-      account, type, amount, date, notes
+      account, type, amount, date, reason, notes
     }).then(() => 'Created')
   },
   getTransactions() {

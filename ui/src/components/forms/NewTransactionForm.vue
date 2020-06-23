@@ -134,11 +134,27 @@
         </div>
         <div class="form__row">
           <div class="form__label">
+            <label for="reason">
+              Reason
+            </label>
+          </div>
+          <div class="form__input">
+            <input id="reason"
+              type="text"
+              v-model="reason"
+              data-qa="reason" />
+            <div v-if="reasonIsEmptyError"
+              class="form__fieldError"
+              data-qa="reason-is-empty-error">A reason must be entered.</div>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="form__label">
             <label for="notes">
               Additional Notes
             </label>
           </div>
-          <div class="form__input form__input--right">
+          <div class="form__input">
             <textarea data-qa="notes"
               v-model="notes"
               id="notes"></textarea>
@@ -169,11 +185,13 @@ export default {
       type: null,
       amount: '0.00',
       date: '',
+      reason: '',
       notes: '',
       accountIsEmptyError: false,
       typeIsEmptyError: false,
       amountTooLowError: false,
       dateIsEmptyError: false,
+      reasonIsEmptyError: false,
       accounts: [],
       failedToSubmit: false
     }
@@ -204,17 +222,20 @@ export default {
       this.typeIsEmptyError = this.type === null
       this.amountTooLowError = this.amount <= 0
       this.dateIsEmptyError = this.date === ''
+      this.reasonIsEmptyError = this.reason === ''
 
       if (this.accountIsEmptyError ||
         this.typeIsEmptyError ||
         this.amountTooLowError ||
-        this.dateIsEmptyError) return
+        this.dateIsEmptyError ||
+        this.reasonIsEmptyError) return
 
       TransactionsClient.addTransaction(
         this.account,
         this.type,
         this.amount,
         this.date,
+        this.reason,
         this.notes
       ).then(this.transactionAdded)
         .catch(this.transactionNotAdded)

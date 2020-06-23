@@ -76,6 +76,11 @@ describe('NewTransactionForm', () => {
     expect(subject.find('[data-qa=date]').element.value).toBe(todaysDate)
   })
 
+  it('has a field to enter a readon', () => {
+    const subject = shallowMount(NewTransactionForm)
+    expect(subject.find('input[data-qa=reason]').exists()).toBeTruthy()
+  })
+
   it('has a field to enter notes', () => {
     const subject = shallowMount(NewTransactionForm)
     expect(subject.find('textarea[data-qa=notes]').exists()).toBeTruthy()
@@ -211,6 +216,22 @@ describe('NewTransactionForm', () => {
     expect(subject.find('[data-qa=date-is-empty-error]').exists()).toBeFalsy()
   })
 
+  it('submitting without a reason results in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=date]').setValue('')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=reason-is-empty-error]').exists()).toBeTruthy()
+  })
+
+  it('submitting with a reason does not result in an error', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    subject.find('[data-qa=reason]').setValue('Testing123')
+    subject.find('[data-qa=add-transaction-form]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=reason-is-empty-error]').exists()).toBeFalsy()
+  })
+
   it('submitting with valid input results in a service call', async () => {
     TransactionsClient.addTransaction.mockResolvedValueOnce()
     const subject = shallowMount(NewTransactionForm)
@@ -220,10 +241,11 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
     subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=reason]').setValue('Just because')
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     expect(TransactionsClient.addTransaction).toBeCalledWith(
-      123, 'debit', '10', '05/28/1994', 'Something about the transaction'
+      123, 'debit', '10', '05/28/1994', 'Just because', 'Something about the transaction'
     )
   })
 
@@ -236,6 +258,7 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
     subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=reason]').setValue('Just because')
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
@@ -251,6 +274,7 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
     subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=reason]').setValue('Just because')
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
@@ -266,6 +290,7 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
     subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=reason]').setValue('Just because')
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
@@ -281,6 +306,7 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
     subject.find('[data-qa=date]').setValue('05/28/1994')
+    subject.find('[data-qa=reason]').setValue('Just because')
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
