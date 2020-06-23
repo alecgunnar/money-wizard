@@ -2,10 +2,6 @@
   <div class="account">
     <div class="account__field account__field--name"
       data-qa="name">{{ account.name }}</div>
-    <div class="account__field account__field--options">
-      <RouterLink :to="{name: 'account-transactions', params: {id: account.id}}"
-        data-qa="account-transactions-link">See Transactions</RouterLink>
-    </div>
     <div class="account__field account__field--balance"
       data-qa="balance">{{ account.balance | dollarAmount }}</div>
   </div>
@@ -30,46 +26,35 @@ export default {
 <style lang="scss" scoped>
 .account {
   display: flex;
+  border-top: 1px solid #efefef;
+  padding: 1em;
 }
 
 .account__field--name {
-  margin: 0 1rem 0 0;
-  color: #aaa;
-  padding: 1rem 0;
-  width: 20%;
-}
-
-.account__field--options,
-.account__field--balance {
-  background-color: #efefef;
-}
-
-.account__field--options {
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-
-  a {
-    color: #999;
-    text-decoration: none;
-    padding: 1rem;
-    display: inline-block;
-
-    &:hover {
-      background-color: #eaeaea;
-    }
-
-    &:first-of-type {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-    }
-  }
+  flex: 1;
 }
 
 .account__field--balance {
   text-align: right;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  padding: 1rem;
   flex: 1;
+}
+
+@media screen and (min-width: 980px) {
+  .account {
+    padding: 0;
+    border: 0;
+    margin: 0 0 1em;
+  }
+
+  .account__field--name {
+    padding: 1em 0;
+  }
+
+  .account__field--balance {
+    background-color: #efefef;
+    padding: 1em;
+    border-radius: 3px;
+    flex: 2;
+  }
 }
 </style>

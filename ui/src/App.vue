@@ -228,7 +228,7 @@ export default {
     }
   }
 
-  @media screen and (min-width: 960px) {
+  @media screen and (min-width: 980px) {
     .wrapper {
       width: 960px;
       margin: 0 auto;

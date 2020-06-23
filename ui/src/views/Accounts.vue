@@ -24,8 +24,7 @@
       <ul class="accounts"
         data-qa="list-of-asset-accounts">
         <li v-for="account in assetAccounts"
-          :key="account.id"
-          class="account">
+          :key="account.id">
           <AccountRow :account="account" />
         </li>
       </ul>
@@ -35,8 +34,7 @@
       <ul class="accounts"
         data-qa="list-of-credit-accounts">
         <li v-for="account in creditAccounts"
-          :key="account.id"
-          class="account">
+          :key="account.id">
           <AccountRow :account="account" />
         </li>
       </ul>
@@ -126,10 +124,8 @@ export default {
 .accounts {
   list-style: none;
   padding: 0;
-}
-
-.account {
-  margin: 0 0 1rem;
+  margin: 1em -1em;
+  border-bottom: 1px solid #efefef;
 }
 
 .addAccount {
@@ -150,5 +146,12 @@ export default {
 
 .addAccount__title {
   flex: 1;
+}
+
+@media screen and (min-width: 980px) {
+  .accounts {
+    margin: 1em 0;
+    border: 0;
+  }
 }
 </style>

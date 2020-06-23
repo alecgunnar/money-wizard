@@ -33,20 +33,4 @@ describe('AccountRow', () => {
 
     expect(subject.find('[data-qa=balance]').text()).toBe('$10,245.45')
   })
-
-  it('shows link to account specific transactions', () => {
-    const subject = shallowMount(AccountRow, {
-      localVue,
-      propsData: {
-        account
-      }
-    })
-
-    expect(subject.find('[data-qa=account-transactions-link]').props('to')).toStrictEqual({
-      name: 'account-transactions',
-      params: {
-        id: 'dfc2a92a-429f-4518-92fa-d919af6ad704'
-      }
-    })
-  })
 })
