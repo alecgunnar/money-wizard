@@ -27,7 +27,7 @@ export default {
 .account {
   display: flex;
   border-top: 1px solid #efefef;
-  padding: 1em;
+  padding: 1rem;
   box-sizing: border-box;
 }
 
