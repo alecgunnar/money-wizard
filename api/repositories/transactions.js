@@ -6,16 +6,18 @@ const fromModel = (accountModel) => ({
   type: accountModel.type,
   amount: accountModel.amount,
   date: accountModel.date,
+  reason: accountModel.reason,
   notes: accountModel.notes
 })
 
 module.exports = {
-  createTransaction (account, type, amount, date, notes) {
+  createTransaction (account, type, amount, date, reason, notes) {
     return db['Transaction'].create({
       AccountId: account,
       type,
       amount,
       date,
+      reason,
       notes
     }).then((transaction) => transaction.id)
   },

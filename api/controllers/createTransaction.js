@@ -5,7 +5,7 @@ const TransactionsRepo = require('../repositories/transactions')
 
 module.exports = (router) => {
   router.post('/transactions', async (req, res) => {
-    const {account: accountId, type, amount, date, notes} = req.body
+    const {account: accountId, type, amount, date, reason, notes} = req.body
 
     if (typeof accountId === 'undefined') {
       return res.status(400).json({
@@ -45,6 +45,18 @@ module.exports = (router) => {
       })
     }
 
+    if (typeof reason === 'undefined') {
+      return res.status(400).json({
+        msg: 'A reason is required.'
+      })
+    }
+
+    if (reason === '') {
+      return res.status(400).json({
+        msg: 'A non-empty reason is required.'
+      })
+    }
+
     moment.suppressDeprecationWarnings = true;
     const parsedDate = moment(date)
 
@@ -62,6 +74,7 @@ module.exports = (router) => {
         type,
         parsedAmount,
         parsedDate.format('YYYY-MM-DD'),
+        reason,
         notes || ''
       )
 

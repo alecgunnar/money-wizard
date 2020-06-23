@@ -18,6 +18,7 @@ describe('Transactions Repository', () => {
       'debit',
       10.57,
       '2020-06-18',
+      'sample',
       'some notes'
     ).then((id) => {
       expect(typeof id === 'number').toBeTruthy()
@@ -33,6 +34,7 @@ describe('Transactions Repository', () => {
       'debit',
       10.57,
       '2020-06-18',
+      'sample',
       'some notes'
     )
 
@@ -42,6 +44,7 @@ describe('Transactions Repository', () => {
       type: 'debit',
       amount: 10.57,
       date: '2020-06-18',
+      reason: 'sample',
       notes: 'some notes'
     })
   })
@@ -53,6 +56,7 @@ describe('Transactions Repository', () => {
       'debit',
       10.57,
       '2020-06-18',
+      'sample',
       'some notes'
     )
 
@@ -63,6 +67,7 @@ describe('Transactions Repository', () => {
         type: 'debit',
         amount: 10.57,
         date: '2020-06-18',
+        reason: 'sample',
         notes: 'some notes'
       }
     ])
@@ -75,6 +80,7 @@ describe('Transactions Repository', () => {
       'debit',
       10.57,
       '2020-06-17',
+      'sample',
       ''
     )
 
@@ -83,6 +89,7 @@ describe('Transactions Repository', () => {
       'debit',
       44.02,
       '2020-06-18',
+      'sample',
       ''
     )
 
@@ -94,6 +101,7 @@ describe('Transactions Repository', () => {
           type: 'debit',
           amount: 10.57,
           date: '2020-06-17',
+          reason: 'sample',
           notes: ''
         }
       ],
@@ -104,6 +112,7 @@ describe('Transactions Repository', () => {
           type: 'debit',
           amount: 44.02,
           date: '2020-06-18',
+          reason: 'sample',
           notes: ''
         }
       ]
@@ -117,6 +126,7 @@ describe('Transactions Repository', () => {
       'debit',
       10.57,
       '2020-06-18',
+      'sample',
       ''
     )
 
@@ -125,6 +135,7 @@ describe('Transactions Repository', () => {
       'debit',
       44.02,
       '2020-06-18',
+      'sample',
       ''
     )
 
@@ -135,6 +146,7 @@ describe('Transactions Repository', () => {
         type: 'debit',
         amount: 10.57,
         date: '2020-06-18',
+        reason: 'sample',
         notes: ''
       },
       {
@@ -143,6 +155,7 @@ describe('Transactions Repository', () => {
         type: 'debit',
         amount: 44.02,
         date: '2020-06-18',
+        reason: 'sample',
         notes: ''
       }
     ])

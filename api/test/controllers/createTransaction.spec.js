@@ -28,6 +28,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then(() => {
@@ -48,6 +49,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -68,6 +70,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then(() => {
@@ -85,6 +88,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -110,6 +114,7 @@ describe('Transactions Controller', () => {
         account: 456,
         amount: '10',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -135,6 +140,7 @@ describe('Transactions Controller', () => {
         account: 456,
         type: 'debit',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -161,6 +167,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '0',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -187,6 +194,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '-10',
         date: '05/28/1994',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -212,6 +220,7 @@ describe('Transactions Controller', () => {
         account: 456,
         type: 'debit',
         amount: '10',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
@@ -238,12 +247,66 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10',
         date: 'invalid format',
+        reason: 'sample',
         notes: ''
       })
       .then((res) => {
         expect(res.statusCode).toBe(400)
         expect(res.body).toEqual({
           msg: 'A properly formatted date date is required. Try a format like: MM/DD/YYYY'
+        })
+      })
+  })
+
+  it('fails to add transaction if the reason is not present', () => {
+    expect.assertions(2)
+
+    AccountsRepository.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        type: 'debit',
+        amount: '10',
+        date: '2020-07-06',
+        notes: ''
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400)
+        expect(res.body).toEqual({
+          msg: 'A reason is required.'
+        })
+      })
+  })
+
+  it('fails to add transaction if the reason is empty', () => {
+    expect.assertions(2)
+
+    AccountsRepository.getAccount.mockResolvedValueOnce({
+      id: 456,
+      name: 'Sample'
+    })
+
+    return chai.request(app)
+      .post('/transactions')
+      .set('content-type', 'application/json')
+      .send({
+        account: 456,
+        type: 'debit',
+        amount: '10',
+        date: '2020-07-06',
+        reason: '',
+        notes: ''
+      })
+      .then((res) => {
+        expect(res.statusCode).toBe(400)
+        expect(res.body).toEqual({
+          msg: 'A non-empty reason is required.'
         })
       })
   })
@@ -266,6 +329,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10.57',
         date: '05/28/1994',
+        reason: 'sample',
         notes: 'these are some notes'
       })
       .then(() => {
@@ -274,6 +338,7 @@ describe('Transactions Controller', () => {
           'debit',
           10.57,
           '1994-05-28',
+          'sample',
           'these are some notes'
         )
       })
@@ -297,6 +362,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10.57',
         date: '05/28/1994',
+        reason: 'sample',
       })
       .then(() => {
         expect(TransactionsRepository.createTransaction).toBeCalledWith(
@@ -304,6 +370,7 @@ describe('Transactions Controller', () => {
           'debit',
           10.57,
           '1994-05-28',
+          'sample',
           ''
         )
       })
@@ -327,6 +394,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10.57',
         date: '05/28/1994',
+        reason: 'sample',
         notes: 'these are some notes'
       })
       .then((res) => {
@@ -352,6 +420,7 @@ describe('Transactions Controller', () => {
         type: 'debit',
         amount: '10.57',
         date: '05/28/1994',
+        reason: 'sample',
         notes: 'these are some notes'
       })
       .then((res) => {
