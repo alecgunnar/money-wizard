@@ -54,6 +54,7 @@ describe('Transactions', () => {
     const subject = shallowMount(Transactions)
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
+    TransactionsClient.getTransactions.mockResolvedValueOnce({})
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
@@ -65,8 +66,25 @@ describe('Transactions', () => {
     jest.resetAllMocks()
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
+    TransactionsClient.getTransactions.mockResolvedValueOnce({})
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     expect(TransactionsClient.getTransactions).toHaveBeenCalled()
+  })
+
+  it('shows the reloaded transactions', async () => {
+    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    const subject = shallowMount(Transactions)
+    jest.resetAllMocks()
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
+    TransactionsClient.getTransactions.mockResolvedValueOnce({
+      '2020-07-06': [
+        {id: '123', amount: 10.53, type: 'credit'}
+      ]
+    })
+    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=lists-of-transactions]').exists()).toBeTruthy()
   })
 
   it('does not show new transaction form by default', () => {

@@ -62,10 +62,13 @@ export default {
     }
   },
   mounted () {
-    TransactionsClient.getTransactions()
-      .then(this.transactionsLoaded)
+    this.loadTransactions()
   },
   methods: {
+    loadTransactions () {
+      TransactionsClient.getTransactions()
+      .then(this.transactionsLoaded)
+    },
     transactionsLoaded (transactions) {
       this.transactions = transactions
     },
@@ -77,7 +80,7 @@ export default {
     },
     transactionAdded () {
       this.addingTransaction = false
-      TransactionsClient.getTransactions()
+      this.loadTransactions()
     }
   },
   components: {
