@@ -56,7 +56,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .wrapper {
+  .wrapper,
+  .header__wrapper {
     padding: 0 1rem;
     box-sizing: border-box;
   }
@@ -78,7 +79,6 @@ export default {
   .header__wrapper {
     display: flex;
     align-items: center;
-    padding: 0 1em;
   }
 
   .branding {
