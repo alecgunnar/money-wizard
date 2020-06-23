@@ -19,32 +19,23 @@
           @click="addAccount">Add Account</button>
       </div>
     </div>
-    <div v-if="assetAccounts.length">
-      <h2>Bank Accounts and Cash</h2>
-      <ul class="accounts"
-        data-qa="list-of-asset-accounts">
-        <li v-for="account in assetAccounts"
-          :key="account.id">
-          <AccountRow :account="account" />
-        </li>
-      </ul>
-    </div>
-    <div v-if="creditAccounts.length">
-      <h2>Credit Cards</h2>
-      <ul class="accounts"
-        data-qa="list-of-credit-accounts">
-        <li v-for="account in creditAccounts"
-          :key="account.id">
-          <AccountRow :account="account" />
-        </li>
-      </ul>
-    </div>
+    <AccountsList v-if="assetAccounts.length"
+      :accounts="assetAccounts"
+      ref="assetList">
+      Bank Accounts and Cash
+    </AccountsList>
+    <AccountsList v-if="creditAccounts.length"
+      :accounts="creditAccounts"
+      ref="creditList">
+      Credit Cards
+    </AccountsList>
     <p v-if="accounts.length === 0"
       data-qa="no-accounts-msg">There are no accounts to display.</p>
   </div>
 </template>
 
 <script>
+import AccountsList from '@/components/lists/AccountsList'
 import AccountRow from '@/components/lists/AccountRow'
 import NewAccountForm from '@/components/forms/NewAccountForm'
 import AccountsClient from '@/clients/accounts'
@@ -88,6 +79,7 @@ export default {
     }
   },
   components: {
+    AccountsList,
     AccountRow,
     NewAccountForm
   }
@@ -123,13 +115,6 @@ export default {
   color: #fff;
 }
 
-.accounts {
-  list-style: none;
-  padding: 0;
-  margin: 1em -1rem;
-  border-bottom: 1px solid #efefef;
-}
-
 .addAccount {
   background-color: #fff;
   position: absolute;
@@ -149,12 +134,5 @@ export default {
 
 .addAccount__title {
   flex: 1;
-}
-
-@media screen and (min-width: 980px) {
-  .accounts {
-    margin: 1em 0;
-    border: 0;
-  }
 }
 </style>
