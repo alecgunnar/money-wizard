@@ -1,5 +1,6 @@
 <template>
-  <div class="account">
+  <div class="account"
+    :data-accountId="account.id">
     <div class="account__field account__field--name"
       data-qa="name">{{ account.name }}</div>
     <div class="account__field account__field--balance"
