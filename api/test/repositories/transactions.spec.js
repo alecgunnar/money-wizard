@@ -56,19 +56,21 @@ describe('Transactions Repository', () => {
       'some notes'
     )
 
-    return expect(transactionsRepo.getTransactions()).resolves.toEqual([{
-      id: transactionId,
-      accountId: accountId,
-      type: 'debit',
-      amount: 10.57,
-      date: '2020-06-18',
-      notes: 'some notes'
-    }])
+    return expect(transactionsRepo.getTransactions()).resolves.toEqual([
+      {
+        id: transactionId,
+        accountId: accountId,
+        type: 'debit',
+        amount: 10.57,
+        date: '2020-06-18',
+        notes: 'some notes'
+      }
+    ])
   })
 
-  it('gets the sum of all transactions for an account', async () => {
+  it('gets the transactions for an account', async () => {
     const accountId = await accountsRepo.createAccount('Sample', 'asset')
-    await transactionsRepo.createTransaction(
+    const firstTransactionId = await transactionsRepo.createTransaction(
       accountId,
       'debit',
       10.57,
@@ -76,7 +78,7 @@ describe('Transactions Repository', () => {
       ''
     )
 
-    await transactionsRepo.createTransaction(
+    const secondTransactionid = await transactionsRepo.createTransaction(
       accountId,
       'debit',
       44.02,
@@ -84,6 +86,23 @@ describe('Transactions Repository', () => {
       ''
     )
 
-    return expect(transactionsRepo.getBalanceForAccount(accountId)).resolves.toEqual(54.59)
+    return expect(transactionsRepo.getTransactionsForAccount(accountId)).resolves.toEqual([
+      {
+        id: firstTransactionId,
+        accountId: accountId,
+        type: 'debit',
+        amount: 10.57,
+        date: '2020-06-18',
+        notes: ''
+      },
+      {
+        id: secondTransactionid,
+        accountId: accountId,
+        type: 'debit',
+        amount: 44.02,
+        date: '2020-06-18',
+        notes: ''
+      }
+    ])
   })
 })

@@ -49,7 +49,7 @@ describe('Get Accounts Controller', () => {
     return chai.request(app)
       .get('/accounts')
       .then(() => {
-        expect(BalancesService.calculateBalanceForAccount).toBeCalledWith(123512)
+        expect(BalancesService.calculateBalanceForAccount).toBeCalledWith(accounts[0])
       })
   })
 

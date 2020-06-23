@@ -27,11 +27,11 @@ module.exports = {
     return db['Transaction'].findAll()
       .then((transactions) => transactions.map(fromModel))
   },
-  getBalanceForAccount (AccountId) {
+  getTransactionsForAccount (AccountId) {
     return db['Transaction'].findAll({
       where: {
         AccountId
       }
-    }).then((transactions) => transactions.reduce((acc, trans) => acc + trans.amount, 0))
+    }).then((transactions) => transactions.map(fromModel))
   }
 }

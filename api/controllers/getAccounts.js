@@ -2,7 +2,7 @@ const AccountsRepository = require('../repositories/accounts')
 const BalanceService = require('../services/balances')
 
 const addBalanceToAccount = async (account) => {
-  const balance = await BalanceService.calculateBalanceForAccount(account.id)
+  const balance = await BalanceService.calculateBalanceForAccount(account)
   return {
     ...account,
     balance

@@ -3,20 +3,51 @@ const TransactionsRepository = require('../../repositories/transactions')
 
 jest.mock('../../repositories/transactions')
 
+const transactions = [
+  {
+    type: 'debit',
+    amount: 5
+  },
+  {
+    type: 'credit',
+    amount: 7
+  }
+]
+
 describe('Balances Service', () => {
-  it('loads sum of transactions for account', () => {
-    TransactionsRepository.getBalanceForAccount.mockResolvedValueOnce(10.59)
-    BalancesService.calculateBalanceForAccount(1241)
-    expect(TransactionsRepository.getBalanceForAccount).toBeCalledWith(1241)
+  it('loads the transactions for account', () => {
+    TransactionsRepository.getTransactionsForAccount.mockResolvedValueOnce()
+    BalancesService.calculateBalanceForAccount({
+      id: 1241,
+      type: 'asset'
+    })
+    expect(TransactionsRepository.getTransactionsForAccount).toBeCalledWith(1241)
   })
 
-  it('resolves with the balance', () => {
-    TransactionsRepository.getBalanceForAccount.mockResolvedValueOnce(10.59)
-    expect(BalancesService.calculateBalanceForAccount(1241)).resolves.toBe(10.59)
+  it('resolves with the balance for an asset account', () => {
+    const account = {
+      id: 1241,
+      type: 'asset'
+    }
+    TransactionsRepository.getTransactionsForAccount.mockResolvedValueOnce(transactions)
+    expect(BalancesService.calculateBalanceForAccount(account)).resolves.toBe(2)
+  })
+
+  it('resolves with the balance for a credit account', () => {
+    const account = {
+      id: 1241,
+      type: 'credit'
+    }
+    TransactionsRepository.getTransactionsForAccount.mockResolvedValueOnce(transactions)
+    expect(BalancesService.calculateBalanceForAccount(account)).resolves.toBe(-2)
   })
 
   it('resolves when the respository fails', () => {
-    TransactionsRepository.getBalanceForAccount.mockRejectedValueOnce()
-    expect(BalancesService.calculateBalanceForAccount(1241)).resolves.toBeNull()
+    const account = {
+      id: 1241,
+      type: 'asset'
+    }
+    TransactionsRepository.getTransactionsForAccount.mockRejectedValueOnce()
+    expect(BalancesService.calculateBalanceForAccount(account)).resolves.toBeNull()
   })
 })
