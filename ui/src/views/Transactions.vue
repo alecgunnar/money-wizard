@@ -107,19 +107,18 @@ export default {
 .transactions {
   list-style: none;
   padding: 0;
-}
-
-.transaction {
-  margin: 0 0 1rem;
+  margin: 0 -1rem;
+  border-bottom: 1px solid #efefef;
 }
 
 .addTransaction {
   background-color: #fff;
   position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  top: -1rem;
+  left: -1rem;
+  bottom: -1rem;
+  right: -1rem;
+  padding: 1em;
   box-sizing: border-box;
 }
 
@@ -131,5 +130,12 @@ export default {
 
 .addTransaction__title {
   flex: 1;
+}
+
+@media screen and (min-width: 980px) {
+  .transactions {
+    margin: 1em 0;
+    border: 0;
+  }
 }
 </style>

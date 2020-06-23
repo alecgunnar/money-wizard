@@ -29,16 +29,6 @@ describe('TransactionRow', () => {
     expect(subject.find('[data-qa=amount]').text()).toBe('$10.00')
   })
 
-  it('shows the reason', () => {
-    const subject = shallowMount(TransactionRow, {
-      propsData: {
-        transaction
-      }
-    })
-
-    expect(subject.find('[data-qa=reason]').text()).toBe('just because')
-  })
-
   it('shows a negative amount', () => {
     transaction.amount = -41.23
 

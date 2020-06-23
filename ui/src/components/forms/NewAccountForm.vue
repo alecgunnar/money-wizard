@@ -119,6 +119,7 @@ export default {
 
 .form__footer {
   text-align: center;
+  margin: 0 0 1em;
   
   button {
     margin: 0 0.5em 0 0;

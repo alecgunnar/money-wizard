@@ -2,8 +2,6 @@
   <div class="transaction">
     <div class="transaction__field transaction__field--date"
       data-qa="date">{{ date }}</div>
-    <div class="transaction__field transaction__field--reason"
-      data-qa="reason">{{ transaction.reason }}</div>
     <div class="transaction__field transaction__field--amount"
       data-qa="amount">{{ transaction.amount | dollarAmount }}</div>
   </div>
@@ -34,34 +32,36 @@ export default {
 <style scoped>
 .transaction {
   display: flex;
-}
-
-.transaction__field--date {
-  margin: 0 1rem 0 0;
-  color: #aaa;
-  padding: 1rem 0;
-  width: 20%;
-}
-
-.transaction__field--reason,
-.transaction__field--amount {
-  background-color: #efefef;
-  padding: 1rem;
+  border-top: 1px solid #efefef;
+  padding: 1em;
   box-sizing: border-box;
 }
 
-.transaction__field--reason {
+.transaction__field--date {
   flex: 1;
-  padding-right: 0;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
 }
 
 .transaction__field--amount {
   text-align: right;
-  width: 10%;
-  padding-left: 0;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  flex: 1;
+}
+
+@media screen and (min-width: 980px) {
+  .transaction {
+    padding: 0;
+    border: 0;
+    margin: 0 0 1em;
+  }
+
+  .transaction__field--date {
+    padding: 1em 0;
+  }
+
+  .transaction__field--amount {
+    background-color: #efefef;
+    padding: 1em;
+    border-radius: 3px;
+    flex: 2;
+  }
 }
 </style>
