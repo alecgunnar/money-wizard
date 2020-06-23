@@ -20,28 +20,30 @@
       </div>
     </div>
 
-    <ol v-if="transactions.transactions.length"
+    <div v-if="thereAreTransactions"
       class="transactions"
-      data-qa="transactions-list">
-      <li v-for="transaction in transactions.transactions"
-        :key="transaction.id">
-          <TransactionRow :transaction="transaction" />
-        </li>
-    </ol>
+      data-qa="lists-of-transactions">
+      <div v-for="group in transactionGroups"
+        :key="group[0]">
+        <TransactionsList :date="group[0]"
+          :transactions="group[1]" />
+      </div>
+    </div>
     <p v-else
       data-qa="no-transactions-msg">There are no transactions to display.</p>
   </div>
 </template>
 
 <script>
+import TransactionsClient from '@/clients/transactions'
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
-import TransactionRow from '@/components/lists/TransactionRow'
-import {mapState, mapActions} from 'vuex'
+import TransactionsList from '@/components/lists/TransactionsList'
 
 export default {
   name: 'transactions',
   data () {
     return {
+      transactions: {},
       addingTransaction: false
     }
   },
@@ -51,12 +53,22 @@ export default {
       default: null
     }
   },
-  computed: mapState(['transactions']),
+  computed: {
+    thereAreTransactions () {
+      return Object.keys(this.transactions).length > 0
+    },
+    transactionGroups () {
+      return Object.entries(this.transactions)
+    }
+  },
   mounted () {
-    this.loadTransactions()
+    TransactionsClient.getTransactions()
+      .then(this.transactionsLoaded)
   },
   methods: {
-    ...mapActions(['loadTransactions']),
+    transactionsLoaded (transactions) {
+      this.transactions = transactions
+    },
     addTransaction () {
       this.addingTransaction = true
     },
@@ -65,12 +77,12 @@ export default {
     },
     transactionAdded () {
       this.addingTransaction = false
-      this.loadTransactions()
+      TransactionsClient.getTransactions()
     }
   },
   components: {
     NewTransactionForm,
-    TransactionRow
+    TransactionsList
   }
 }
 </script>
@@ -104,13 +116,6 @@ export default {
   color: #fff;
 }
 
-.transactions {
-  list-style: none;
-  padding: 0;
-  margin: 0 -1rem;
-  border-bottom: 1px solid #efefef;
-}
-
 .addTransaction {
   background-color: #fff;
   position: absolute;
@@ -130,12 +135,5 @@ export default {
 
 .addTransaction__title {
   flex: 1;
-}
-
-@media screen and (min-width: 980px) {
-  .transactions {
-    margin: 1em 0;
-    border: 0;
-  }
 }
 </style>

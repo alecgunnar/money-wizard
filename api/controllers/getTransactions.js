@@ -2,7 +2,7 @@ const TransactionsRepo = require('../repositories/transactions')
 
 module.exports = (router) => {
   router.get('/transactions', (_, res) => {
-    TransactionsRepo.getTransactions()
+    TransactionsRepo.getGroupedTransactions()
       .then((transactions) => res.json(transactions))
       .catch(() => {
         res.status(500)

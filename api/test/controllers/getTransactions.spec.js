@@ -12,12 +12,12 @@ describe('Transactions Controller', () => {
   it('gets all transactions', () => {
     expect.assertions(1)
 
-    TransactionsRepo.getTransactions.mockResolvedValueOnce([])
+    TransactionsRepo.getGroupedTransactions.mockResolvedValueOnce([])
 
     return chai.request(app)
     .get('/transactions')
     .then(() => {
-      expect(TransactionsRepo.getTransactions).toBeCalled()
+      expect(TransactionsRepo.getGroupedTransactions).toBeCalled()
     })
   })
 
@@ -29,21 +29,23 @@ describe('Transactions Controller', () => {
       amount: 23.12
     }
 
-    TransactionsRepo.getTransactions.mockResolvedValueOnce([
-      transaction
-    ])
+    TransactionsRepo.getGroupedTransactions.mockResolvedValueOnce({
+      '2020-07-06': [transaction]
+    })
 
     return chai.request(app)
-    .get('/transactions')
-    .then((res) => {
-      expect(res.body).toEqual([transaction])
-    })
+      .get('/transactions')
+      .then((res) => {
+        expect(res.body).toEqual({
+          '2020-07-06': [transaction]
+        })
+      })
   })
 
   it('rejects when transactions cannot be loaded', () => {
     expect.assertions(2)
 
-    TransactionsRepo.getTransactions.mockRejectedValueOnce()
+    TransactionsRepo.getGroupedTransactions.mockRejectedValueOnce()
 
     return chai.request(app)
     .get('/transactions')

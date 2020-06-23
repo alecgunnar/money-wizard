@@ -1,3 +1,4 @@
+
 import TransactionsClient from '@/clients/transactions'
 import RootClient from '@/clients'
 
@@ -34,5 +35,33 @@ describe('Transactions Client', () => {
     expect(
       TransactionsClient.addTransaction(1234, 'debit', '10', '05/28/1994', 'Something')
     ).rejects.toBeUndefined()
+  })
+
+  it('makes a get request to load transactions', () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: {}
+    })
+    TransactionsClient.getTransactions()
+    expect(RootClient.get).toBeCalledWith('/transactions')
+  })
+
+  it('resolves with transactions when the request succeeds', () => {
+    const transactions = {
+      '2020-02-02': [
+        {
+          amount: 4,
+          type: 'debit'
+        }
+      ]
+    }
+    RootClient.get.mockResolvedValueOnce({
+      data: transactions
+    })
+    expect(TransactionsClient.getTransactions()).resolves.toBe(transactions)
+  })
+
+  it('rejects when the request fails', () => {
+    RootClient.get.mockRejectedValueOnce()
+    expect(TransactionsClient.getTransactions()).rejects.toBeUndefined()
   })
 })
