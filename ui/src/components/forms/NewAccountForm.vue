@@ -100,8 +100,7 @@ export default {
 }
 
 .form__row {
-  display: flex;
-  margin: 0 0 2em;
+  margin: 0 0 1.5em;
   position: relative;
 }
 
@@ -111,21 +110,42 @@ export default {
 }
 
 .form__label {
-  text-align: right;
-  width: 30%;
-  margin: 0 1em 0 0;
-  padding: 0.5em 0;
+  margin: 0 0 0.5em;
 }
 
 .form__input {
-  width: 300px;
+  width: 100%;
 }
 
 .form__footer {
-  padding-left: calc(30% + 1em);
-
+  text-align: center;
+  
   button {
     margin: 0 0.5em 0 0;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .form__row {
+    display: flex;
+    margin: 0 0 2em;
+  }
+
+  .form__label {
+    text-align: right;
+    line-height: 2em;
+    padding: 0 0.5em 0 0;
+    width: 30%;
+    box-sizing: border-box;
+  }
+
+  .form__input {
+    width: 300px;
+  }
+
+  .form__footer {
+    text-align: left;
+    padding: 0 0 0 30%;
   }
 }
 </style>

@@ -28,6 +28,7 @@ export default {
   display: flex;
   border-top: 1px solid #efefef;
   padding: 1em;
+  box-sizing: border-box;
 }
 
 .account__field--name {
