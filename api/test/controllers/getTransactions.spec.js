@@ -17,7 +17,19 @@ describe('Transactions Controller', () => {
     return chai.request(app)
     .get('/transactions')
     .then(() => {
-      expect(TransactionsRepo.getGroupedTransactions).toBeCalled()
+      expect(TransactionsRepo.getGroupedTransactions).toBeCalledWith(undefined)
+    })
+  })
+
+  it('gets all transactions for an account', () => {
+    expect.assertions(1)
+
+    TransactionsRepo.getGroupedTransactions.mockResolvedValueOnce([])
+
+    return chai.request(app)
+    .get('/transactions?accountId=123')
+    .then(() => {
+      expect(TransactionsRepo.getGroupedTransactions).toBeCalledWith('123')
     })
   })
 

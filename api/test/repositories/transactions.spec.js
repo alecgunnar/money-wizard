@@ -73,6 +73,42 @@ describe('Transactions Repository', () => {
     ])
   })
 
+  it('gets all transactions for an account and groups them', async () => {
+    const firstAccountId = await accountsRepo.createAccount('Sample', 'asset')
+    const firstTransactionId = await transactionsRepo.createTransaction(
+      firstAccountId,
+      'debit',
+      10.57,
+      '2020-06-18',
+      'sample',
+      'some notes'
+    )
+
+    const secondAccountId = await accountsRepo.createAccount('Sample Two', 'credit')
+    await transactionsRepo.createTransaction(
+      secondAccountId,
+      'credit',
+      11.11,
+      '2020-06-15',
+      'sample',
+      ''
+    )
+
+    return expect(transactionsRepo.getGroupedTransactions(firstAccountId)).resolves.toEqual({
+      '2020-06-18': [
+        {
+          id: firstTransactionId,
+          accountId: firstAccountId,
+          type: 'debit',
+          amount: 10.57,
+          date: '2020-06-18',
+          reason: 'sample',
+          notes: 'some notes'
+        }
+      ]
+    })
+  })
+
   it('gets all transactions and groups them', async () => {
     const accountId = await accountsRepo.createAccount('Sample', 'asset')
     const firstTransactionId = await transactionsRepo.createTransaction(
