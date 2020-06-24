@@ -53,9 +53,8 @@ export default {
 
 .accounts__account,
 .accounts__balance {
-  border-top: 1px solid #efefef;
-  border-left: 1px solid #efefef;
-  border-right: 1px solid #efefef;
+  border: 1px solid #efefef;
+  border-bottom-width: 0;
 }
 
 .accounts__listItem:first-of-type .accounts__account {
@@ -67,7 +66,7 @@ export default {
   background-color: #f9f9f9;
   padding: 1em;
   display: flex;
-  border-bottom: 1px solid #efefef;
+  border-bottom-width: 1px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
 
