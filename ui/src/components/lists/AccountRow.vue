@@ -2,7 +2,9 @@
   <div class="account"
     :data-accountId="account.id">
     <div class="account__field account__field--name"
-      data-qa="name">{{ account.name }}</div>
+      data-qa="name">
+        <RouterLink :to="{name: 'account-transactions', params: {id: account.id}}">{{ account.name }}</RouterLink>
+      </div>
     <div class="account__field account__field--balance"
       data-qa="balance">{{ account.balance | dollarAmount }}</div>
   </div>
