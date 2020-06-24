@@ -5,8 +5,10 @@
     </h2>
     <ul class="accounts">
       <li v-for="account in accounts"
+        class="accounts__listItem"
         :key="account.id">
-        <AccountRow :account="account" />
+        <AccountRow class="accounts__account"
+          :account="account" />
       </li>
       <li class="accounts__balance">
         <div>Total Balance</div>
@@ -47,32 +49,31 @@ export default {
 .accounts {
   list-style: none;
   padding: 0;
-  margin: 1em -1rem;
-  border-bottom: 1px solid #efefef;
+}
+
+.accounts__account,
+.accounts__balance {
+  border-top: 1px solid #efefef;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+}
+
+.accounts__listItem:first-of-type .accounts__account {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 .accounts__balance {
   background-color: #f9f9f9;
-  border-top: 1px solid #efefef;
-  padding: 1em 1rem;
+  padding: 1em;
   display: flex;
+  border-bottom: 1px solid #efefef;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 
   div:first-of-type {
     font-weight: bold;
     flex: 1;
-  }
-}
-
-@media screen and (min-width: 980px) {
-  .accounts {
-    margin: 1em 0;
-    border: 0;
-  }
-
-  .accounts__balance {
-    background-color: transparent;
-    border: none;
-    padding-left: 0;
   }
 }
 </style>

@@ -27,8 +27,8 @@ export default {
 <style lang="scss" scoped>
 .account {
   display: flex;
-  border-top: 1px solid #efefef;
-  padding: 1em 1rem;
+  align-items: center;
+  padding: 1em;
   box-sizing: border-box;
 }
 
@@ -42,20 +42,7 @@ export default {
 }
 
 @media screen and (min-width: 980px) {
-  .account {
-    padding: 0;
-    border: 0;
-    margin: 0 0 1em;
-  }
-
-  .account__field--name {
-    padding: 1em 0;
-  }
-
   .account__field--balance {
-    background-color: #efefef;
-    padding: 1em;
-    border-radius: 3px;
     flex: 2;
   }
 }
