@@ -46,6 +46,14 @@ describe('Transactions Client', () => {
     expect(RootClient.get).toBeCalledWith('/transactions')
   })
 
+  it('makes a get request to load transactions for an account', () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: {}
+    })
+    TransactionsClient.getTransactions(123)
+    expect(RootClient.get).toBeCalledWith('/transactions?accountId=123')
+  })
+
   it('resolves with transactions when the request succeeds', () => {
     const transactions = {
       '2020-02-02': [

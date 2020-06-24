@@ -6,8 +6,9 @@ export default {
       account, type, amount, date, reason, notes
     }).then(() => 'Created')
   },
-  getTransactions() {
-    return RootClient.get('/transactions')
+  getTransactions(accountId) {
+    const endpoint = `/transactions${typeof accountId !== 'undefined' ? `?accountId=${accountId}` : ''}`
+    return RootClient.get(endpoint)
       .then((resp) => resp.data)
   }
 }
