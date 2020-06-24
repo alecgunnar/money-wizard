@@ -5,7 +5,7 @@
       <div class="transaction__field transaction__field--reason"
         data-qa="reason">{{ transaction.reason }}</div>
       <div class="transaction__field transaction__field--amount"
-        data-qa="amount">{{ transaction.amount | dollarAmount }}</div>
+        data-qa="amount">{{ signedAmount | dollarAmount }}</div>
     </div>
     <div v-if="expanded"
       class="transaction__expandedContent"
@@ -31,6 +31,18 @@ export default {
   props: {
     transaction: {
       required: true
+    }
+  },
+  computed: {
+    signedAmount () {
+      const {type, amount, account} = this.transaction
+
+      if (
+        type === 'debit' && account.type === 'asset'
+          || type === 'credit' && account.type === 'credit'
+      ) return amount * -1
+
+      return amount
     }
   },
   methods: {

@@ -6,7 +6,12 @@ const transaction = {
   date: '2020-05-28',
   reason: 'just because',
   amount: 10.00,
-  notes: 'well, I do not need a reason'
+  notes: 'well, I do not need a reason',
+  type: 'debit',
+  account: {
+    name: 'money receptacal',
+    type: 'asset'
+  }
 }
 
 describe('TransactionRow', () => {
@@ -18,28 +23,6 @@ describe('TransactionRow', () => {
     })
 
     expect(subject.find('[data-qa=reason]').text()).toBe('just because')
-  })
-
-  it('shows the amount', () => {
-    const subject = shallowMount(TransactionRow, {
-      propsData: {
-        transaction
-      }
-    })
-
-    expect(subject.find('[data-qa=amount]').text()).toBe('$10.00')
-  })
-
-  it('shows a negative amount', () => {
-    transaction.amount = -41.23
-
-    const subject = shallowMount(TransactionRow, {
-      propsData: {
-        transaction
-      }
-    })
-
-    expect(subject.find('[data-qa=amount]').text()).toBe('-$41.23')
   })
 
   it('shows expanded content when the row is clicked', async () => {
@@ -113,5 +96,61 @@ describe('TransactionRow', () => {
     subject.trigger('click')
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=expanded-content] [data-qa=notes]').text()).toBe('–')
+  })
+
+  it('shows asset account debit as negative amount', () => {
+    transaction.amount = 10
+    transaction.type = 'debit'
+    transaction.account.type = 'asset'
+
+    const subject = shallowMount(TransactionRow, {
+      propsData: {
+        transaction
+      }
+    })
+
+    expect(subject.find('[data-qa=amount]').text()).toBe('-$10.00')
+  })
+
+  it('shows asset account credit as positive amount', () => {
+    transaction.amount = 10
+    transaction.type = 'credit'
+    transaction.account.type = 'asset'
+
+    const subject = shallowMount(TransactionRow, {
+      propsData: {
+        transaction
+      }
+    })
+
+    expect(subject.find('[data-qa=amount]').text()).toBe('$10.00')
+  })
+
+  it('shows credit account debit as positive amount', () => {
+    transaction.amount = 10
+    transaction.type = 'debit'
+    transaction.account.type = 'credit'
+
+    const subject = shallowMount(TransactionRow, {
+      propsData: {
+        transaction
+      }
+    })
+
+    expect(subject.find('[data-qa=amount]').text()).toBe('$10.00')
+  })
+
+  it('shows credit account credit as negative amount', () => {
+    transaction.amount = 10
+    transaction.type = 'credit'
+    transaction.account.type = 'credit'
+
+    const subject = shallowMount(TransactionRow, {
+      propsData: {
+        transaction
+      }
+    })
+
+    expect(subject.find('[data-qa=amount]').text()).toBe('-$10.00')
   })
 })
