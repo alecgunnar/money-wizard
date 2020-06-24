@@ -3,8 +3,10 @@
     <h2 data-qa="date-of-transactions">{{ formattedDate }}</h2>
     <ul class="transactions">
       <li v-for="transaction in transactions"
+        class="transaction__listItem"
         :key="transaction.id">
-          <TransactionRow :transaction="transaction" />
+          <TransactionRow :transaction="transaction"
+            class="transactions__transaction" />
         </li>
     </ul>
   </div>
@@ -39,14 +41,21 @@ export default {
 .transactions {
   list-style: none;
   padding: 0;
-  margin: 1em -1rem;
-  border-bottom: 1px solid #efefef;
 }
 
-@media screen and (min-width: 980px) {
-  .transactions {
-    margin: 1em 0;
-    border: 0;
-  }
+.transactions__transaction {
+  border: 1px solid #efefef;
+  border-bottom-width: 0;
+}
+
+.transaction__listItem:first-of-type .transactions__transaction {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.transaction__listItem:last-of-type .transactions__transaction {
+  border-bottom-width: 1px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 </style>

@@ -26,36 +26,16 @@ export default {
 <style scoped>
 .transaction {
   display: flex;
-  border-top: 1px solid #efefef;
-  padding: 1em 1rem;
+  padding: 1em;
   box-sizing: border-box;
 }
 
-.transaction__field--reason {
+.transaction__field--reason,
+.transaction__field--amount {
   flex: 1;
 }
 
 .transaction__field--amount {
   text-align: right;
-  flex: 1;
-}
-
-@media screen and (min-width: 980px) {
-  .transaction {
-    padding: 0;
-    border: 0;
-    margin: 0 0 1em;
-  }
-
-  .transaction__field--reason {
-    padding: 1em 0;
-  }
-
-  .transaction__field--amount {
-    background-color: #efefef;
-    padding: 1em;
-    border-radius: 3px;
-    flex: 2;
-  }
 }
 </style>
