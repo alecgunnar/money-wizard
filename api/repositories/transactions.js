@@ -29,14 +29,14 @@ module.exports = {
     return db['Transaction'].findAll()
       .then((transactions) => transactions.map(fromModel))
   },
-  getGroupedTransactions (AccountId) {
+  getGroupedTransactions (AccountId=null) {
     const query = {
       order: [
         ['date', 'DESC']
       ]
     }
 
-    if (typeof AccountId !== 'undefined') {
+    if (AccountId) {
       query.where = {
         AccountId
       }
