@@ -5,6 +5,10 @@ import RootClient from '@/clients'
 jest.mock('@/clients')
 
 describe('Transactions Client', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('makes a post request to add transaction', () => {
     RootClient.post.mockResolvedValueOnce()
     TransactionsClient.addTransaction(1234, 'debit', '10', '05/28/1994', 'BECAUSE!', 'Something')
@@ -43,6 +47,14 @@ describe('Transactions Client', () => {
       data: {}
     })
     TransactionsClient.getTransactions()
+    expect(RootClient.get).toBeCalledWith('/transactions')
+  })
+
+  it('makes a get request to load transactions when account is null', () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: {}
+    })
+    TransactionsClient.getTransactions(null)
     expect(RootClient.get).toBeCalledWith('/transactions')
   })
 
