@@ -9,13 +9,13 @@ describe('AccountsList', () => {
         accounts: [
           {
             id: 1,
-            type: 'debit',
-            amount: 10.31
+            type: 'asset',
+            balance: 10.31
           },
           {
             id: 2,
-            type: 'debit',
-            amount: 14.11
+            type: 'asset',
+            balance: 14.11
           }
         ]
       }
@@ -30,8 +30,8 @@ describe('AccountsList', () => {
         accounts: [
           {
             id: 1,
-            type: 'debit',
-            amount: 10.31
+            type: 'asset',
+            balance: 10.31
           }
         ]
       }
@@ -39,8 +39,50 @@ describe('AccountsList', () => {
 
     expect(subject.findComponent(AccountRow).props('account')).toEqual({
       id: 1,
-      type: 'debit',
-      amount: 10.31
+      type: 'asset',
+      balance: 10.31
     })
+  })
+
+  it('sums the balances of all accounts', () => {
+    const subject = shallowMount(AccountsList, {
+      propsData: {
+        accounts: [
+          {
+            id: 1,
+            type: 'asset',
+            balance: 10.31
+          },
+          {
+            id: 2,
+            type: 'asset',
+            balance: 14.11
+          }
+        ]
+      }
+    })
+
+    expect(subject.find('[data-qa=total-balance]').text()).toBe('$24.42')
+  })
+
+  it('sums the balances of all accounts when balances are rounded', () => {
+    const subject = shallowMount(AccountsList, {
+      propsData: {
+        accounts: [
+          {
+            id: 1,
+            type: 'asset',
+            balance: 10
+          },
+          {
+            id: 2,
+            type: 'asset',
+            balance: 14
+          }
+        ]
+      }
+    })
+
+    expect(subject.find('[data-qa=total-balance]').text()).toBe('$24.00')
   })
 })
