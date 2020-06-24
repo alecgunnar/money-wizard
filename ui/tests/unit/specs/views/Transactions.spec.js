@@ -13,6 +13,22 @@ describe('Transactions', () => {
     expect(TransactionsClient.getTransactions).toHaveBeenCalled()
   })
 
+  it('loads transactions for the account when one is not specified', () => {
+    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    shallowMount(Transactions)
+    expect(TransactionsClient.getTransactions).toHaveBeenCalledWith(null)
+  })
+
+  it('loads transactions for the account when one is specified', () => {
+    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    shallowMount(Transactions, {
+      propsData: {
+        id: 123
+      }
+    })
+    expect(TransactionsClient.getTransactions).toHaveBeenCalledWith(123)
+  })
+
   it('has a button to create new transaction', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
     const subject = shallowMount(Transactions)

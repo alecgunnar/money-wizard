@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     loadTransactions () {
-      TransactionsClient.getTransactions()
+      TransactionsClient.getTransactions(this.id)
       .then(this.transactionsLoaded)
     },
     transactionsLoaded (transactions) {
