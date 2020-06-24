@@ -38,7 +38,7 @@ describe('Transactions Repository', () => {
       'some notes'
     )
 
-    return expect(transactionsRepo.getTransaction(transactionId)).resolves.toEqual({
+    return expect(transactionsRepo.getTransaction(transactionId)).resolves.toMatchObject({
       id: transactionId,
       accountId: accountId,
       type: 'debit',
@@ -60,7 +60,7 @@ describe('Transactions Repository', () => {
       'some notes'
     )
 
-    return expect(transactionsRepo.getTransactions()).resolves.toEqual([
+    return expect(transactionsRepo.getTransactions()).resolves.toMatchObject([
       {
         id: transactionId,
         accountId: accountId,
@@ -94,7 +94,7 @@ describe('Transactions Repository', () => {
       ''
     )
 
-    return expect(transactionsRepo.getGroupedTransactions(firstAccountId)).resolves.toEqual({
+    return expect(transactionsRepo.getGroupedTransactions(firstAccountId)).resolves.toMatchObject({
       '2020-06-18': [
         {
           id: firstTransactionId,
@@ -103,7 +103,11 @@ describe('Transactions Repository', () => {
           amount: 10.57,
           date: '2020-06-18',
           reason: 'sample',
-          notes: 'some notes'
+          notes: 'some notes',
+          account: {
+            name: 'Sample',
+            type: 'asset'
+          }
         }
       ]
     })
@@ -129,7 +133,7 @@ describe('Transactions Repository', () => {
       ''
     )
 
-    return expect(transactionsRepo.getGroupedTransactions()).resolves.toEqual({
+    return expect(transactionsRepo.getGroupedTransactions()).resolves.toMatchObject({
       '2020-06-17': [
         {
           id: firstTransactionId,
@@ -202,7 +206,7 @@ describe('Transactions Repository', () => {
       ''
     )
 
-    return expect(transactionsRepo.getTransactionsForAccount(accountId)).resolves.toEqual([
+    return expect(transactionsRepo.getTransactionsForAccount(accountId)).resolves.toMatchObject([
       {
         id: firstTransactionId,
         accountId: accountId,

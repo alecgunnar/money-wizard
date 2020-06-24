@@ -1,13 +1,19 @@
 const db = require('../models')
 
-const fromModel = (accountModel) => ({
-  id: accountModel.id,
-  accountId: accountModel.AccountId,
-  type: accountModel.type,
-  amount: accountModel.amount,
-  date: accountModel.date,
-  reason: accountModel.reason,
-  notes: accountModel.notes
+const fromAccountModel = (accountModel) => (accountModel ? {
+  name: accountModel.name,
+  type: accountModel.type
+} : null)
+
+const fromModel = (transactionModel) => ({
+  id: transactionModel.id,
+  accountId: transactionModel.AccountId,
+  type: transactionModel.type,
+  amount: transactionModel.amount,
+  date: transactionModel.date,
+  reason: transactionModel.reason,
+  notes: transactionModel.notes,
+  account: fromAccountModel(transactionModel.Account)
 })
 
 module.exports = {
@@ -33,7 +39,8 @@ module.exports = {
     const query = {
       order: [
         ['date', 'DESC']
-      ]
+      ],
+      include: [db['Account']]
     }
 
     if (AccountId) {
