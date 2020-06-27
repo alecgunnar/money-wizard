@@ -183,7 +183,7 @@ export default {
     return {
       account: null,
       type: null,
-      amount: '0.00',
+      amount: '',
       date: '',
       reason: '',
       notes: '',
