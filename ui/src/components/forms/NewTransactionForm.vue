@@ -109,6 +109,7 @@
               <input type="text"
                 id="amount"
                 v-model="amount"
+                autocomplete="off"
                 data-qa="amount" />
             </div>
             <div v-if="amountTooLowError"
@@ -123,10 +124,16 @@
             </label>
           </div>
           <div class="form__input">
-            <input type="text"
-              id="date"
-              v-model="date"
-              data-qa="date" />
+            <div class="form__input--withPrefix">
+              <div class="form__inputPrefix">
+                &nbsp;
+              </div>
+              <input type="text"
+                id="date"
+                v-model="date"
+                autocomplete="off"
+                data-qa="date" />
+            </div>
             <div v-if="dateIsEmptyError"
               class="form__fieldError"
               data-qa="date-is-empty-error">A date must be entered.</div>
