@@ -101,7 +101,7 @@
               Amount
             </label>
           </div>
-          <div class="form__input form__input--right">
+          <div class="form__input">
             <div class="form__input--withPrefix">
               <div class="form__inputPrefix">
                 $
@@ -122,7 +122,7 @@
               Date
             </label>
           </div>
-          <div class="form__input form__input--right">
+          <div class="form__input">
             <input type="text"
               id="date"
               v-model="date"
