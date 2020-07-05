@@ -29,6 +29,11 @@
       ref="creditList">
       Credit Cards
     </AccountsList>
+    <AccountsList v-if="loanAccounts.length"
+      :accounts="loanAccounts"
+      ref="loanList">
+      Loans
+    </AccountsList>
     <p v-if="accounts.length === 0"
       data-qa="no-accounts-msg">There are no accounts to display.</p>
   </div>
@@ -54,6 +59,9 @@ export default {
     },
     creditAccounts () {
       return this.accounts.filter((account) => account.type === 'credit')
+    },
+    loanAccounts () {
+      return this.accounts.filter((account) => account.type === 'loan')
     }
   },
   mounted () {

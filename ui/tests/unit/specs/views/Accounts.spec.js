@@ -79,6 +79,61 @@ describe('Accounts', () => {
     expect(subject.findComponent(AccountsList).exists()).toBeFalsy()
   })
 
+  it('shows the list of loan accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'loan'
+      }
+    ])
+
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
+    expect(subject.findComponent({
+      ref: 'loanList'
+    }).exists()).toBeTruthy()
+  })
+
+  it('props the loan accounts list with loan accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'loan'
+      },
+      {
+        id: '456',
+        name: 'other',
+        balance: 9.99,
+        type: 'credit'
+      }
+    ])
+
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
+    expect(subject.findComponent({
+      ref: 'loanList'
+    }).props('accounts')).toEqual([
+      {
+        id: '123',
+        name: 'Sample',
+        balance: 10.33,
+        type: 'loan'
+      }
+    ])
+  })
+
+  it('does not show the list of loan accounts when there are no loan accounts', async () => {
+    AccountsClient.getAccounts.mockResolvedValueOnce([])
+
+    const subject = shallowMount(Accounts)
+    await subject.vm.$nextTick()
+    expect(subject.findComponent(AccountsList).exists()).toBeFalsy()
+  })
+
   it('shows the list of credit accounts', async () => {
     AccountsClient.getAccounts.mockResolvedValueOnce([
       {
