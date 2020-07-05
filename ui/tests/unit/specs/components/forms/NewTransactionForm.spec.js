@@ -21,6 +21,11 @@ describe('NewTransactionForm', () => {
         id: 456,
         name: 'Other',
         type: 'credit'
+      },
+      {
+        id: 789,
+        name: 'Other',
+        type: 'loan'
       }
     ])
   })
@@ -39,7 +44,7 @@ describe('NewTransactionForm', () => {
     const subject = shallowMount(NewTransactionForm)
     await subject.vm.$nextTick()
     const options = subject.findAll('[data-qa=choose-account] option')
-    expect(options.length).toBe(3)
+    expect(options.length).toBe(4)
   })
 
   it('fills each account option with the name of the account', async () => {
@@ -107,10 +112,26 @@ describe('NewTransactionForm', () => {
     expect(subject.find('[data-qa=credit-types]').exists()).toBeTruthy()
   })
 
+  it('when a loan type account is selected, the credit transaction type fields are shown', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(789)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=credit-types]').exists()).toBeTruthy()
+  })
+
   it('when a credit type account is selected, the asset transaction type fields are not shown', async () => {
     const subject = shallowMount(NewTransactionForm)
     await subject.vm.$nextTick()
     subject.find('[data-qa=choose-account]').setValue(456)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
+  })
+
+  it('when a loan type account is selected, the asset transaction type fields are not shown', async () => {
+    const subject = shallowMount(NewTransactionForm)
+    await subject.vm.$nextTick()
+    subject.find('[data-qa=choose-account]').setValue(789)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
   })

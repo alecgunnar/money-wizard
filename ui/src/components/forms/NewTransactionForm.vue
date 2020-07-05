@@ -54,7 +54,7 @@
                 <label for="credit">Deposit</label>
               </div>
             </div>
-            <div v-else-if="accountTypeIsSelected('credit')"
+            <div v-else-if="accountTypeIsSelected('credit') || accountTypeIsSelected('loan')"
               class="form__radios"
               data-qa="credit-types">
               <div class="form__radio">
