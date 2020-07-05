@@ -85,4 +85,20 @@ describe('Transactions Client', () => {
     RootClient.get.mockRejectedValueOnce()
     expect(TransactionsClient.getTransactions()).rejects.toBeUndefined()
   })
+
+  it('makes request to delete transaction', () => {
+    RootClient.delete.mockResolvedValueOnce()
+    TransactionsClient.deleteTransaction('1234')
+    expect(RootClient.delete).toBeCalledWith('/transactions/1234')
+  })
+
+  it('resolves when the transaction is deleted', () => {
+    RootClient.delete.mockResolvedValueOnce()
+    expect(TransactionsClient.deleteTransaction('123')).resolves.toBeUndefined()
+  })
+
+  it('rejects when the transaction is not deleted', () => {
+    RootClient.delete.mockRejectedValueOnce()
+    expect(TransactionsClient.deleteTransaction('123')).rejects.toBeUndefined()
+  })
 })

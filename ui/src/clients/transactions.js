@@ -10,5 +10,8 @@ export default {
     const endpoint = `/transactions${accountId ? `?accountId=${accountId}` : ''}`
     return RootClient.get(endpoint)
       .then((resp) => resp.data)
+  },
+  deleteTransaction (transactionId) {
+    return RootClient.delete(`/transactions/${transactionId}`)
   }
 }

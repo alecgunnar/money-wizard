@@ -1,4 +1,5 @@
 import App from '@/App'
+import ConfirmDialog from '@/components/dialogs/Confirm'
 import store from '@/store'
 import VueRouter from 'vue-router'
 import {shallowMount, createLocalVue} from '@vue/test-utils'
@@ -65,5 +66,10 @@ describe('App', () => {
     await subject.vm.$nextTick()
 
     expect(subject.find('[data-qa=nav-menu]').classes('triggered')).toBeFalsy()
+  })
+
+  it('has a confirm dialog', () => {
+    const subject = shallowMount(App, {store, localVue, router})
+    expect(subject.findComponent(ConfirmDialog).exists()).toBeTruthy()
   })
 })

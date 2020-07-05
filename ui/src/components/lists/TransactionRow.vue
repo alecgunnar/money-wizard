@@ -10,6 +10,10 @@
     <div v-if="expanded"
       class="transaction__expandedContent"
       data-qa="expanded-content">
+      <div class="transaction__options">
+        <button data-qa="delete"
+          @click="deleteTransaction">Delete</button>
+      </div>
       <div style="font-weight: bold;">Notes:</div>
       <div data-qa="notes">
         {{ transaction.notes || '–' }}
@@ -19,6 +23,8 @@
 </template>
 
 <script>
+import TransactionsClient from '@/clients/transactions'
+import DialogsUtil from '@/utils/dialogs'
 import dollarAmount from '@/filters/dollarAmount'
 
 export default {
@@ -48,6 +54,18 @@ export default {
   methods: {
     toggleExpandedContent () {
       this.expanded = !this.expanded
+    },
+    deleteTransaction (e) {
+      e.stopPropagation()
+      DialogsUtil.confirm(this.confirmed)
+    },
+    confirmed () {
+      TransactionsClient.deleteTransaction(this.transaction.id)
+        .then(this.transactionDeleted)
+        .catch(() => {})
+    },
+    transactionDeleted () {
+      this.$emit('deleted')
     }
   },
   filters: {
@@ -73,6 +91,10 @@ export default {
 
 .transaction__expandedContent {
   margin: 1em 0 0;
+}
+
+.transaction__options {
+  float: right;
 }
 
 .transaction__field--reason,

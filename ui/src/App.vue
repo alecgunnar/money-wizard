@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <ConfirmDialog />
     <div v-if="serverError"
       class="serverError"
       data-qa="server-error-message">
@@ -30,6 +31,7 @@
 </template>
 
 <script>
+import ConfirmDialog from '@/components/dialogs/Confirm'
 import {mapState} from 'vuex'
 
 export default {
@@ -51,6 +53,9 @@ export default {
       this.mobileNavTriggered = false
       next()
     }
+  },
+  components: {
+    ConfirmDialog
   }
 }
 </script>
