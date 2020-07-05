@@ -35,6 +35,7 @@
             <option value="" disabled selected>Choose an account type</option>
             <option value="asset">Cash or Bank</option>
             <option value="credit">Credit Card</option>
+            <option value="loan">Loan</option>
           </select>
           <div v-if="withoutTypeErr"
             class="form__fieldError"
