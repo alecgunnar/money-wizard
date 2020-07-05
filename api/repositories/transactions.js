@@ -61,5 +61,11 @@ module.exports = {
         AccountId
       }
     }).then((transactions) => transactions.map(fromModel))
+  },
+  deleteTransaction (id) {
+    return db['Transaction'].findByPk(id)
+      .then((transaction) => {
+        if (transaction) transaction.destroy()
+      })
   }
 }

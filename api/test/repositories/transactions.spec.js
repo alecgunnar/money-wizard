@@ -227,4 +227,25 @@ describe('Transactions Repository', () => {
       }
     ])
   })
+
+  it('deletes transaction', async () => {
+    const accountId = await accountsRepo.createAccount('Sample', 'asset')
+
+    const id = await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      10.57,
+      '2020-06-18',
+      'sample',
+      'some notes'
+    )
+
+    await transactionsRepo.deleteTransaction(id)
+
+    expect(transactionsRepo.getTransactions()).resolves.toEqual([])
+  })
+
+  it('deletes transaction even if it does not exist', () => {
+    expect(transactionsRepo.deleteTransaction('1234')).resolves.toBeUndefined()
+  })
 })

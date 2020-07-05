@@ -5,5 +5,6 @@ require('./createAccount')(router)
 require('./getAccounts')(router)
 require('./createTransaction')(router)
 require('./getTransactions')(router)
+require('./deleteTransaction')(router)
 
 module.exports = router
