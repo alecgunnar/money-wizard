@@ -26,6 +26,7 @@
       <div v-for="group in transactionGroups"
         :key="group[0]">
         <TransactionsList :date="group[0]"
+          @remove="(id) => removeFromGroup(group[0], id)"
           :transactions="group[1]" />
       </div>
     </div>
@@ -81,6 +82,9 @@ export default {
     transactionAdded () {
       this.addingTransaction = false
       this.loadTransactions()
+    },
+    removeFromGroup (date, id) {
+      this.transactions[date] = this.transactions[date].filter((transaction) => transaction.id !== id)
     }
   },
   components: {

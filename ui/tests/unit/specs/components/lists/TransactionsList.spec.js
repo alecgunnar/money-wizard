@@ -55,4 +55,27 @@ describe('TransactionsList', () => {
 
     expect(subject.findComponent(TransactionRow).props('transaction')).toEqual(transaction)
   })
+
+  it('emits transaction to be removed when it is deleted', () => {
+    const subject = shallowMount(TransactionsList, {
+      propsData: {
+        date: '2020-07-06',
+        transactions: [
+          {
+            id: 'ab23r',
+            amount: 123
+          },
+          {
+            id: '323g42',
+            amount: 77.31
+          }
+        ]
+      }
+    })
+
+    const transactions = subject.findAllComponents(TransactionRow)
+    transactions.at(0).vm.$emit('deleted')
+
+    expect(subject.emitted().remove[0][0]).toBe('ab23r')
+  })
 })

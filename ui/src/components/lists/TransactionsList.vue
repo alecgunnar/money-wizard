@@ -6,6 +6,7 @@
         class="transaction__listItem"
         :key="transaction.id">
           <TransactionRow :transaction="transaction"
+            @deleted="removeTransaction(transaction.id)"
             class="transactions__transaction" />
         </li>
     </ul>
@@ -29,6 +30,11 @@ export default {
   computed: {
     formattedDate () {
       return moment(this.date).format('MMMM D, YYYY')
+    }
+  },
+  methods: {
+    removeTransaction (id) {
+      this.$emit('remove', id)
     }
   },
   components: {

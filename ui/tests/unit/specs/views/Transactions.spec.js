@@ -188,4 +188,22 @@ describe('Transactions', () => {
     const list = subject.findComponent(TransactionsList)
     expect(list.props('transactions')).toEqual(transactions)
   })
+
+  it('removes transaction', async () => {
+    const transactions = [
+      {id: '123', amount: 10.53, type: 'credit'},
+      {id: '456', amount: 10.53, type: 'credit'}
+    ]
+    TransactionsClient.getTransactions.mockResolvedValueOnce({
+      '2020-07-06': transactions
+    })
+    const subject = shallowMount(Transactions)
+    await subject.vm.$nextTick()
+    subject.findComponent(TransactionsList).vm.$emit('remove', '123')
+    await subject.vm.$nextTick()
+    const list = subject.findComponent(TransactionsList)
+    expect(list.props('transactions')).toEqual([
+      {id: '456', amount: 10.53, type: 'credit'}
+    ])
+  })
 })
