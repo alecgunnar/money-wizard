@@ -44,6 +44,24 @@ describe('Create Account Controller', () => {
       })
   })
 
+  it('creates a loan account', () => {
+    expect.assertions(2)
+
+    AccountsRepository.createAccount.mockResolvedValueOnce()
+
+    return chai.request(app)
+      .post('/accounts')
+      .set('content-type', 'application/json')
+      .send({
+        name: 'Sample Account',
+        type: 'loan'
+      })
+      .then((res) => {
+        expect(AccountsRepository.createAccount).toBeCalledWith('Sample Account', 'loan')
+        expect(res.statusCode).toBe(201)
+      })
+  })
+
   it('account creation fails', () => {
     expect.assertions(2)
 

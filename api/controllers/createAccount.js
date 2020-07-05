@@ -22,7 +22,7 @@ module.exports = (router) => {
       })
     }
 
-    if (['asset', 'credit'].indexOf(type) === -1) {
+    if (['asset', 'credit', 'loan'].indexOf(type) === -1) {
       return res.status(401).send({
         msg: 'The supplied type is not valid. Valid types are "asset" and "credit".'
       })
