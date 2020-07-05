@@ -19,7 +19,6 @@
             @click="toggleMobileNav"></div>
           <ul class="navigation__links">
             <li class="navigation__link"><RouterLink :to="{name: 'accounts'}">Accounts</RouterLink></li>
-            <li class="navigation__link"><RouterLink :to="{name: 'transactions'}">Transactions</RouterLink></li>
           </ul>
         </nav>
       </div>
