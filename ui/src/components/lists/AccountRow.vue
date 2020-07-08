@@ -3,7 +3,7 @@
     :data-accountId="account.id">
     <div class="account__field account__field--name"
       data-qa="name">
-        <RouterLink :to="{name: 'account-transactions', params: {id: account.id}}">{{ account.name }}</RouterLink>
+        <RouterLink :to="{name: 'account', params: {id: account.id}}">{{ account.name }}</RouterLink>
       </div>
     <div class="account__field account__field--balance"
       data-qa="balance">{{ account.balance | dollarAmount }}</div>
