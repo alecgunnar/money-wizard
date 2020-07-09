@@ -10,5 +10,8 @@ export default {
   async getAccounts () {
     return RootClient.get('/accounts')
       .then((resp) => resp.data)
+  },
+  getAccount (id) {
+    return Promise.resolve()
   }
 }

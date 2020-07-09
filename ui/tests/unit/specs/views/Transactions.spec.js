@@ -2,21 +2,31 @@ import Transactions from '@/views/Transactions'
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionsList from '@/components/lists/TransactionsList'
 import TransactionsClient from '@/clients/transactions'
+import AccountsClient from '@/clients/accounts'
 import {shallowMount} from '@vue/test-utils'
 
 jest.mock('@/clients/transactions')
+jest.mock('@/clients/accounts')
 
 describe('Transactions', () => {
-  it('loads transactions', () => {
+  it('loads accounts', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    shallowMount(Transactions)
-    expect(TransactionsClient.getTransactions).toHaveBeenCalled()
+    shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
+    expect(AccountsClient.getAccount).toBeCalledWith(1234)
   })
 
-  it('loads transactions for the account when one is not specified', () => {
+  it('loads transactions', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    shallowMount(Transactions)
-    expect(TransactionsClient.getTransactions).toHaveBeenCalledWith(null)
+    shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
+    expect(TransactionsClient.getTransactions).toHaveBeenCalled()
   })
 
   it('loads transactions for the account when one is specified', () => {
@@ -31,13 +41,21 @@ describe('Transactions', () => {
 
   it('has a button to create new transaction', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     expect(subject.find('button[data-qa=new-transaction]').exists()).toBeTruthy()
   })
 
   it('shows a form to create a new transaction', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewTransactionForm).exists()).toBeTruthy()
@@ -57,7 +75,11 @@ describe('Transactions', () => {
 
   it('hides the form when the form is canceled', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
     subject.findComponent(NewTransactionForm).vm.$emit('cancel')
@@ -67,7 +89,11 @@ describe('Transactions', () => {
 
   it('hides the form when the form is submitted', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
@@ -78,7 +104,11 @@ describe('Transactions', () => {
 
   it('reloads the transactions when the form is submitted', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     jest.resetAllMocks()
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
@@ -89,7 +119,11 @@ describe('Transactions', () => {
 
   it('shows the reloaded transactions', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     jest.resetAllMocks()
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
@@ -105,20 +139,32 @@ describe('Transactions', () => {
 
   it('does not show new transaction form by default', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
   })
 
   it('renders a message stating no transactions are available', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=no-transactions-msg]').exists()).toBeTruthy()
   })
 
   it('does not render transactions', async () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({})
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=transactions-list]').exists()).toBeFalsy()
   })
@@ -130,7 +176,11 @@ describe('Transactions', () => {
         {id: '123', amount: 10.53, type: 'credit'}
       ]
     })
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=no-transactions-msg]').exists()).toBeFalsy()
   })
@@ -142,7 +192,11 @@ describe('Transactions', () => {
         {id: '123', amount: 10.53, type: 'credit'}
       ]
     })
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=lists-of-transactions]').exists()).toBeTruthy()
   })
@@ -157,7 +211,11 @@ describe('Transactions', () => {
         {id: '456', amount: 10.53, type: 'credit'}
       ]
     })
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     expect(subject.findAllComponents(TransactionsList).length).toBe(2)
   })
@@ -169,7 +227,11 @@ describe('Transactions', () => {
         {id: '123', amount: 10.53, type: 'credit'}
       ]
     })
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     const list = subject.findComponent(TransactionsList)
     expect(list.props('date')).toBe('2020-07-06')
@@ -183,7 +245,11 @@ describe('Transactions', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({
       '2020-07-06': transactions
     })
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     const list = subject.findComponent(TransactionsList)
     expect(list.props('transactions')).toEqual(transactions)
@@ -197,7 +263,11 @@ describe('Transactions', () => {
     TransactionsClient.getTransactions.mockResolvedValueOnce({
       '2020-07-06': transactions
     })
-    const subject = shallowMount(Transactions)
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
     await subject.vm.$nextTick()
     subject.findComponent(TransactionsList).vm.$emit('remove', '123')
     await subject.vm.$nextTick()

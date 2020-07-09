@@ -37,6 +37,7 @@
 
 <script>
 import TransactionsClient from '@/clients/transactions'
+import AccountsClient from '@/clients/accounts'
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionsList from '@/components/lists/TransactionsList'
 
@@ -50,7 +51,7 @@ export default {
   },
   props: {
     id: {
-      required: false,
+      required: true,
       default: null
     }
   },
@@ -63,12 +64,16 @@ export default {
     }
   },
   mounted () {
+    this.loadAccount()
     this.loadTransactions()
   },
   methods: {
+    loadAccount () {
+      AccountsClient.getAccount(this.id)
+    },
     loadTransactions () {
       TransactionsClient.getTransactions(this.id)
-      .then(this.transactionsLoaded)
+        .then(this.transactionsLoaded)
     },
     transactionsLoaded (transactions) {
       this.transactions = transactions
