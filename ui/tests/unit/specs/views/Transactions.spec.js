@@ -8,9 +8,18 @@ import {shallowMount} from '@vue/test-utils'
 jest.mock('@/clients/transactions')
 jest.mock('@/clients/accounts')
 
+const setupTest = (transactions = {}, account = null) => {
+  TransactionsClient.getTransactions.mockResolvedValueOnce(transactions)
+
+  AccountsClient.getAccount.mockResolvedValueOnce(account || {
+    name: 'Sample',
+    balance: 1.21
+  })
+}
+
 describe('Transactions', () => {
   it('loads accounts', () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -19,8 +28,36 @@ describe('Transactions', () => {
     expect(AccountsClient.getAccount).toBeCalledWith(1234)
   })
 
+  it('shows the account title', async() => {
+    setupTest({}, {
+      name: 'This is the account',
+      balance: 1.21
+    })
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=account-name]').text()).toBe('This is the account')
+  })
+
+  it('shows the account balance', async() => {
+    setupTest({}, {
+      name: 'This is the account',
+      balance: 1.21
+    })
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=account-balance]').text()).toBe('$1.21')
+  })
+
   it('loads transactions', () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -30,7 +67,7 @@ describe('Transactions', () => {
   })
 
   it('loads transactions for the account when one is specified', () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     shallowMount(Transactions, {
       propsData: {
         id: 123
@@ -40,7 +77,7 @@ describe('Transactions', () => {
   })
 
   it('has a button to create new transaction', () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -50,7 +87,7 @@ describe('Transactions', () => {
   })
 
   it('shows a form to create a new transaction', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -62,7 +99,7 @@ describe('Transactions', () => {
   })
 
   it('props the form with the account to preselect', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: '234'
@@ -74,7 +111,7 @@ describe('Transactions', () => {
   })
 
   it('hides the form when the form is canceled', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -88,7 +125,7 @@ describe('Transactions', () => {
   })
 
   it('hides the form when the form is submitted', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -96,14 +133,14 @@ describe('Transactions', () => {
     })
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
   })
 
   it('reloads the transactions when the form is submitted', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -112,13 +149,13 @@ describe('Transactions', () => {
     jest.resetAllMocks()
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     expect(TransactionsClient.getTransactions).toHaveBeenCalled()
   })
 
   it('shows the reloaded transactions', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -138,7 +175,7 @@ describe('Transactions', () => {
   })
 
   it('does not show new transaction form by default', () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -148,7 +185,7 @@ describe('Transactions', () => {
   })
 
   it('renders a message stating no transactions are available', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -159,7 +196,7 @@ describe('Transactions', () => {
   })
 
   it('does not render transactions', async () => {
-    TransactionsClient.getTransactions.mockResolvedValueOnce({})
+    setupTest()
     const subject = shallowMount(Transactions, {
       propsData: {
         id: 1234
@@ -171,7 +208,7 @@ describe('Transactions', () => {
 
   it('does not render a message stating no transactions are available', async () => {
     jest.resetAllMocks()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': [
         {id: '123', amount: 10.53, type: 'credit'}
       ]
@@ -187,7 +224,7 @@ describe('Transactions', () => {
 
   it('renders lists of transactions', async () => {
     jest.resetAllMocks()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': [
         {id: '123', amount: 10.53, type: 'credit'}
       ]
@@ -203,7 +240,7 @@ describe('Transactions', () => {
 
   it('renders each list of transactions', async () => {
     jest.resetAllMocks()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': [
         {id: '123', amount: 10.53, type: 'credit'}
       ],
@@ -222,7 +259,7 @@ describe('Transactions', () => {
 
   it('props transaction list with the date', async () => {
     jest.resetAllMocks()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': [
         {id: '123', amount: 10.53, type: 'credit'}
       ]
@@ -242,7 +279,7 @@ describe('Transactions', () => {
     const transactions = [
       {id: '123', amount: 10.53, type: 'credit'}
     ]
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': transactions
     })
     const subject = shallowMount(Transactions, {
@@ -260,7 +297,7 @@ describe('Transactions', () => {
       {id: '123', amount: 10.53, type: 'credit'},
       {id: '456', amount: 10.53, type: 'credit'}
     ]
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': transactions
     })
     const subject = shallowMount(Transactions, {

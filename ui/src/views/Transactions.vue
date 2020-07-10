@@ -1,5 +1,13 @@
 <template>
   <div class="page">
+    <div v-if="account">
+      <div data-qa="account-name">
+        {{ account.name }}
+      </div>
+      <div data-qa="account-balance">
+        {{ account.balance | dollarAmount }}
+      </div>
+    </div>
     <div v-if="addingTransaction"
       class="addTransaction">
       <div class="addTransaction__header">
@@ -40,11 +48,13 @@ import TransactionsClient from '@/clients/transactions'
 import AccountsClient from '@/clients/accounts'
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionsList from '@/components/lists/TransactionsList'
+import dollarAmount from '@/filters/dollarAmount'
 
 export default {
   name: 'transactions',
   data () {
     return {
+      account: null,
       transactions: {},
       addingTransaction: false
     }
@@ -70,6 +80,10 @@ export default {
   methods: {
     loadAccount () {
       AccountsClient.getAccount(this.id)
+        .then(this.accountLoaded)
+    },
+    accountLoaded (account) {
+      this.account = account
     },
     loadTransactions () {
       TransactionsClient.getTransactions(this.id)
@@ -91,6 +105,9 @@ export default {
     removeFromGroup (date, id) {
       this.transactions[date] = this.transactions[date].filter((transaction) => transaction.id !== id)
     }
+  },
+  filters: {
+    dollarAmount
   },
   components: {
     NewTransactionForm,
