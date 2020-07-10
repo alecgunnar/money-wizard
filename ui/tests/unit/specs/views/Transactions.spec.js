@@ -147,9 +147,9 @@ describe('Transactions', () => {
       }
     })
     jest.resetAllMocks()
+    setupTest()
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
-    setupTest()
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     expect(TransactionsClient.getTransactions).toHaveBeenCalled()
   })
@@ -162,16 +162,51 @@ describe('Transactions', () => {
       }
     })
     jest.resetAllMocks()
-    subject.find('[data-qa=new-transaction]').trigger('click')
-    await subject.vm.$nextTick()
-    TransactionsClient.getTransactions.mockResolvedValueOnce({
+    setupTest({
       '2020-07-06': [
         {id: '123', amount: 10.53, type: 'credit'}
       ]
     })
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=lists-of-transactions]').exists()).toBeTruthy()
+  })
+
+  it('reloads the account data when the form is submitted', async () => {
+    setupTest()
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
+    jest.resetAllMocks()
+    setupTest()
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
+    expect(AccountsClient.getAccount).toHaveBeenCalledWith(1234)
+  })
+
+  it('shows the updated account data', async () => {
+    setupTest()
+    const subject = shallowMount(Transactions, {
+      propsData: {
+        id: 1234
+      }
+    })
+    jest.resetAllMocks()
+    setupTest({}, {
+      name: 'Sample',
+      balance: 100.21
+    })
+    subject.find('[data-qa=new-transaction]').trigger('click')
+    await subject.vm.$nextTick()
+    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=account-name]').text()).toBe('Sample')
+    expect(subject.find('[data-qa=account-balance]').text()).toBe('$100.21')
   })
 
   it('does not show new transaction form by default', () => {

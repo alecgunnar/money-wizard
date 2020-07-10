@@ -100,6 +100,7 @@ export default {
     },
     transactionAdded () {
       this.addingTransaction = false
+      this.loadAccount()
       this.loadTransactions()
     },
     removeFromGroup (date, id) {
