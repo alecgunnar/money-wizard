@@ -4,6 +4,10 @@ import RootClient from '@/clients'
 jest.mock('@/clients')
 
 describe('Accounts Client', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
   it('makes a request to create account', async () => {
     RootClient.post.mockResolvedValueOnce()
     await AccountsClient.createAccount('sample', 'something')
@@ -43,5 +47,31 @@ describe('Accounts Client', () => {
   it('rejects when the request fails', () => {
     RootClient.get.mockRejectedValueOnce()
     expect(AccountsClient.getAccounts()).rejects.toBeUndefined()
+  })
+
+  it('makes a request for account info', () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: {}
+    })
+    AccountsClient.getAccount(123)
+    expect(RootClient.get).toBeCalledWith('/accounts/123')
+  })
+
+  it('resolves when the request for account info succeeds', () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: {
+        name: 'sample',
+        balance: 12.41
+      }
+    })
+    expect(AccountsClient.getAccount(123)).resolves.toEqual({
+      name: 'sample',
+      balance: 12.41
+    })
+  })
+
+  it('rejects when the request for account info fails', () => {
+    RootClient.get.mockRejectedValueOnce()
+    expect(AccountsClient.getAccount(123)).rejects.toBeUndefined()
   })
 })

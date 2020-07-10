@@ -12,6 +12,7 @@ export default {
       .then((resp) => resp.data)
   },
   getAccount (id) {
-    return Promise.resolve()
+    return RootClient.get(`/accounts/${id}`)
+      .then(resp => resp.data)
   }
 }
