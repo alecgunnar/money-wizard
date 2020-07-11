@@ -1,13 +1,5 @@
 <template>
   <div class="page">
-    <div v-if="account">
-      <div data-qa="account-name">
-        {{ account.name }}
-      </div>
-      <div data-qa="account-balance">
-        {{ account.balance | dollarAmount }}
-      </div>
-    </div>
     <div v-if="addingTransaction"
       class="addTransaction">
       <div class="addTransaction__header">
@@ -19,9 +11,19 @@
         @cancel="addingTransactionCanceled"
         :preselect="this.id" />
     </div>
-    <div class="header">
-      <h1 class="header__title">Transactions</h1>
-      <div class="header__buttons">
+    <div v-if="account"
+      class="accountSnapshot">
+      <div class="accountSnapshot__details">
+        <div class="accountSnapshot__name"
+          data-qa="account-name">
+          {{ account.name }}
+        </div>
+        <div class="accountSnapshot__balance"
+          data-qa="account-balance">
+          {{ account.balance | dollarAmount }}
+        </div>
+      </div>
+      <div class="accountSnapshot__options">
         <button data-qa="new-transaction"
           class="button"
           @click="addTransaction">Add Transaction</button>
@@ -122,6 +124,26 @@ export default {
   position: relative;
 }
 
+.accountSnapshot {
+  background-color: #f1f1f1;
+  padding: 0.5em;
+  border-radius: 3px;
+  margin: 0 0 1em;
+}
+
+.accountSnapshot__details {
+  margin: 0 0 1em;
+}
+
+.accountSnapshot__options {
+  text-align: center;
+}
+
+.accountSnapshot__name {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
 .header {
   display: flex;
   margin: 0 0 2rem;
@@ -165,5 +187,20 @@ export default {
 
 .addTransaction__title {
   flex: 1;
+}
+
+@media screen and (min-width: 480px) {
+  .accountSnapshot {
+    display: flex;
+  }
+
+  .accountSnapshot__details {
+    flex: 1;
+    margin: 0;
+  }
+
+  .accountSnapshot__options {
+    text-align: unset;
+  }
 }
 </style>
