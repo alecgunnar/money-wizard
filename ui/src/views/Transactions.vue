@@ -11,9 +11,9 @@
         @cancel="addingTransactionCanceled"
         :preselect="this.id" />
     </div>
-    <div v-if="account"
-      class="accountSnapshot">
-      <div class="accountSnapshot__details">
+    <div class="accountSnapshot">
+      <div v-if="account"
+        class="accountSnapshot__details">
         <div class="accountSnapshot__name"
           data-qa="account-name">
           {{ account.name }}
