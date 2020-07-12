@@ -50,7 +50,7 @@ describe('NewTransactionForm', () => {
 
   it('has a field to select an account', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -60,7 +60,7 @@ describe('NewTransactionForm', () => {
 
   it('loads accounts', () => {
     setupTest()
-    
+
     shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -70,7 +70,7 @@ describe('NewTransactionForm', () => {
 
   it('provides an option for each account', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -82,7 +82,7 @@ describe('NewTransactionForm', () => {
 
   it('fills each account option with the name of the account', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -95,7 +95,7 @@ describe('NewTransactionForm', () => {
 
   it('preselects the propped account', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       propsData: {
         preselect: 456
@@ -107,7 +107,7 @@ describe('NewTransactionForm', () => {
 
   it('has a field to enter an amount', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -117,7 +117,7 @@ describe('NewTransactionForm', () => {
 
   it('has a field to enter the date of the transaction', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -128,7 +128,7 @@ describe('NewTransactionForm', () => {
   it.skip('the date field is pre-filled with the current date', () => {
     const todaysDate = moment().format('MM/DD/YYYY')
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -138,7 +138,7 @@ describe('NewTransactionForm', () => {
 
   it('has a field to enter a readon', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -148,7 +148,7 @@ describe('NewTransactionForm', () => {
 
   it('has a field to enter notes', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -158,7 +158,7 @@ describe('NewTransactionForm', () => {
 
   it('there is a submit button', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -168,7 +168,7 @@ describe('NewTransactionForm', () => {
 
   it('when an asset type account is selected, the asset transaction type fields are shown', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -181,7 +181,7 @@ describe('NewTransactionForm', () => {
 
   it('when a credit type account is selected, the credit transaction type fields are shown', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -194,7 +194,7 @@ describe('NewTransactionForm', () => {
 
   it('when a loan type account is selected, the credit transaction type fields are shown', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -207,7 +207,7 @@ describe('NewTransactionForm', () => {
 
   it('when a credit type account is selected, the asset transaction type fields are not shown', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -220,7 +220,7 @@ describe('NewTransactionForm', () => {
 
   it('when a loan type account is selected, the asset transaction type fields are not shown', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -233,7 +233,7 @@ describe('NewTransactionForm', () => {
 
   it('when a asset type account is selected, the credit transaction type fields are not shown', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -246,7 +246,7 @@ describe('NewTransactionForm', () => {
 
   it('when no account is selected, the disabled types appear', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -257,7 +257,7 @@ describe('NewTransactionForm', () => {
 
   it('when no account is selected, the asset types do not appear', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -268,7 +268,7 @@ describe('NewTransactionForm', () => {
 
   it('when no account is selected, the credit types do not appear', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -279,7 +279,7 @@ describe('NewTransactionForm', () => {
 
   it('submiting without choosing an account results in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -291,7 +291,7 @@ describe('NewTransactionForm', () => {
 
   it('submiting with an account does not result in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -305,7 +305,7 @@ describe('NewTransactionForm', () => {
 
   it('submiting without choosing a type results in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -318,7 +318,7 @@ describe('NewTransactionForm', () => {
 
   it('submiting with a type does not result in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -334,7 +334,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting with amount less than zero results in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -347,7 +347,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting with amount equal to zero results in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -360,7 +360,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting with amount greater than zero does not result in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -373,7 +373,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting without a date results in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -386,7 +386,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting with a date does not result in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -399,7 +399,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting without a reason results in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -412,7 +412,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting with a reason does not result in an error', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -425,8 +425,10 @@ describe('NewTransactionForm', () => {
 
   it('submitting with valid input results in a service call', async () => {
     TransactionsClient.addTransaction.mockResolvedValueOnce()
-    setupTest()
-    
+
+    const addTr = jest.fn()
+    setupTest(addTr)
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -440,15 +442,25 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=reason]').setValue('Just because')
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
-    expect(TransactionsClient.addTransaction).toBeCalledWith(
-      123, 'debit', '10', '05/28/1994', 'Just because', 'Something about the transaction'
+    expect(addTr).toBeCalledWith(
+      expect.any(Object), {
+        type: 'debit', 
+        amount: '10', 
+        date: '05/28/1994',
+        reason: 'Just because',
+        notes: 'Something about the transaction'
+      }
     )
   })
 
   it('when the transaction creation succeeds an event is emitted', async () => {
     TransactionsClient.addTransaction.mockResolvedValueOnce()
-    setupTest()
-    
+
+    const addTr = jest.fn()
+    addTr.mockResolvedValueOnce(true)
+
+    setupTest(addTr)
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -468,8 +480,12 @@ describe('NewTransactionForm', () => {
 
   it('when the transaction creation fails an event is not emitted', async () => {
     TransactionsClient.addTransaction.mockRejectedValueOnce()
-    setupTest()
-    
+
+    const addTr = jest.fn()
+    addTr.mockResolvedValueOnce(false)
+
+    setupTest(addTr)
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -489,8 +505,12 @@ describe('NewTransactionForm', () => {
 
   it('when the transaction creation fails an error is shown', async () => {
     TransactionsClient.addTransaction.mockRejectedValueOnce()
-    setupTest()
-    
+
+    const addTr = jest.fn()
+    addTr.mockResolvedValueOnce(false)
+
+    setupTest(addTr)
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -505,13 +525,14 @@ describe('NewTransactionForm', () => {
     subject.find('[data-qa=notes]').setValue('Something about the transaction')
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
     await subject.vm.$nextTick()
+    await addTr
     expect(subject.find('[data-qa=submit-error]').exists()).toBeTruthy()
   })
 
   it('when the transaction creation succeeds an error is not shown', async () => {
     TransactionsClient.addTransaction.mockResolvedValueOnce()
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -531,7 +552,7 @@ describe('NewTransactionForm', () => {
 
   it('submitting with invalid input does not result in a service call', async () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -543,7 +564,7 @@ describe('NewTransactionForm', () => {
 
   it('there is a cancel button', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
@@ -553,7 +574,7 @@ describe('NewTransactionForm', () => {
 
   it('clicking the cancel button causes event to be emitted', () => {
     setupTest()
-    
+
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store

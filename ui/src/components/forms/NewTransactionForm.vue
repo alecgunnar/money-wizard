@@ -183,6 +183,7 @@
 import AccountsClient from '@/clients/accounts'
 import TransactionsClient from '@/clients/transactions'
 import moment from 'moment'
+import {mapAction, mapActions} from 'vuex'
 
 export default {
   name: 'new-transaction-form',
@@ -216,13 +217,14 @@ export default {
       .then(this.accountsLoaded)
   },
   methods: {
+    ...mapActions(['addTransaction']),
     accountsLoaded (accounts) {
       this.accounts = accounts
     },
     cancel () {
       this.$emit('cancel')
     },
-    submit (e) {
+    async submit (e) {
       e.preventDefault()
 
       this.accountIsEmptyError = this.account === null
@@ -237,15 +239,16 @@ export default {
         this.dateIsEmptyError ||
         this.reasonIsEmptyError) return
 
-      TransactionsClient.addTransaction(
-        this.account,
-        this.type,
-        this.amount,
-        this.date,
-        this.reason,
-        this.notes
-      ).then(this.transactionAdded)
-        .catch(this.transactionNotAdded)
+      const status = await this.addTransaction({
+        type: this.type,
+        amount: this.amount,
+        date: this.date,
+        reason: this.reason,
+        notes: this.notes
+      })
+
+      if (status) this.transactionAdded()
+      else this.transactionNotAdded()
     },
     transactionAdded () {
       this.$emit('submitted')
