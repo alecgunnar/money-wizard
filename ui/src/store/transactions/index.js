@@ -1,4 +1,4 @@
-import client from '@/clients'
+import RootClient from '@/clients'
 
 export default {
   state: {
@@ -14,8 +14,8 @@ export default {
   },
   getters: {},
   actions: {
-    loadTransactions ({commit}) {
-      return client.get('/transactions')
+    loadTransactions ({commit}, accountId) {
+      return RootClient.get(`/transactions?accountId=${accountId}`)
         .then(resp => resp.data)
         .then(transactions => commit('transactionsLoaded', transactions))
         .catch(_ => commit('encounteredServerError', 'Could not load transactions.'))

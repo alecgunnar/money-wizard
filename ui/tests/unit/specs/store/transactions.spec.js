@@ -1,7 +1,23 @@
 import transactions from '@/store/transactions'
-import client from '@/clients'
+import RootClient from '@/clients'
+import {createLocalVue} from '@vue/test-utils'
+import Vuex from 'vuex'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 jest.mock('@/clients')
+
+const createSubject = (srvrErrMock = null) => {
+  return new Vuex.Store({
+    mutations: {
+      encounteredServerError: srvrErrMock || jest.fn()
+    },
+    modules: {
+      transactions
+    }
+  })
+}
 
 describe('transactions module', () => {
   it('makes a request to load transactions', () => {
@@ -9,42 +25,45 @@ describe('transactions module', () => {
       {id: '123', reason: 'test'}
     ]
 
-    client.get.mockResolvedValueOnce({
+    RootClient.get.mockResolvedValueOnce({
       data: fetchedTransactions
     })
 
-    transactions.actions.loadTransactions({
-      commit: jest.fn()
-    })
+    const subject = createSubject()
 
-    expect(client.get).toBeCalledWith('/transactions')
+    subject.dispatch('loadTransactions', 1234)
+
+    expect(RootClient.get).toBeCalledWith('/transactions?accountId=1234')
   })
 
   it('stores the transactions that are loaded', async () => {
+    expect.assertions(1)
+
     const fetchedTransactions = [
       {id: '123', reason: 'test'}
     ]
 
-    client.get.mockResolvedValueOnce({
+    RootClient.get.mockResolvedValueOnce({
       data: fetchedTransactions
     })
 
-    const commit = jest.fn()
+    const subject = createSubject()
 
-    await transactions.actions.loadTransactions({commit})
+    await subject.dispatch('loadTransactions', 1234)
 
-    expect(commit).toBeCalledWith('transactionsLoaded', fetchedTransactions)
+    expect(subject.state.transactions.transactions).toEqual(fetchedTransactions)
   })
 
   it('stores error when loading transactions fails', async () => {
-    client.get.mockRejectedValueOnce({
+    RootClient.get.mockRejectedValueOnce({
       msg: 'err'
     })
 
-    const commit = jest.fn()
+    const srvrErrMock = jest.fn()
+    const subject = createSubject(srvrErrMock)
 
-    await transactions.actions.loadTransactions({commit})
+    await subject.dispatch('loadTransactions', 1234)
 
-    expect(commit).toBeCalledWith('encounteredServerError', 'Could not load transactions.')
+    expect(srvrErrMock).toBeCalledWith(expect.any(Object), 'Could not load transactions.')
   })
 })
