@@ -12,7 +12,7 @@
       data-qa="expanded-content">
       <div class="transaction__options">
         <button data-qa="delete"
-          @click="deleteTransaction">Delete</button>
+          @click="doDelete">Delete</button>
       </div>
       <div style="font-weight: bold;">Notes:</div>
       <div data-qa="notes">
@@ -26,6 +26,7 @@
 import TransactionsClient from '@/clients/transactions'
 import DialogsUtil from '@/utils/dialogs'
 import dollarAmount from '@/filters/dollarAmount'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'transaction-row',
@@ -52,17 +53,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['deleteTransaction']),
     toggleExpandedContent () {
       this.expanded = !this.expanded
     },
-    deleteTransaction (e) {
+    doDelete (e) {
       e.stopPropagation()
       DialogsUtil.confirm(this.confirmed)
     },
-    confirmed () {
-      TransactionsClient.deleteTransaction(this.transaction.id)
-        .then(this.transactionDeleted)
-        .catch(() => {})
+    async confirmed () {
+      const status = await this.deleteTransaction(this.transaction.id)
+      if (status) this.transactionDeleted()
     },
     transactionDeleted () {
       this.$emit('deleted')

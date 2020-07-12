@@ -1,7 +1,25 @@
 import TransactionRow from '@/components/lists/TransactionRow'
 import DialogsUtil from '@/utils/dialogs'
 import TransactionsClient from '@/clients/transactions'
-import {shallowMount} from '@vue/test-utils'
+import {shallowMount, createLocalVue} from '@vue/test-utils'
+import Vuex from 'vuex'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
+
+let store
+
+const setupTest = (dltTrnsctn = null) => {
+  store = new Vuex.Store({
+    modules: {
+      transactions: {
+        actions: {
+          deleteTransaction: dltTrnsctn || jest.fn()
+        }
+      }
+    }
+  })
+}
 
 const transaction = {
   id: '9762e721-9cf2-4165-8495-6ef69f6d2fd9',
@@ -25,7 +43,11 @@ describe('TransactionRow', () => {
   })
 
   it('shows the reason', () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -35,7 +57,11 @@ describe('TransactionRow', () => {
   })
 
   it('shows expanded content when the row is clicked', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -47,7 +73,11 @@ describe('TransactionRow', () => {
   })
 
   it('does not show expanded content when the row has not been clicked', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -56,7 +86,11 @@ describe('TransactionRow', () => {
   })
 
   it('hides the expanded content when the row is clicked again', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -70,7 +104,11 @@ describe('TransactionRow', () => {
   })
 
   it('the expanded contents contains the notes', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -82,7 +120,11 @@ describe('TransactionRow', () => {
   })
 
   it('shows the notes', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -96,7 +138,11 @@ describe('TransactionRow', () => {
   it('shows message when notes are empty', async () => {
     transaction.notes = ''
 
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -112,7 +158,11 @@ describe('TransactionRow', () => {
     transaction.type = 'debit'
     transaction.account.type = 'asset'
 
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -126,7 +176,11 @@ describe('TransactionRow', () => {
     transaction.type = 'credit'
     transaction.account.type = 'asset'
 
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -140,7 +194,11 @@ describe('TransactionRow', () => {
     transaction.type = 'debit'
     transaction.account.type = 'credit'
 
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -154,7 +212,11 @@ describe('TransactionRow', () => {
     transaction.type = 'credit'
     transaction.account.type = 'credit'
 
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -164,7 +226,11 @@ describe('TransactionRow', () => {
   })
 
   it('there is a button to delete the transaction when the row is expanded', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -176,7 +242,11 @@ describe('TransactionRow', () => {
   })
 
   it('there is no button to delete the transaction when the row is not expanded', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -186,7 +256,11 @@ describe('TransactionRow', () => {
   })
 
   it('transaction deletion confirmation is requested', async () => {
+    setupTest()
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -202,7 +276,12 @@ describe('TransactionRow', () => {
   it('deletes the transaction', async () => {
     TransactionsClient.deleteTransaction.mockResolvedValueOnce()
 
+    const deleteTr = jest.fn()
+    setupTest(deleteTr)
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -213,13 +292,20 @@ describe('TransactionRow', () => {
     subject.find('[data-qa=delete]').trigger('click')
     const callback = DialogsUtil.confirm.mock.calls[0][0]
     callback()
-    expect(TransactionsClient.deleteTransaction).toBeCalledWith('9762e721-9cf2-4165-8495-6ef69f6d2fd9')
+    expect(deleteTr).toBeCalledWith(expect.any(Object), '9762e721-9cf2-4165-8495-6ef69f6d2fd9')
   })
 
   it('emits event when the transaction is deleted successfully', async () => {
     TransactionsClient.deleteTransaction.mockResolvedValueOnce()
 
+    const deleteTr = jest.fn()
+    deleteTr.mockResolvedValueOnce(true)
+
+    setupTest(deleteTr)
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
@@ -237,7 +323,14 @@ describe('TransactionRow', () => {
   it('does not emit event when the transaction is not deleted successfully', async () => {
     TransactionsClient.deleteTransaction.mockRejectedValueOnce()
 
+    const deleteTr = jest.fn()
+    deleteTr.mockResolvedValueOnce(false)
+
+    setupTest(deleteTr)
+
     const subject = shallowMount(TransactionRow, {
+      localVue,
+      store,
       propsData: {
         transaction
       }
