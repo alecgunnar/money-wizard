@@ -3,24 +3,57 @@ import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionsList from '@/components/lists/TransactionsList'
 import TransactionsClient from '@/clients/transactions'
 import AccountsClient from '@/clients/accounts'
-import {shallowMount} from '@vue/test-utils'
+import {shallowMount, createLocalVue} from '@vue/test-utils'
+import Vuex from 'vuex'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
+
+let store
 
 jest.mock('@/clients/transactions')
 jest.mock('@/clients/accounts')
 
-const setupTest = (transactions = {}, account = null) => {
+const setupTest = (transactions = {}, account = null, forAccount = null) => {
   TransactionsClient.getTransactions.mockResolvedValueOnce(transactions)
 
   AccountsClient.getAccount.mockResolvedValueOnce(account || {
     name: 'Sample',
     balance: 1.21
   })
+
+  store = new Vuex.Store({
+    modules: {
+      transactions: {
+        actions: {
+          forAccount: forAccount || jest.fn()
+        }
+      }
+    }
+  })
 }
 
 describe('Transactions', () => {
+  it('inits the store', () => {
+    const frAcct = jest.fn()
+    setupTest(null, null, frAcct)
+
+    shallowMount(Transactions, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(frAcct).toBeCalledWith(expect.any(Object), 1234)
+  })
+
   it('loads accounts', () => {
     setupTest()
     shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -34,6 +67,8 @@ describe('Transactions', () => {
       balance: 1.21
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -48,6 +83,8 @@ describe('Transactions', () => {
       balance: 1.21
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -59,6 +96,8 @@ describe('Transactions', () => {
   it('loads transactions', () => {
     setupTest()
     shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -69,6 +108,8 @@ describe('Transactions', () => {
   it('loads transactions for the account when one is specified', () => {
     setupTest()
     shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 123
       }
@@ -79,6 +120,8 @@ describe('Transactions', () => {
   it('has a button to create new transaction', () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -89,6 +132,8 @@ describe('Transactions', () => {
   it('shows a form to create a new transaction', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -101,6 +146,8 @@ describe('Transactions', () => {
   it('props the form with the account to preselect', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: '234'
       }
@@ -113,6 +160,8 @@ describe('Transactions', () => {
   it('hides the form when the form is canceled', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -127,6 +176,8 @@ describe('Transactions', () => {
   it('hides the form when the form is submitted', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -142,6 +193,8 @@ describe('Transactions', () => {
   it('reloads the transactions when the form is submitted', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -157,6 +210,8 @@ describe('Transactions', () => {
   it('shows the reloaded transactions', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -177,6 +232,8 @@ describe('Transactions', () => {
   it('reloads the account data when the form is submitted', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -192,6 +249,8 @@ describe('Transactions', () => {
   it('shows the updated account data', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -212,6 +271,8 @@ describe('Transactions', () => {
   it('does not show new transaction form by default', () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -222,6 +283,8 @@ describe('Transactions', () => {
   it('renders a message stating no transactions are available', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -233,6 +296,8 @@ describe('Transactions', () => {
   it('does not render transactions', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -249,6 +314,8 @@ describe('Transactions', () => {
       ]
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -265,6 +332,8 @@ describe('Transactions', () => {
       ]
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -284,6 +353,8 @@ describe('Transactions', () => {
       ]
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -300,6 +371,8 @@ describe('Transactions', () => {
       ]
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -318,6 +391,8 @@ describe('Transactions', () => {
       '2020-07-06': transactions
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -336,6 +411,8 @@ describe('Transactions', () => {
       '2020-07-06': transactions
     })
     const subject = shallowMount(Transactions, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }

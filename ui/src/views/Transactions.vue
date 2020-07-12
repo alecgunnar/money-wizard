@@ -51,6 +51,7 @@ import AccountsClient from '@/clients/accounts'
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionsList from '@/components/lists/TransactionsList'
 import dollarAmount from '@/filters/dollarAmount'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'transactions',
@@ -69,17 +70,19 @@ export default {
   },
   computed: {
     thereAreTransactions () {
-      return Object.keys(this.transactions).length > 0
+      return Object.keys(this.transactions || {}).length > 0
     },
     transactionGroups () {
       return Object.entries(this.transactions)
     }
   },
   mounted () {
+    this.forAccount(this.id)
     this.loadAccount()
     this.loadTransactions()
   },
   methods: {
+    ...mapActions(['forAccount']),
     loadAccount () {
       AccountsClient.getAccount(this.id)
         .then(this.accountLoaded)
