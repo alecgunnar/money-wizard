@@ -20,50 +20,202 @@ const createSubject = (srvrErrMock = null) => {
 }
 
 describe('transactions module', () => {
-  it('makes a request to load transactions', () => {
-    const fetchedTransactions = [
-      {id: '123', reason: 'test'}
-    ]
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
 
+  it('requests the account data on account init', () => {
     RootClient.get.mockResolvedValueOnce({
-      data: fetchedTransactions
+      name: 'Something',
+      balance: 12.23
     })
 
     const subject = createSubject()
+    subject.dispatch('forAccount', 2512)
 
-    subject.dispatch('loadTransactions', 1234)
-
-    expect(RootClient.get).toBeCalledWith('/transactions?accountId=1234')
+    expect(RootClient.get).toBeCalledWith('/accounts/2512')
   })
 
-  it('stores the transactions that are loaded', async () => {
+  it('retains the accounts data on account init', async () => {
     expect.assertions(1)
 
-    const fetchedTransactions = [
-      {id: '123', reason: 'test'}
+    const account = {
+      name: 'Something',
+      balance: 12.23
+    }
+
+    RootClient.get.mockResolvedValueOnce({
+      data: account
+    })
+
+    const transactions = [
+      {amount: 1.23, type: 'debit'}
     ]
 
     RootClient.get.mockResolvedValueOnce({
-      data: fetchedTransactions
+      data: transactions
     })
 
     const subject = createSubject()
+    await subject.dispatch('forAccount', 2512)
 
-    await subject.dispatch('loadTransactions', 1234)
-
-    expect(subject.state.transactions.transactions).toEqual(fetchedTransactions)
+    expect(subject.state.transactions.account).toEqual(account)
   })
 
-  it('stores error when loading transactions fails', async () => {
+  it('retains the failure to load account on account init', async () => {
+    expect.assertions(1)
+
     RootClient.get.mockRejectedValueOnce({
-      msg: 'err'
+      err: 'msg'
+    })
+
+    const transactions = [
+      {amount: 1.23, type: 'debit'}
+    ]
+
+    RootClient.get.mockResolvedValueOnce({
+      data: transactions
     })
 
     const srvrErrMock = jest.fn()
+
     const subject = createSubject(srvrErrMock)
+    await subject.dispatch('forAccount', 2512)
 
-    await subject.dispatch('loadTransactions', 1234)
+    expect(srvrErrMock).toBeCalled()
+  })
 
-    expect(srvrErrMock).toBeCalledWith(expect.any(Object), 'Could not load transactions.')
+  it('resoves to false on failure to load account on account init', async () => {
+    expect.assertions(1)
+
+    RootClient.get.mockRejectedValueOnce({
+      err: 'msg'
+    })
+
+    const srvrErrMock = jest.fn()
+
+    const subject = createSubject(srvrErrMock)
+    const status = await subject.dispatch('forAccount', 2512)
+    expect(status).toBeFalsy()
+  })
+
+  it('requests the transactions on account init', async () => {
+    expect.assertions(1)
+
+    const account = {
+      name: 'Something',
+      balance: 12.23
+    }
+
+    RootClient.get.mockResolvedValueOnce({
+      data: account
+    })
+
+    const subject = createSubject()
+    await subject.dispatch('forAccount', 1212)
+
+    expect(RootClient.get).toBeCalledWith('/transactions?accountId=1212')
+  })
+
+  it('retains the transactions on account init', async () => {
+    expect.assertions(1)
+
+    const account = {
+      name: 'Something',
+      balance: 12.23
+    }
+
+    const transactions = [
+      {amount: 1.23, type: 'debit'}
+    ]
+
+    RootClient.get
+      .mockResolvedValueOnce({
+        data: account
+      })
+      .mockResolvedValueOnce({
+        data: transactions
+      })
+
+    const subject = createSubject()
+    await subject.dispatch('forAccount', 1212)
+
+    expect(subject.state.transactions.transactions).toEqual(transactions)
+  })
+
+  it('retains the failure to load transactions on account init', async () => {
+    expect.assertions(1)
+
+    const account = {
+      name: 'Something',
+      balance: 12.23
+    }
+
+    RootClient.get.mockResolvedValueOnce({
+      data: account
+    })
+
+    RootClient.get.mockRejectedValueOnce({
+      err: 'msg'
+    })
+
+    const srvrErrMock = jest.fn()
+
+    const subject = createSubject(srvrErrMock)
+    await subject.dispatch('forAccount', 2512)
+
+    expect(srvrErrMock).toBeCalled()
+  })
+
+  it('resoves to false on failure to load transactions on account init', async () => {
+    expect.assertions(1)
+
+    const account = {
+      name: 'Something',
+      balance: 12.23
+    }
+
+    RootClient.get.mockResolvedValueOnce({
+      data: account
+    })
+
+    RootClient.get.mockRejectedValueOnce({
+      err: 'msg'
+    })
+
+    const srvrErrMock = jest.fn()
+
+    const subject = createSubject(srvrErrMock)
+    const status = await subject.dispatch('forAccount', 2512)
+
+    expect(status).toBeFalsy()
+  })
+
+  it('resolves to true when all data is loaded on init', async () => {
+    expect.assertions(1)
+
+    const account = {
+      name: 'Something',
+      balance: 12.23
+    }
+
+    const transactions = [
+      {amount: 1.23, type: 'debit'}
+    ]
+
+    RootClient.get
+      .mockResolvedValueOnce({
+        data: account
+      })
+      .mockResolvedValueOnce({
+        data: transactions
+      })
+
+    const srvrErrMock = jest.fn()
+
+    const subject = createSubject(srvrErrMock)
+    const status = await subject.dispatch('forAccount', 2512)
+
+    expect(status).toBeTruthy()
   })
 })
