@@ -14,17 +14,18 @@ let store
 jest.mock('@/clients/transactions')
 jest.mock('@/clients/accounts')
 
-const setupTest = (transactions = {}, account = null, forAccount = null) => {
-  TransactionsClient.getTransactions.mockResolvedValueOnce(transactions)
-
-  AccountsClient.getAccount.mockResolvedValueOnce(account || {
-    name: 'Sample',
-    balance: 1.21
-  })
-
+const setupTest = (
+  transactions = {},
+  account = null,
+  forAccount = null
+) => {
   store = new Vuex.Store({
     modules: {
       transactions: {
+        state: {
+          account,
+          transactions,
+        },
         actions: {
           forAccount: forAccount || jest.fn()
         }
@@ -36,7 +37,7 @@ const setupTest = (transactions = {}, account = null, forAccount = null) => {
 describe('Transactions', () => {
   it('inits the store', () => {
     const frAcct = jest.fn()
-    setupTest(null, null, frAcct)
+    setupTest({}, null, frAcct)
 
     shallowMount(Transactions, {
       store,
@@ -47,18 +48,6 @@ describe('Transactions', () => {
     })
 
     expect(frAcct).toBeCalledWith(expect.any(Object), 1234)
-  })
-
-  it('loads accounts', () => {
-    setupTest()
-    shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 1234
-      }
-    })
-    expect(AccountsClient.getAccount).toBeCalledWith(1234)
   })
 
   it('shows the account title', async() => {
@@ -91,30 +80,6 @@ describe('Transactions', () => {
     })
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=account-balance]').text()).toBe('$1.21')
-  })
-
-  it('loads transactions', () => {
-    setupTest()
-    shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 1234
-      }
-    })
-    expect(TransactionsClient.getTransactions).toHaveBeenCalled()
-  })
-
-  it('loads transactions for the account when one is specified', () => {
-    setupTest()
-    shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 123
-      }
-    })
-    expect(TransactionsClient.getTransactions).toHaveBeenCalledWith(123)
   })
 
   it('has a button to create new transaction', () => {
@@ -188,84 +153,6 @@ describe('Transactions', () => {
     subject.findComponent(NewTransactionForm).vm.$emit('submitted')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
-  })
-
-  it('reloads the transactions when the form is submitted', async () => {
-    setupTest()
-    const subject = shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 1234
-      }
-    })
-    jest.resetAllMocks()
-    setupTest()
-    subject.find('[data-qa=new-transaction]').trigger('click')
-    await subject.vm.$nextTick()
-    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
-    expect(TransactionsClient.getTransactions).toHaveBeenCalled()
-  })
-
-  it('shows the reloaded transactions', async () => {
-    setupTest()
-    const subject = shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 1234
-      }
-    })
-    jest.resetAllMocks()
-    setupTest({
-      '2020-07-06': [
-        {id: '123', amount: 10.53, type: 'credit'}
-      ]
-    })
-    subject.find('[data-qa=new-transaction]').trigger('click')
-    await subject.vm.$nextTick()
-    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=lists-of-transactions]').exists()).toBeTruthy()
-  })
-
-  it('reloads the account data when the form is submitted', async () => {
-    setupTest()
-    const subject = shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 1234
-      }
-    })
-    jest.resetAllMocks()
-    setupTest()
-    subject.find('[data-qa=new-transaction]').trigger('click')
-    await subject.vm.$nextTick()
-    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
-    expect(AccountsClient.getAccount).toHaveBeenCalledWith(1234)
-  })
-
-  it('shows the updated account data', async () => {
-    setupTest()
-    const subject = shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: 1234
-      }
-    })
-    jest.resetAllMocks()
-    setupTest({}, {
-      name: 'Sample',
-      balance: 100.21
-    })
-    subject.find('[data-qa=new-transaction]').trigger('click')
-    await subject.vm.$nextTick()
-    subject.findComponent(NewTransactionForm).vm.$emit('submitted')
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=account-name]').text()).toBe('Sample')
-    expect(subject.find('[data-qa=account-balance]').text()).toBe('$100.21')
   })
 
   it('does not show new transaction form by default', () => {

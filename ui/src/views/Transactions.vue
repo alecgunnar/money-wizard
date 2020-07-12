@@ -51,14 +51,12 @@ import AccountsClient from '@/clients/accounts'
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
 import TransactionsList from '@/components/lists/TransactionsList'
 import dollarAmount from '@/filters/dollarAmount'
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 
 export default {
   name: 'transactions',
   data () {
     return {
-      account: null,
-      transactions: {},
       addingTransaction: false
     }
   },
@@ -69,8 +67,12 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      account: state => state.transactions.account,
+      transactions: state => state.transactions.transactions
+    }),
     thereAreTransactions () {
-      return Object.keys(this.transactions || {}).length > 0
+      return Object.keys(this.transactions).length > 0
     },
     transactionGroups () {
       return Object.entries(this.transactions)
@@ -78,25 +80,9 @@ export default {
   },
   mounted () {
     this.forAccount(this.id)
-    this.loadAccount()
-    this.loadTransactions()
   },
   methods: {
     ...mapActions(['forAccount']),
-    loadAccount () {
-      AccountsClient.getAccount(this.id)
-        .then(this.accountLoaded)
-    },
-    accountLoaded (account) {
-      this.account = account
-    },
-    loadTransactions () {
-      TransactionsClient.getTransactions(this.id)
-        .then(this.transactionsLoaded)
-    },
-    transactionsLoaded (transactions) {
-      this.transactions = transactions
-    },
     addTransaction () {
       this.addingTransaction = true
     },
@@ -105,8 +91,6 @@ export default {
     },
     transactionAdded () {
       this.addingTransaction = false
-      this.loadAccount()
-      this.loadTransactions()
     },
     removeFromGroup (date, id) {
       this.transactions[date] = this.transactions[date].filter((transaction) => transaction.id !== id)
