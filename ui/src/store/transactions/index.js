@@ -21,6 +21,9 @@ export default {
   actions: {
     async forAccount ({commit, dispatch}, accountId) {
       commit('setAccountId', accountId)
+      return await dispatch('reloadAccount')
+    },
+    async reloadAccount ({commit, dispatch}) {
       try {
         await dispatch('loadAccount')
         await dispatch('loadTransactions')
