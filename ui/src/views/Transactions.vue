@@ -8,8 +8,7 @@
         </div>
       </div>
       <NewTransactionForm @submitted="transactionAdded"
-        @cancel="addingTransactionCanceled"
-        :preselect="this.id" />
+        @cancel="addingTransactionCanceled" />
     </div>
     <div class="accountSnapshot">
       <div v-if="account"

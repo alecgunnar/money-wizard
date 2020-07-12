@@ -108,20 +108,6 @@ describe('Transactions', () => {
     expect(subject.findComponent(NewTransactionForm).exists()).toBeTruthy()
   })
 
-  it('props the form with the account to preselect', async () => {
-    setupTest()
-    const subject = shallowMount(Transactions, {
-      store,
-      localVue,
-      propsData: {
-        id: '234'
-      }
-    })
-    subject.find('[data-qa=new-transaction]').trigger('click')
-    await subject.vm.$nextTick()
-    expect(subject.findComponent(NewTransactionForm).props('preselect')).toBe('234')
-  })
-
   it('hides the form when the form is canceled', async () => {
     setupTest()
     const subject = shallowMount(Transactions, {

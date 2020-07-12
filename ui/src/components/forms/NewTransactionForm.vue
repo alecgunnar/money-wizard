@@ -8,27 +8,6 @@
       <div class="form">
         <div class="form__row">
           <div class="form__label">
-            <label for="account">
-              Account
-            </label>
-          </div>
-          <div class="form__input">
-            <select data-qa="choose-account"
-              id="account"
-              v-model="account">
-              <option :value="null"
-                disabled>Choose an Account</option>
-              <option v-for="account in accounts"
-                :value="account.id"
-                :key="account.id">{{ account.name }}</option>
-            </select>
-            <div v-if="accountIsEmptyError"
-              class="form__fieldError"
-              data-qa="choose-account-error">An account must be chosen.</div>
-          </div>
-        </div>
-        <div class="form__row">
-          <div class="form__label">
             <label for="amount">
               Type
             </label>
@@ -180,16 +159,13 @@
 </template>
 
 <script>
-import AccountsClient from '@/clients/accounts'
-import TransactionsClient from '@/clients/transactions'
 import moment from 'moment'
-import {mapAction, mapActions} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 
 export default {
   name: 'new-transaction-form',
   data () {
     return {
-      account: null,
       type: null,
       amount: '',
       date: '',
@@ -204,17 +180,13 @@ export default {
       failedToSubmit: false
     }
   },
-  props: {
-    preselect: {
-      required: false,
-      default: null
-    }
+  computed: {
+    ...mapState({
+      account: state => state.transactions.account
+    })
   },
   mounted () {
-    this.account = this.preselect
     this.date = moment().format('MM/DD/YYYY')
-    AccountsClient.getAccounts()
-      .then(this.accountsLoaded)
   },
   methods: {
     ...mapActions(['addTransaction']),
@@ -257,7 +229,7 @@ export default {
       this.failedToSubmit = true
     },
     accountTypeIsSelected (type) {
-      return this.accounts.filter((account) => account.id === this.account && account.type === type).length === 1
+      return this.account.type === type
     }
   }
 }

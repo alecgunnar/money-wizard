@@ -1,6 +1,4 @@
 import NewTransactionForm from '@/components/forms/NewTransactionForm'
-import AccountsClient from '@/clients/accounts'
-import TransactionsClient from '@/clients/transactions'
 import moment from 'moment'
 import {shallowMount, createLocalVue} from '@vue/test-utils'
 import Vuex from 'vuex'
@@ -10,10 +8,17 @@ localVue.use(Vuex)
 
 let store
 
-const setupTest = (addTr = null) => {
+const setupTest = (addTr = null, type = 'asset') => {
   store = new Vuex.Store({
     modules: {
       transactions: {
+        state: {
+          account: {
+            id: 123,
+            name: 'Sample',
+            type
+          }
+        },
         actions: {
           addTransaction: addTr || jest.fn()
         }
@@ -22,89 +27,7 @@ const setupTest = (addTr = null) => {
   })
 }
 
-jest.mock('@/clients/accounts')
-jest.mock('@/clients/transactions')
-
 describe('NewTransactionForm', () => {
-  beforeEach(() => {
-    jest.resetAllMocks()
-
-    AccountsClient.getAccounts.mockResolvedValueOnce([
-      {
-        id: 123,
-        name: 'Sample',
-        type: 'asset'
-      },
-      {
-        id: 456,
-        name: 'Other',
-        type: 'credit'
-      },
-      {
-        id: 789,
-        name: 'Other',
-        type: 'loan'
-      }
-    ])
-  })
-
-  it('has a field to select an account', () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    expect(subject.find('select[data-qa=choose-account]').exists()).toBeTruthy()
-  })
-
-  it('loads accounts', () => {
-    setupTest()
-
-    shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    expect(AccountsClient.getAccounts).toBeCalled()
-  })
-
-  it('provides an option for each account', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    await subject.vm.$nextTick()
-    const options = subject.findAll('[data-qa=choose-account] option')
-    expect(options.length).toBe(4)
-  })
-
-  it('fills each account option with the name of the account', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    await subject.vm.$nextTick()
-    const options = subject.findAll('[data-qa=choose-account] option')
-    expect(options.at(1).text()).toBe('Sample')
-    expect(options.at(2).text()).toBe('Other')
-  })
-
-  it('preselects the propped account', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      propsData: {
-        preselect: 456
-      }
-    })
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=choose-account]').element.value).toBe('456')
-  })
-
   it('has a field to enter an amount', () => {
     setupTest()
 
@@ -174,133 +97,68 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=asset-types]').exists()).toBeTruthy()
   })
 
   it('when a credit type account is selected, the credit transaction type fields are shown', async () => {
-    setupTest()
+    setupTest(null, 'credit')
 
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(456)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=credit-types]').exists()).toBeTruthy()
   })
 
   it('when a loan type account is selected, the credit transaction type fields are shown', async () => {
-    setupTest()
+    setupTest(null, 'loan')
 
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(789)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=credit-types]').exists()).toBeTruthy()
   })
 
   it('when a credit type account is selected, the asset transaction type fields are not shown', async () => {
-    setupTest()
+    setupTest(null, 'credit')
 
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(456)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
   })
 
   it('when a loan type account is selected, the asset transaction type fields are not shown', async () => {
-    setupTest()
+    setupTest(null, 'loan')
 
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(789)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
   })
 
   it('when a asset type account is selected, the credit transaction type fields are not shown', async () => {
-    setupTest()
+    setupTest(null, 'asset')
 
     const subject = shallowMount(NewTransactionForm, {
       localVue,
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=credit-types]').exists()).toBeFalsy()
-  })
-
-  it('when no account is selected, the disabled types appear', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=choose-account-types]').exists()).toBeTruthy()
-  })
-
-  it('when no account is selected, the asset types do not appear', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=asset-types]').exists()).toBeFalsy()
-  })
-
-  it('when no account is selected, the credit types do not appear', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=credit-types]').exists()).toBeFalsy()
-  })
-
-  it('submiting without choosing an account results in an error', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    subject.find('[data-qa=add-transaction-form]').trigger('submit')
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=choose-account-error]').exists()).toBeTruthy()
-  })
-
-  it('submiting with an account does not result in an error', async () => {
-    setupTest()
-
-    const subject = shallowMount(NewTransactionForm, {
-      localVue,
-      store
-    })
-    await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
-    subject.find('[data-qa=add-transaction-form]').trigger('submit')
-    await subject.vm.$nextTick()
-    expect(subject.find('[data-qa=choose-account-error]').exists()).toBeFalsy()
   })
 
   it('submiting without choosing a type results in an error', async () => {
@@ -324,7 +182,6 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
@@ -424,8 +281,6 @@ describe('NewTransactionForm', () => {
   })
 
   it('submitting with valid input results in a service call', async () => {
-    TransactionsClient.addTransaction.mockResolvedValueOnce()
-
     const addTr = jest.fn()
     setupTest(addTr)
 
@@ -434,7 +289,6 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
@@ -454,8 +308,6 @@ describe('NewTransactionForm', () => {
   })
 
   it('when the transaction creation succeeds an event is emitted', async () => {
-    TransactionsClient.addTransaction.mockResolvedValueOnce()
-
     const addTr = jest.fn()
     addTr.mockResolvedValueOnce(true)
 
@@ -466,7 +318,6 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
@@ -479,8 +330,6 @@ describe('NewTransactionForm', () => {
   })
 
   it('when the transaction creation fails an event is not emitted', async () => {
-    TransactionsClient.addTransaction.mockRejectedValueOnce()
-
     const addTr = jest.fn()
     addTr.mockResolvedValueOnce(false)
 
@@ -491,7 +340,6 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
@@ -504,8 +352,6 @@ describe('NewTransactionForm', () => {
   })
 
   it('when the transaction creation fails an error is shown', async () => {
-    TransactionsClient.addTransaction.mockRejectedValueOnce()
-
     const addTr = jest.fn()
     addTr.mockResolvedValueOnce(false)
 
@@ -516,7 +362,6 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
@@ -530,7 +375,6 @@ describe('NewTransactionForm', () => {
   })
 
   it('when the transaction creation succeeds an error is not shown', async () => {
-    TransactionsClient.addTransaction.mockResolvedValueOnce()
     setupTest()
 
     const subject = shallowMount(NewTransactionForm, {
@@ -538,7 +382,6 @@ describe('NewTransactionForm', () => {
       store
     })
     await subject.vm.$nextTick()
-    subject.find('[data-qa=choose-account]').setValue(123)
     await subject.vm.$nextTick()
     subject.find('[data-qa=debit-opt]').setChecked(true)
     subject.find('[data-qa=amount]').setValue('10')
@@ -551,7 +394,8 @@ describe('NewTransactionForm', () => {
   })
 
   it('submitting with invalid input does not result in a service call', async () => {
-    setupTest()
+    const addTr = jest.fn()
+    setupTest(addTr)
 
     const subject = shallowMount(NewTransactionForm, {
       localVue,
@@ -559,7 +403,7 @@ describe('NewTransactionForm', () => {
     })
     await subject.vm.$nextTick()
     subject.find('[data-qa=add-transaction-form]').trigger('submit')
-    expect(TransactionsClient.addTransaction).not.toBeCalled()
+    expect(addTr).not.toBeCalled()
   })
 
   it('there is a cancel button', () => {
