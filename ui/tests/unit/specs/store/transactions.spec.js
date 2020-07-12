@@ -307,14 +307,15 @@ describe('transactions module', () => {
     })
   })
 
-  it('the account data is reloaded when the transaction is added', () => {
-    RootClient.post.mockResolvedValueOnce()
-
+  it('the account data is reloaded when the transaction is added', async () => {
     const rldAcct = jest.fn()
     const subject = createSubject(null, rldAcct)
 
     subject.dispatch('forAccount', 1251)
-    subject.dispatch('addTransaction', {
+    jest.resetAllMocks()
+
+    RootClient.post.mockResolvedValueOnce()
+    await subject.dispatch('addTransaction', {
       amount: 12.14,
       date: '05/28/1994',
       type: 'debit',
@@ -357,6 +358,56 @@ describe('transactions module', () => {
       reason: 'sample',
       notes: 'who knows'
     })
+
+    expect(status).toBeFalsy()
+  })
+
+  it('requests to delete a transaction', () => {
+    RootClient.delete.mockResolvedValueOnce()
+
+    const subject = createSubject(null, jest.fn())
+
+    subject.dispatch('forAccount', 1251)
+    subject.dispatch('deleteTransaction', 312)
+
+    expect(RootClient.delete).toBeCalledWith('/transactions/312')
+  })
+
+  it('reloads the account data when the transaction is deleted', async () => {
+    const rldAcct = jest.fn()
+    const subject = createSubject(null, rldAcct)
+
+    subject.dispatch('forAccount', 1251)
+    jest.resetAllMocks()
+
+    RootClient.delete.mockResolvedValueOnce()
+    await subject.dispatch('deleteTransaction', 312)
+
+    expect(rldAcct).toBeCalled()
+  })
+
+  it('resolves to true when the transaction is deleted', async () => {
+    const rldAcct = jest.fn()
+    const subject = createSubject(null, rldAcct)
+
+    subject.dispatch('forAccount', 1251)
+    jest.resetAllMocks()
+
+    RootClient.delete.mockResolvedValueOnce()
+    const status = await subject.dispatch('deleteTransaction', 312)
+
+    expect(status).toBeTruthy()
+  })
+
+  it('resolves to false when the transaction fails to be deleted', async () => {
+    const rldAcct = jest.fn()
+    const subject = createSubject(null, rldAcct)
+
+    subject.dispatch('forAccount', 1251)
+    jest.resetAllMocks()
+
+    RootClient.delete.mockRejectedValueOnce()
+    const status = await subject.dispatch('deleteTransaction', 312)
 
     expect(status).toBeFalsy()
   })

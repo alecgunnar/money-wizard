@@ -52,6 +52,13 @@ export default {
         dispatch('reloadAccount')
         return true
       }).catch(() => false)
+    },
+    deleteTransaction ({dispatch}, id) {
+      return RootClient.delete(`/transactions/${id}`)
+        .then(() => {
+          dispatch('reloadAccount')
+          return true
+        }).catch(() => false)
     }
   }
 }
