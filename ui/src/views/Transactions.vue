@@ -23,6 +23,8 @@
         </div>
       </div>
       <div class="accountSnapshot__options">
+        <button data-qa="reconcile-account"
+          @click="reconcileAccount">Reconcile</button>
         <button data-qa="new-transaction"
           class="button"
           @click="addTransaction">Add Transaction</button>
@@ -93,6 +95,14 @@ export default {
     },
     removeFromGroup (date, id) {
       this.transactions[date] = this.transactions[date].filter((transaction) => transaction.id !== id)
+    },
+    reconcileAccount () {
+      this.$router.push({
+        name: 'reconcile',
+        params: {
+          id: this.id
+        }
+      })
     }
   },
   filters: {
@@ -123,6 +133,14 @@ export default {
 
 .accountSnapshot__options {
   text-align: center;
+}
+
+.accountSnapshot__options button {
+  margin: 0 1em 0 0;
+}
+
+.accountSnapshot__options button:last-of-type {
+  margin: 0;
 }
 
 .accountSnapshot__name {

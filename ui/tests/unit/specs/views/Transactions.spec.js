@@ -298,4 +298,46 @@ describe('Transactions', () => {
       {id: '456', amount: 10.53, type: 'credit'}
     ])
   })
+
+  it('there is a button to reconcile the account', () => {
+    setupTest()
+
+    const subject = shallowMount(Transactions, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(subject.find('button[data-qa=reconcile-account]').exists()).toBeTruthy()
+  })
+
+  it('sends the user to the reconcile page when the button is clicked', () => {
+    setupTest()
+
+    const push = jest.fn()
+
+    const subject = shallowMount(Transactions, {
+      store,
+      localVue,
+      mocks: {
+        $router: {
+          push
+        }
+      },
+      propsData: {
+        id: 1234
+      }
+    })
+
+    subject.find('[data-qa=reconcile-account]').trigger('click')
+
+    expect(push).toBeCalledWith({
+      name: 'reconcile',
+      params: {
+        id: 1234
+      }
+    })
+  })
 })
