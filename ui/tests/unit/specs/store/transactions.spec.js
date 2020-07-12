@@ -282,4 +282,82 @@ describe('transactions module', () => {
 
     expect(status).toBeTruthy()
   })
+
+  it('requests to add the account', () => {
+    RootClient.post.mockResolvedValueOnce()
+
+    const subject = createSubject(null, jest.fn())
+
+    subject.dispatch('forAccount', 1251)
+    subject.dispatch('addTransaction', {
+      amount: 12.14,
+      date: '05/28/1994',
+      type: 'debit',
+      reason: 'sample',
+      notes: 'who knows'
+    })
+
+    expect(RootClient.post).toBeCalledWith('/transactions', {
+      account: 1251,
+      amount: 12.14,
+      date: '05/28/1994',
+      type: 'debit',
+      reason: 'sample',
+      notes: 'who knows'
+    })
+  })
+
+  it('the account data is reloaded when the transaction is added', () => {
+    RootClient.post.mockResolvedValueOnce()
+
+    const rldAcct = jest.fn()
+    const subject = createSubject(null, rldAcct)
+
+    subject.dispatch('forAccount', 1251)
+    subject.dispatch('addTransaction', {
+      amount: 12.14,
+      date: '05/28/1994',
+      type: 'debit',
+      reason: 'sample',
+      notes: 'who knows'
+    })
+
+    expect(rldAcct).toBeCalled()
+  })
+
+  it('resolves to true when the transaction is added', async () => {
+    RootClient.post.mockResolvedValueOnce()
+
+    const rldAcct = jest.fn()
+    const subject = createSubject(null, rldAcct)
+
+    subject.dispatch('forAccount', 1251)
+    const status = await subject.dispatch('addTransaction', {
+      amount: 12.14,
+      date: '05/28/1994',
+      type: 'debit',
+      reason: 'sample',
+      notes: 'who knows'
+    })
+
+    expect(status).toBeTruthy()
+  })
+
+  it('resolves to false when the transaction fails to be added', async () => {
+    RootClient.post.mockRejectedValueOnce()
+
+    const rldAcct = jest.fn()
+    const subject = createSubject(null, rldAcct)
+
+    subject.dispatch('forAccount', 1251)
+    const status = await subject.dispatch('addTransaction', {
+      amount: 12.14,
+      date: '05/28/1994',
+      type: 'debit',
+      reason: 'sample',
+      notes: 'who knows'
+    })
+
+    expect(status).toBeFalsy()
+  })
 })

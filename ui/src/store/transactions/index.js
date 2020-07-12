@@ -43,6 +43,15 @@ export default {
       return RootClient.get(`/transactions?accountId=${state.accountId}`)
         .then(resp => resp.data)
         .then(data => commit('transactionsLoaded', data))
+    },
+    addTransaction ({state, dispatch}, data) {
+      return RootClient.post('/transactions', {
+        account: state.accountId,
+        ...data
+      }).then(() => {
+        dispatch('reloadAccount')
+        return true
+      }).catch(() => false)
     }
   }
 }
