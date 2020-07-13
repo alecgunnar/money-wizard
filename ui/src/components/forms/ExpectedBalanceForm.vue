@@ -53,7 +53,7 @@ export default {
     beginReconciliation (e) {
       e.stopPropagation()
       this.emptyAmountErr = !this.amount
-      this.nonNumericAmountErr = isNaN(parseFloat(this.amount))
+      this.nonNumericAmountErr = !this.emptyAmountErr && isNaN(parseFloat(this.amount))
     }
   }
 }

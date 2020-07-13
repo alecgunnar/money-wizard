@@ -53,4 +53,12 @@ describe('Expected Balance Form', () => {
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=enter-numeric-amount-error]').exists()).toBeFalsy()
   })
+
+  it('when the expected amount is empty a non-numeric error is not shown', async () => {
+    const subject = shallowMount(ExpectedBalanceForm)
+    subject.find('[data-qa=expected-balance]').setValue('')
+    subject.find('form[data-qa=begin-reconciliation]').trigger('submit')
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=enter-numeric-amount-error]').exists()).toBeFalsy()
+  })
 })
