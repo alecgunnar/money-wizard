@@ -7,7 +7,6 @@
         <ExpectedBalanceForm />
       </div>
     </div>
-    </div>
   </div>
 </template>
 
