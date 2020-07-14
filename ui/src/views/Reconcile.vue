@@ -17,8 +17,7 @@ export default {
   name: 'reconcile',
   props: {
     id: {
-      required: true,
-      type: Number
+      required: true
     }
   },
   methods: {
