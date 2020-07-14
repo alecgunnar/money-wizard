@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-if="onceConfirmed"
-      class="dialogShadow">
-      <div class="dialog"
+      class="modal">
+      <div class="dialog modal__window"
         data-qa="dialog">
         <h3>Please confirm</h3>
         <p>Are you sure you would like to continue?</p>
@@ -48,18 +48,8 @@ export default {
 }
 </script>
 
-<style scoped>
-.dialog {
-  background-color: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 1em;
-}
-
+<style lang="scss" scoped>
+@import '../../assets/modals.scss';
 .dialog__buttons {
   text-align: center;
 }
@@ -77,24 +67,6 @@ h3, p {
 }
 
 @media screen and (min-width: 480px) {
-  .dialogShadow {
-    background-color: rgba(0, 0, 0, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 1000;
-  }
-
-  .dialog {
-    position: static;
-    border-radius: 3px;
-  }
-
   p {
     margin: 0 0 2em;
   }
