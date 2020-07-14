@@ -119,7 +119,7 @@ describe('Transactions', () => {
     })
     subject.find('[data-qa=new-transaction]').trigger('click')
     await subject.vm.$nextTick()
-    subject.findComponent(NewTransactionForm).vm.$emit('cancel')
+    subject.findComponent(NewTransactionForm).vm.$emit('canceled')
     await subject.vm.$nextTick()
     expect(subject.findComponent(NewTransactionForm).exists()).toBeFalsy()
   })

@@ -8,7 +8,7 @@
         </div>
       </div>
       <NewTransactionForm @submitted="transactionAdded"
-        @cancel="addingTransactionCanceled" />
+        @canceled="addingTransactionCanceled" />
     </div>
     <div class="accountSnapshot">
       <div v-if="account"

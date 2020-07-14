@@ -194,7 +194,7 @@ export default {
       this.accounts = accounts
     },
     cancel () {
-      this.$emit('cancel')
+      this.$emit('canceled')
     },
     async submit (e) {
       e.preventDefault()

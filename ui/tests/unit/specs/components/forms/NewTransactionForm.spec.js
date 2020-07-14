@@ -424,6 +424,6 @@ describe('NewTransactionForm', () => {
       store
     })
     subject.find('[data-qa=cancel]').trigger('click')
-    expect(subject.emitted('cancel')).not.toBeUndefined()
+    expect(subject.emitted('canceled')).not.toBeUndefined()
   })
 })
