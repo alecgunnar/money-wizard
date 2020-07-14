@@ -1,11 +1,6 @@
 <template>
   <div id="app">
     <ConfirmDialog />
-    <div v-if="serverError"
-      class="serverError"
-      data-qa="server-error-message">
-      <p class="serverError__message">{{ serverError }}</p>
-    </div>
     <header class="header">
       <div class="wrapper header__wrapper">
         <div class="branding">
@@ -24,12 +19,15 @@
       </div>
     </header>
     <div class="wrapper">
-      <router-view/>
+      <RouterView v-if="!serverError"
+        ref="routerView" />
+      <ServerError v-else />
     </div>
   </div>
 </template>
 
 <script>
+import ServerError from '@/views/ServerError'
 import ConfirmDialog from '@/components/dialogs/Confirm'
 import {mapState} from 'vuex'
 
@@ -54,6 +52,7 @@ export default {
     }
   },
   components: {
+    ServerError,
     ConfirmDialog
   }
 }

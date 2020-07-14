@@ -1,4 +1,5 @@
 import App from '@/App'
+import ServerError from '@/views/ServerError'
 import ConfirmDialog from '@/components/dialogs/Confirm'
 import store from '@/store'
 import VueRouter from 'vue-router'
@@ -14,21 +15,26 @@ describe('App', () => {
     store.commit('clearServerError')
   })
 
-  it('shows server errors', () => {
-    store.commit('encounteredServerError', 'There was an error')
+  it('shows server error view when there is an error', () => {
+    store.commit('encounteredServerError')
     const subject = shallowMount(App, {store, localVue, router})
-    expect(subject.find('[data-qa=server-error-message]').exists()).toBeTruthy()
+    expect(subject.findComponent(ServerError).exists()).toBeTruthy()
   })
 
-  it('shows server error message', () => {
-    store.commit('encounteredServerError', 'There was an error...')
+  it('does not show server error view when there is not an error', () => {
     const subject = shallowMount(App, {store, localVue, router})
-    expect(subject.find('[data-qa=server-error-message]').text()).toBe('There was an error...')
+    expect(subject.findComponent(ServerError).exists()).toBeFalsy()
   })
 
-  it('does not show a server error', () => {
+  it('does not show router view when there is an error', () => {
+    store.commit('encounteredServerError')
     const subject = shallowMount(App, {store, localVue, router})
-    expect(subject.find('[data-qa=server-error-message]').exists()).toBeFalsy()
+    expect(subject.findComponent({ref: 'routerView'}).exists()).toBeFalsy()
+  })
+
+  it('shows router view when there is not an error', () => {
+    const subject = shallowMount(App, {store, localVue, router})
+    expect(subject.findComponent({ref: 'routerView'}).exists()).toBeTruthy()
   })
 
   it('there is a mobile nav trigger', () => {

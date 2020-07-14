@@ -12,8 +12,8 @@ export default new Vuex.Store({
     serverError: null
   },
   mutations: {
-    encounteredServerError (state, msg) {
-      state.serverError = msg
+    encounteredServerError (state) {
+      state.serverError = true
     },
     clearServerError (state) {
       state.serverError = null
