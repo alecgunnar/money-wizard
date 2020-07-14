@@ -1,15 +1,17 @@
 <template>
   <div class="page">
     <div v-if="addingAccount"
-      class="addAccount">
-      <div class="addAccount__header">
-        <div class="addAccount__title">
-          <h2>Add an Account</h2>
+      class="modal">
+      <div class="modal__window">
+        <div class="addAccount__header">
+          <div class="addAccount__title">
+            <h2>Add an Account</h2>
+          </div>
         </div>
+        <NewAccountForm
+          @submitted="accountAdded"
+          @cancel="cancelAddAccount" />
       </div>
-      <NewAccountForm
-        @submitted="accountAdded"
-        @cancel="cancelAddAccount" />
     </div>
     <div class="header">
       <h1 class="header__title">Accounts</h1>
@@ -94,7 +96,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '../assets/modals.scss';
+
 .page {
   position: relative;
 }
