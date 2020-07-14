@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="initialized"
-      lass="modal">
+      class="modal">
       <div class="modal__window">
         <h3>Enter an Expected Balance</h3>
         <ExpectedBalanceForm @canceled="formCanceled" />

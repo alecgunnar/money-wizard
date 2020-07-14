@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import transactions from './transactions'
 import accounts from './accounts'
+import reconcile from './reconcile'
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     transactions,
-    accounts
+    accounts,
+    reconcile
   }
 })
