@@ -16,7 +16,10 @@ const actions = {
       .then(resp => resp.data)
       .then(data => commit('accountLoaded', data))
       .then(() => true)
-      .catch(() => false)
+      .catch(() => {
+        commit('encounteredServerError')
+        return false
+      })
   }
 }
 

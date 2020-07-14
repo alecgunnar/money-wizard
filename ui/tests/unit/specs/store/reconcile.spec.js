@@ -72,6 +72,9 @@ describe('Reconcile Module', () => {
 
   it('the action resolves when the account fails to load', async () => {
     const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
       modules: {
         reconcile: ReconcileModule
       }
@@ -82,5 +85,24 @@ describe('Reconcile Module', () => {
     const status = await subject.dispatch('reconcileAccount', 1234)
 
     expect(status).toBeFalsy()
+  })
+
+  it('records the error when the account fails to load', async () => {
+    const encounteredServerError = jest.fn()
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    RootClient.get.mockRejectedValueOnce()
+
+    await subject.dispatch('reconcileAccount', 1234)
+
+    expect(encounteredServerError).toBeCalled()
   })
 })
