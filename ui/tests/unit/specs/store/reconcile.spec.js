@@ -51,7 +51,7 @@ describe('Reconcile Module', () => {
     })
   })
 
-  it('the action resolves to true when the account is loaded', async () => {
+  it('the action resolves when the account is loaded', async () => {
     const subject = new Vuex.Store({
       modules: {
         reconcile: ReconcileModule
@@ -68,5 +68,19 @@ describe('Reconcile Module', () => {
     const status = await subject.dispatch('reconcileAccount', 1234)
 
     expect(status).toBeTruthy()
+  })
+
+  it('the action resolves when the account fails to load', async () => {
+    const subject = new Vuex.Store({
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    RootClient.get.mockRejectedValueOnce()
+
+    const status = await subject.dispatch('reconcileAccount', 1234)
+
+    expect(status).toBeFalsy()
   })
 })
