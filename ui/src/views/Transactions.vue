@@ -26,7 +26,7 @@
       </div>
       <div class="accountSnapshot__options">
         <button data-qa="reconcile-account"
-          style="visibility: hidden;"
+          style="display: none;"
           @click="reconcileAccount">Reconcile</button>
         <button data-qa="new-transaction"
           class="button"
@@ -126,9 +126,6 @@ export default {
 }
 
 .accountSnapshot {
-  background-color: #f1f1f1;
-  padding: 0.5em;
-  border-radius: 3px;
   margin: 0 0 1em;
 }
 
@@ -137,7 +134,7 @@ export default {
 }
 
 .accountSnapshot__options {
-  text-align: center;
+  text-align: right;
 }
 
 .accountSnapshot__options button {
