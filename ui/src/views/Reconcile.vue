@@ -12,6 +12,7 @@
 
 <script>
 import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'reconcile',
@@ -20,7 +21,11 @@ export default {
       required: true
     }
   },
+  mounted () {
+    this.reconcileAccount(this.id)
+  },
   methods: {
+    ...mapActions(['reconcileAccount']),
     formCanceled () {
       this.$router.push({
         name: 'account',

@@ -7,7 +7,9 @@ const mutations = {
 }
 
 const actions = {
+  reconcileAccount (store, id) {
 
+  }
 }
 
 export default {

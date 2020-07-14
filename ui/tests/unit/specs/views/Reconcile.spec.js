@@ -8,18 +8,40 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 let store
+let reconcileAccount
 
 describe('Reconcile', () => {
   beforeEach(() => {
+    reconcileAccount = jest.fn()
     store = new Vuex.Store({
       modules: {
-        reconcile: ReconcileModule
+        reconcile: {
+          ...ReconcileModule,
+          actions: {
+            ...ReconcileModule.actions,
+            reconcileAccount: reconcileAccount
+          }
+        }
       }
     })
   })
 
+  it('initializes the reconciliation', () => {
+    shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(reconcileAccount).toBeCalledWith(expect.any(Object), 1234)
+  })
+
   it('shows the expected balance form', () => {
     const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
       propsData: {
         id: 1234
       }
@@ -30,6 +52,8 @@ describe('Reconcile', () => {
   it('sends the user back to the account page when the form is canceled', () => {
     const push = jest.fn()
     const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
       mocks: {
         $router: {
           push
