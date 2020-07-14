@@ -52,7 +52,10 @@ export default {
     beginReconciliation (e) {
       e.preventDefault()
       this.emptyAmountErr = !this.amount
-      this.nonNumericAmountErr = !this.emptyAmountErr && isNaN(parseFloat(this.amount))
+      const parsedAmount = parseFloat(this.amount)
+      this.nonNumericAmountErr = !this.emptyAmountErr && isNaN(parsedAmount)
+      if (this.emptyAmountErr || this.nonNumericAmountErr) return
+      this.$emit('submitted', parsedAmount)
     },
     cancel () {
       this.$emit('canceled')

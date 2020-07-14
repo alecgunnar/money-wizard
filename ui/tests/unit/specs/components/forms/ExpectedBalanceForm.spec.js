@@ -72,4 +72,27 @@ describe('Expected Balance Form', () => {
     subject.find('[data-qa=cancel]').trigger('click')
     expect(subject.emitted('canceled')).not.toBeUndefined()
   })
+
+  it('an event is emitted when the form is correctly filled out and submitted', () => {
+    const subject = shallowMount(ExpectedBalanceForm)
+    subject.find('[data-qa=expected-balance]').setValue('10.99')
+    subject.find('form[data-qa=begin-reconciliation]').trigger('submit')
+    expect(subject.emitted('submitted')).toEqual([
+      [10.99]
+    ])
+  })
+
+  it('an event is not emitted when the expected amount is empty', async () => {
+    const subject = shallowMount(ExpectedBalanceForm)
+    subject.find('[data-qa=expected-balance]').setValue('')
+    subject.find('form[data-qa=begin-reconciliation]').trigger('submit')
+    expect(subject.emitted('submitted')).toBeUndefined()
+  })
+
+  it('an event is not emitted when the expected amount is non numeric', async () => {
+    const subject = shallowMount(ExpectedBalanceForm)
+    subject.find('[data-qa=expected-balance]').setValue('abc123')
+    subject.find('form[data-qa=begin-reconciliation]').trigger('submit')
+    expect(subject.emitted('submitted')).toBeUndefined()
+  })
 })
