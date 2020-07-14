@@ -3,11 +3,7 @@
     <div v-if="addingAccount"
       class="modal">
       <div class="modal__window">
-        <div class="addAccount__header">
-          <div class="addAccount__title">
-            <h2>Add an Account</h2>
-          </div>
-        </div>
+        <h3>Add an Account</h3>
         <NewAccountForm
           @submitted="accountAdded"
           @cancel="cancelAddAccount" />
@@ -136,15 +132,5 @@ export default {
   right: -1rem;
   padding: 1em;
   box-sizing: border-box;
-}
-
-.addAccount__header {
-  display: flex;
-  align-items: center;
-  margin: 0 0 1em;
-}
-
-.addAccount__title {
-  flex: 1;
 }
 </style>

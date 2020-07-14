@@ -3,11 +3,7 @@
     <div v-if="addingTransaction"
       class="modal">
       <div class="modal__window">
-        <div class="addTransaction__header">
-          <div class="addTransaction__title">
-            <h2>Add a Transaction</h2>
-          </div>
-        </div>
+        <h3>Add a Transaction</h3>
         <NewTransactionForm @submitted="transactionAdded"
           @canceled="addingTransactionCanceled" />
       </div>
@@ -172,27 +168,6 @@ export default {
 .button {
   background: #4CAF50;
   color: #fff;
-}
-
-.addTransaction {
-  background-color: #fff;
-  position: absolute;
-  top: -1rem;
-  left: -1rem;
-  bottom: -1rem;
-  right: -1rem;
-  padding: 1em;
-  box-sizing: border-box;
-}
-
-.addTransaction__header {
-  display: flex;
-  align-items: center;
-  margin: 0 0 1em;
-}
-
-.addTransaction__title {
-  flex: 1;
 }
 
 @media screen and (min-width: 480px) {
