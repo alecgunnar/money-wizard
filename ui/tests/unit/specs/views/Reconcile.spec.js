@@ -1,8 +1,23 @@
 import Reconcile from '@/views/Reconcile'
 import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
-import {shallowMount} from '@vue/test-utils'
+import ReconcileModule from '@/store/reconcile'
+import Vuex from 'vuex'
+import {shallowMount, createLocalVue} from '@vue/test-utils'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
+
+let store
 
 describe('Reconcile', () => {
+  beforeEach(() => {
+    store = new Vuex.Store({
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+  })
+
   it('shows the expected balance form', () => {
     const subject = shallowMount(Reconcile, {
       propsData: {
