@@ -22,7 +22,6 @@
       </div>
       <div class="accountSnapshot__options">
         <button data-qa="reconcile-account"
-          style="display: none;"
           @click="reconcileAccount">Reconcile</button>
         <button data-qa="new-transaction"
           class="button"
