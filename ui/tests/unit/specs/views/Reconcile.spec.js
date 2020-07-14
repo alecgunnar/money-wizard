@@ -38,7 +38,7 @@ describe('Reconcile', () => {
     expect(reconcileAccount).toBeCalledWith(expect.any(Object), 1234)
   })
 
-  it('shows the expected balance form', () => {
+  it('does not show the expected balance form until the initialization completes', () => {
     const subject = shallowMount(Reconcile, {
       store,
       localVue,
@@ -46,10 +46,25 @@ describe('Reconcile', () => {
         id: 1234
       }
     })
+
+    expect(subject.findComponent(ExpectedBalanceForm).exists()).toBeFalsy()
+  })
+
+  it('shows the expected balance form once the initialization completes', async () => {
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
     expect(subject.findComponent(ExpectedBalanceForm).exists()).toBeTruthy()
   })
 
-  it('sends the user back to the account page when the form is canceled', () => {
+  it('sends the user back to the account page when the form is canceled', async () => {
     const push = jest.fn()
     const subject = shallowMount(Reconcile, {
       store,
@@ -63,6 +78,9 @@ describe('Reconcile', () => {
         id: 1234
       }
     })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
 
     subject.findComponent(ExpectedBalanceForm).vm.$emit('canceled')
     expect(push).toBeCalledWith({

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Reconcile Account</h1>
-    <div class="modal">
+    <div v-if="initialized"
+      lass="modal">
       <div class="modal__window">
         <h3>Enter an Expected Balance</h3>
         <ExpectedBalanceForm @canceled="formCanceled" />
@@ -16,6 +16,11 @@ import {mapActions} from 'vuex'
 
 export default {
   name: 'reconcile',
+  data () {
+    return {
+      initialized: false
+    }
+  },
   props: {
     id: {
       required: true
@@ -23,6 +28,7 @@ export default {
   },
   mounted () {
     this.reconcileAccount(this.id)
+      .then(this.initializationComplete)
   },
   methods: {
     ...mapActions(['reconcileAccount']),
@@ -33,6 +39,9 @@ export default {
           id: this.id
         }
       })
+    },
+    initializationComplete () {
+      this.initialized = true
     }
   },
   components: {
