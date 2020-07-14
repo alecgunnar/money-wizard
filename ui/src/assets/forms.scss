@@ -91,7 +91,7 @@
 
 .form__footer {
   text-align: center;
-  margin: 0 0 1em;
+  padding: 1em 0 0;
   
   button {
     margin: 0 0.5em 0 0;
@@ -106,6 +106,7 @@
 
   .modal .form__row {
     display: block;
+    margin: 0 0 1em;
   }
 
   .form__label {
@@ -135,6 +136,6 @@
 
   .modal .form__footer {
     text-align: center;
-    padding: unset;
+    padding: 1em 0 0;
   }
 }
