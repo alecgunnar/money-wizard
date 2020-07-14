@@ -104,6 +104,10 @@
     margin: 0 0 2em;
   }
 
+  .modal .form__row {
+    display: block;
+  }
+
   .form__label {
     text-align: right;
     padding: 0.5em 0.5em 0 0;
@@ -111,12 +115,26 @@
     box-sizing: border-box;
   }
 
+  .modal .form__label {
+    width: unset;
+    text-align: unset;
+  }
+
   .form__input {
     width: 300px;
+  }
+
+  .modal .form__input {
+    width: 400px;
   }
 
   .form__footer {
     text-align: left;
     padding: 0 0 0 30%;
+  }
+
+  .modal .form__footer {
+    text-align: center;
+    padding: unset;
   }
 }

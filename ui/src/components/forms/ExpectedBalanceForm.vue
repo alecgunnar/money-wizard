@@ -3,10 +3,6 @@
     <form class="form"
       data-qa="begin-reconciliation"
       @submit="beginReconciliation">
-      <div v-if="enterAnAmountError"
-        class="form__fieldError"
-        data-qa="enter-an-amount-error"></div>
-
       <div class="form__row">
         <div class="form__label">
           <label for="expected-balance">
