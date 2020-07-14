@@ -30,6 +30,9 @@
       <div class="form__footer">
         <button type="submit"
           data-qa="continue">Continue</button>
+        <button data-qa="cancel"
+          type="button"
+          @click="cancel">Cancel</button>
       </div>
     </form>
   </div>
@@ -47,9 +50,12 @@ export default {
   },
   methods: {
     beginReconciliation (e) {
-      e.stopPropagation()
+      e.preventDefault()
       this.emptyAmountErr = !this.amount
       this.nonNumericAmountErr = !this.emptyAmountErr && isNaN(parseFloat(this.amount))
+    },
+    cancel () {
+      this.$emit('canceled')
     }
   }
 }

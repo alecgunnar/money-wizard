@@ -4,7 +4,7 @@
     <div class="modal">
       <div class="modal__window">
         <h3>Enter an Expected Balance</h3>
-        <ExpectedBalanceForm />
+        <ExpectedBalanceForm @canceled="formCanceled" />
       </div>
     </div>
   </div>
@@ -15,6 +15,22 @@ import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
 
 export default {
   name: 'reconcile',
+  props: {
+    id: {
+      required: true,
+      type: Number
+    }
+  },
+  methods: {
+    formCanceled () {
+      this.$router.push({
+        name: 'account',
+        params: {
+          id: this.id
+        }
+      })
+    }
+  },
   components: {
     ExpectedBalanceForm
   }

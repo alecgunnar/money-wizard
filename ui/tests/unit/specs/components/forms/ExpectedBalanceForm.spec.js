@@ -61,4 +61,15 @@ describe('Expected Balance Form', () => {
     await subject.vm.$nextTick()
     expect(subject.find('[data-qa=enter-numeric-amount-error]').exists()).toBeFalsy()
   })
+
+  it('there is a cancel button', () => {
+    const subject = shallowMount(ExpectedBalanceForm)
+    expect(subject.find('button[type=button][data-qa=cancel]').exists()).toBeTruthy()
+  })
+
+  it('an event is emitted when the cancel button is clicked', () => {
+    const subject = shallowMount(ExpectedBalanceForm)
+    subject.find('[data-qa=cancel]').trigger('click')
+    expect(subject.emitted('canceled')).not.toBeUndefined()
+  })
 })
