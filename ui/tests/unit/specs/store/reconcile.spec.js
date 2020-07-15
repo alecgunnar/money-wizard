@@ -187,7 +187,7 @@ describe('Reconcile Module', () => {
 
     subject.dispatch('reconcile/loadTransactions', 4521)
 
-    expect(RootClient.get).toBeCalledWith('/transactions?accountId=4521&reconciled=false')
+    expect(RootClient.get).toBeCalledWith('/transactions?accountId=4521&reconciled=false&inline=true')
   })
 
   it('records the transactions that are loaded', async () => {
@@ -218,11 +218,13 @@ describe('Reconcile Module', () => {
     expect(subject.state.reconcile.transactions).toEqual([
       {
         type: 'debit',
-        amount: 10
+        amount: 10,
+        posted: true
       },
       {
         type: 'credit',
-        amount: 14
+        amount: 14,
+        posted: true
       }
     ])
   })

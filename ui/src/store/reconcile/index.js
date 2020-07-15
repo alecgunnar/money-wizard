@@ -12,7 +12,10 @@ const mutations = {
     state.balance = account.balance
   },
   transactionsLoaded (state, transactions) {
-    state.transactions = transactions
+    state.transactions = transactions.map(transaction => ({
+      ...transaction,
+      posted: true
+    }))
   },
   reset (state) {
     state.account = null
@@ -34,9 +37,10 @@ const actions = {
       })
   },
   loadTransactions ({commit}, id) {
-    return RootClient.get(`/transactions?accountId=${id}&reconciled=false`)
+    return RootClient.get(`/transactions?accountId=${id}&reconciled=false&inline=true`)
       .then(resp => resp.data)
       .then(data => commit('transactionsLoaded', data))
+      .catch(() => null)
   }
 }
 

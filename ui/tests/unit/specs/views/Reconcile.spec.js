@@ -291,14 +291,14 @@ describe('Reconcile', () => {
     })
 
     expect(subject.findComponent(ReconcilableTransactionsList).props('transactions')).toEqual([
-      {
+      expect.objectContaining({
         type: 'debit',
         amount: 123
-      },
-      {
+      }),
+      expect.objectContaining({
         type: 'credit',
         amount: 456
-      }
+      })
     ])
   })
 })
