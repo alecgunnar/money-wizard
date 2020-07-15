@@ -106,4 +106,65 @@ describe('Reconcile', () => {
     await subject.vm.$nextTick()
     expect(subject.findComponent(ExpectedBalanceForm).exists()).toBeFalsy()
   })
+
+  it('renders the expected balance', async () => {
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 10.99)
+    await subject.vm.$nextTick()
+    expect(subject.find('[data-qa=expected-balance]').text()).toBe('$10.99')
+  })
+
+  it('does not render an expected balance before one is entered', async () => {
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(subject.find('[data-qa=expected-balance]').exists()).toBeFalsy()
+  })
+
+  it('renders the account name', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account'
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=account-name]').text()).toBe('Sample Account')
+  })
+
+  it('the name is not rendered before the account data is loaded', () => {
+    store.commit('reconcile/accountLoaded', null)
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(subject.find('[data-qa=account-name]').exists()).toBeFalsy()
+  })
 })

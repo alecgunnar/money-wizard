@@ -8,12 +8,18 @@
           @canceled="formCanceled" />
       </div>
     </div>
+    <div v-if="account !== null"
+      class="summary">
+      <h1>Reconciling <span data-qa="account-name">{{ account.name }}</span></h1>
+      <span v-if="expectedBalance !== null">The expected balance is <span data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</span></span>
+    </div>
   </div>
 </template>
 
 <script>
 import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
-import {mapActions} from 'vuex'
+import dollarAmount from '@/filters/dollarAmount'
+import {mapActions, mapState} from 'vuex'
 
 export default {
   name: 'reconcile',
@@ -27,6 +33,11 @@ export default {
     id: {
       required: true
     }
+  },
+  computed: {
+    ...mapState({
+      account: (state) => state.reconcile.account
+    })
   },
   mounted () {
     this.reconcileAccount(this.id)
@@ -50,6 +61,9 @@ export default {
     initializationComplete () {
       this.initialized = true
     }
+  },
+  filters: {
+    dollarAmount
   },
   components: {
     ExpectedBalanceForm
