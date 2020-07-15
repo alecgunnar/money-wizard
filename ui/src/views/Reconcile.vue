@@ -12,7 +12,9 @@
       class="summary">
       <h1>Reconciling <span data-qa="account-name">{{ account.name }}</span></h1>
       <span v-if="expectedBalance !== null">The expected balance is <span style="font-weight: bold;"
-        data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</span>.</span>
+        data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</span>, and the reconciled balance is <span style="font-weight: bold;"
+          data-qa="reconciled-balance">{{ reconciledBalance | dollarAmount }}</span>. The difference between the two balances is <span style="font-weight: bold;"
+            data-qa="balance-difference">{{ balanceDifference | dollarAmount }}</span></span>
     </div>
   </div>
 </template>
@@ -37,8 +39,12 @@ export default {
   },
   computed: {
     ...mapState({
-      account: (state) => state.reconcile.account
-    })
+      account: (state) => state.reconcile.account,
+      reconciledBalance: (state) => state.reconcile.balance,
+    }),
+    balanceDifference () {
+      return this.reconciledBalance - this.expectedBalance
+    }
   },
   mounted () {
     this.reconcileAccount(this.id)

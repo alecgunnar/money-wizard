@@ -141,7 +141,8 @@ describe('Reconcile', () => {
 
   it('renders the account name', async () => {
     store.commit('reconcile/accountLoaded', {
-      name: 'Sample Account'
+      name: 'Sample Account',
+      balance: 4.13
     })
 
     const subject = shallowMount(Reconcile, {
@@ -170,5 +171,89 @@ describe('Reconcile', () => {
     })
 
     expect(subject.find('[data-qa=account-name]').exists()).toBeFalsy()
+  })
+
+  it('shows the reconciled balance', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 10.99)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=reconciled-balance]').text()).toBe('$4.13')
+  })
+
+  it('does not show the reconciled balance before an expected balance is entered', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=reconciled-balance]').exists()).toBeFalsy()
+  })
+
+  it('renders the difference between the expected and the reconciled balances', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 10.99)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=balance-difference]').text()).toBe('-$6.86')
+  })
+
+  it('does not render the difference between the expected and the reconciled balances before an expected balance has been entered', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=balance-difference]').exists()).toBeFalsy()
   })
 })
