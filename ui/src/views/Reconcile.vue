@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div v-if="initialized"
+    <div v-if="initialized && expectedBalance === null"
       class="modal">
       <div class="modal__window">
         <h3>Enter an Expected Balance</h3>
-        <ExpectedBalanceForm @canceled="formCanceled" />
+        <ExpectedBalanceForm @submitted="balanceExpected"
+          @canceled="formCanceled" />
       </div>
     </div>
   </div>
@@ -18,7 +19,8 @@ export default {
   name: 'reconcile',
   data () {
     return {
-      initialized: false
+      initialized: false,
+      expectedBalance: null
     }
   },
   props: {
@@ -34,6 +36,9 @@ export default {
     ...mapActions({
       reconcileAccount: 'reconcile/reconcileAccount'
     }),
+    balanceExpected (balance) {
+      this.expectedBalance = balance
+    },
     formCanceled () {
       this.$router.push({
         name: 'account',

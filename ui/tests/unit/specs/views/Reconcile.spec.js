@@ -90,4 +90,20 @@ describe('Reconcile', () => {
       }
     })
   })
+
+  it('hides the expected balance form when the form is submitted', async () => {
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 10.99)
+    await subject.vm.$nextTick()
+    expect(subject.findComponent(ExpectedBalanceForm).exists()).toBeFalsy()
+  })
 })
