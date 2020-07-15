@@ -11,7 +11,8 @@
     <div v-if="account !== null"
       class="summary">
       <h1>Reconciling <span data-qa="account-name">{{ account.name }}</span></h1>
-      <span v-if="expectedBalance !== null">The expected balance is <span data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</span></span>
+      <span v-if="expectedBalance !== null">The expected balance is <span style="font-weight: bold;"
+        data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</span>.</span>
     </div>
   </div>
 </template>
