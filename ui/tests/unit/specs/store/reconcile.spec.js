@@ -24,7 +24,7 @@ describe('Reconcile Module', () => {
       data: {}
     })
 
-    subject.dispatch('reconcileAccount', 1234)
+    subject.dispatch('reconcile/reconcileAccount', 1234)
 
     expect(RootClient.get).toBeCalledWith('/accounts/1234')
   })
@@ -43,7 +43,7 @@ describe('Reconcile Module', () => {
       }
     })
 
-    await subject.dispatch('reconcileAccount', 1234)
+    await subject.dispatch('reconcile/reconcileAccount', 1234)
 
     expect(subject.state.reconcile.account).toEqual({
       name: 'Something',
@@ -65,7 +65,7 @@ describe('Reconcile Module', () => {
       }
     })
 
-    const status = await subject.dispatch('reconcileAccount', 1234)
+    const status = await subject.dispatch('reconcile/reconcileAccount', 1234)
 
     expect(status).toBeTruthy()
   })
@@ -82,7 +82,7 @@ describe('Reconcile Module', () => {
 
     RootClient.get.mockRejectedValueOnce()
 
-    const status = await subject.dispatch('reconcileAccount', 1234)
+    const status = await subject.dispatch('reconcile/reconcileAccount', 1234)
 
     expect(status).toBeFalsy()
   })
@@ -101,7 +101,7 @@ describe('Reconcile Module', () => {
 
     RootClient.get.mockRejectedValueOnce()
 
-    await subject.dispatch('reconcileAccount', 1234)
+    await subject.dispatch('reconcile/reconcileAccount', 1234)
 
     expect(encounteredServerError).toBeCalled()
   })

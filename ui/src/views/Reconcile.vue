@@ -31,7 +31,9 @@ export default {
       .then(this.initializationComplete)
   },
   methods: {
-    ...mapActions(['reconcileAccount']),
+    ...mapActions({
+      reconcileAccount: 'reconcile/reconcileAccount'
+    }),
     formCanceled () {
       this.$router.push({
         name: 'account',

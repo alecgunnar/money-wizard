@@ -17,13 +17,14 @@ const actions = {
       .then(data => commit('accountLoaded', data))
       .then(() => true)
       .catch(() => {
-        commit('encounteredServerError')
+        commit('encounteredServerError', null, {root: true})
         return false
       })
   }
 }
 
 export default {
+  namespaced: true,
   state,
   mutations,
   actions
