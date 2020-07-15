@@ -108,6 +108,10 @@ describe('Reconcile', () => {
   })
 
   it('renders the expected balance', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account'
+    })
+
     const subject = shallowMount(Reconcile, {
       store,
       localVue,
