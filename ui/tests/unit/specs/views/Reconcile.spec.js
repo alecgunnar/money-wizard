@@ -1,5 +1,6 @@
 import Reconcile from '@/views/Reconcile'
 import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
+import ReconcilableTransactionsList from '@/components/lists/ReconcilableTransactionsList'
 import ReconcileModule from '@/store/reconcile'
 import Vuex from 'vuex'
 import {shallowMount, createLocalVue} from '@vue/test-utils'
@@ -255,5 +256,49 @@ describe('Reconcile', () => {
     await subject.vm.$nextTick()
 
     expect(subject.find('[data-qa=balance-difference]').exists()).toBeFalsy()
+  })
+
+  it('has a transactions list', () => {
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(subject.findComponent(ReconcilableTransactionsList).exists()).toBeTruthy()
+  })
+
+  it('props the transactions to the list', () => {
+    store.commit('reconcile/transactionsLoaded', [
+      {
+        type: 'debit',
+        amount: 123
+      },
+      {
+        type: 'credit',
+        amount: 456
+      }
+    ])
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    expect(subject.findComponent(ReconcilableTransactionsList).props('transactions')).toEqual([
+      {
+        type: 'debit',
+        amount: 123
+      },
+      {
+        type: 'credit',
+        amount: 456
+      }
+    ])
   })
 })

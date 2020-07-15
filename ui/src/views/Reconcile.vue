@@ -16,11 +16,13 @@
           data-qa="reconciled-balance">{{ reconciledBalance | dollarAmount }}</span>. The difference between the two balances is <span style="font-weight: bold;"
             data-qa="balance-difference">{{ balanceDifference | dollarAmount }}</span></p>
     </div>
+    <ReconcilableTransactionsList :transactions="transactions" />
   </div>
 </template>
 
 <script>
 import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
+import ReconcilableTransactionsList from '@/components/lists/ReconcilableTransactionsList'
 import dollarAmount from '@/filters/dollarAmount'
 import {mapActions, mapState} from 'vuex'
 
@@ -41,6 +43,7 @@ export default {
     ...mapState({
       account: (state) => state.reconcile.account,
       reconciledBalance: (state) => state.reconcile.balance,
+      transactions: (state) => state.reconcile.transactions
     }),
     balanceDifference () {
       return this.reconciledBalance - this.expectedBalance
@@ -73,7 +76,8 @@ export default {
     dollarAmount
   },
   components: {
-    ExpectedBalanceForm
+    ExpectedBalanceForm,
+    ReconcilableTransactionsList
   }
 }
 </script>
