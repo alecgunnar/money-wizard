@@ -38,7 +38,8 @@ module.exports = {
   getGroupedTransactions (AccountId=null) {
     const query = {
       order: [
-        ['date', 'DESC']
+        ['date', 'DESC'],
+        ['id', 'DESC']
       ],
       include: [db['Account']]
     }
