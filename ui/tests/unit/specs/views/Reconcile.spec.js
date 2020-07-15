@@ -159,7 +159,7 @@ describe('Reconcile', () => {
   })
 
   it('the name is not rendered before the account data is loaded', () => {
-    store.commit('reconcile/accountLoaded', null)
+    store.commit('reconcile/reset')
 
     const subject = shallowMount(Reconcile, {
       store,

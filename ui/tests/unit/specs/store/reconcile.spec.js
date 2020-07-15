@@ -57,6 +57,28 @@ describe('Reconcile Module', () => {
     })
   })
 
+  it('retains the account balance on init', async () => {
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    RootClient.get.mockResolvedValueOnce({
+      data: {
+        name: 'Something',
+        balance: 45.23
+      }
+    })
+
+    await subject.dispatch('reconcile/reconcileAccount', 1234)
+
+    expect(subject.state.reconcile.balance).toEqual(45.23)
+  })
+
   it('the action resolves when the account is loaded', async () => {
     const subject = new Vuex.Store({
       mutations: {
