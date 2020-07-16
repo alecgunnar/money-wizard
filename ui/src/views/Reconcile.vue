@@ -11,11 +11,11 @@
     <div v-if="account !== null">
       <h1>Reconciling an Account</h1>
       <div>Account: <span data-qa="account-name">{{ account.name }}</span></div>
-      <a name="summary"
-        ref="anchor"></a>
+      <div class="anchor"
+        :class="{fill: stickSummary}"
+        ref="anchor">&nbsp;</div>
       <ul class="summary"
-        :class="{stuck: stickSummary}"
-        ref="summary">
+        :class="{stuck: stickSummary}">
         <li class="summary__item">
           <div class="summary__label">Reconciled Balance</div>
           <div class=""
@@ -141,6 +141,7 @@ h1 {
   .summary {
     display: flex;
     padding: 0;
+    margin: 1em 0;
 
     &.stuck {
       background-color: #fff;
@@ -154,6 +155,15 @@ h1 {
       border-right: 0;
       border-radius: 0;
       box-shadow: 10px 10px 10px #efefef;
+    }
+  }
+
+  .anchor {
+    padding: 0;
+
+    &.fill {
+      padding: 1em;
+      margin: 0 0 3em;
     }
   }
 
