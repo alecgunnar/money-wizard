@@ -442,4 +442,48 @@ describe('Reconcile Module', () => {
 
     expect(subject.getters['reconcile/reconciledBalance']).toBe(-18)
   })
+
+  it('calculates the reconciled balance up to two decimal places', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: 1,
+          account: {
+            type: 'loan'
+          },
+          type: 'debit',
+          amount: 10.31214125
+        },
+        {
+          id: 2,
+          account: {
+            type: 'loan'
+          },
+          type: 'credit',
+          amount: 14.2351212
+        },
+        {
+          id: 3,
+          account: {
+            type: 'loan'
+          },
+          type: 'credit',
+          amount: 28.2351245
+        }
+      ]
+    })
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    await subject.dispatch('reconcile/loadTransactions', 4521)
+
+    expect(subject.getters['reconcile/reconciledBalance']).toBe(-32.16)
+  })
 })

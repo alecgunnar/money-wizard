@@ -8,7 +8,7 @@ const state = {
 
 const getters = {
   reconciledBalance (state) {
-    return state.transactions
+    return +state.transactions
       .filter(transaction => transaction.posted)
       .map(transaction => {
         const {type, amount, account} = transaction
@@ -19,7 +19,7 @@ const getters = {
 
         return type === 'credit' ? -1 * amount : amount
       })
-      .reduce((acc, amount) => acc + amount, 0)
+      .reduce((acc, amount) => acc + amount, 0).toFixed(2)
   }
 }
 
