@@ -64,7 +64,8 @@ module.exports = {
         ['id', 'DESC']
       ],
       where: {
-        AccountId
+        AccountId,
+        ReconciliationId: null
       }
     }).then((transactions) => transactions.map(fromModel))
   },

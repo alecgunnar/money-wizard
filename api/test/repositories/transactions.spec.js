@@ -141,6 +141,40 @@ describe('Transactions Repository', () => {
     expect(transactions['2020-06-18'][1].id).toBe(firstTransactionId)
   })
 
+  it('gets all transactions for an account that are not reconciled', async () => {
+    const accountId = await accountsRepo.createAccount('Sample', 'asset')
+
+    const reconciliationId = await reconciliationsRepo.createReconciliation(accountId, 10.99, '2020-02-13')
+
+    const firstTransactionId = await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      10.57,
+      '2020-06-18',
+      'sample',
+      'some notes'
+    )
+
+    await transactionsRepo.updateReconciliation(firstTransactionId, reconciliationId)
+
+    const secondTransactionId = await transactionsRepo.createTransaction(
+      accountId,
+      'credit',
+      11.11,
+      '2020-06-18',
+      'sample',
+      ''
+    )
+
+    return expect(
+      transactionsRepo.getTransactionsForAccount(accountId)
+    ).resolves.toMatchObject([
+      {
+        id: secondTransactionId
+      }
+    ])
+  })
+
   it('gets all transactions and groups them', async () => {
     const accountId = await accountsRepo.createAccount('Sample', 'asset')
     const firstTransactionId = await transactionsRepo.createTransaction(
