@@ -1,71 +1,89 @@
 const app = require('../../app')
-const TransactionsRepo = require('../../repositories/transactions')
+const TransactionsService = require('../../services/transactions')
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 
-jest.mock('../../repositories/accounts')
-jest.mock('../../repositories/transactions')
+jest.mock('../../services/transactions')
 
 chai.use(chaiHttp)
 
 describe('Transactions Controller', () => {
-  it('gets all transactions', () => {
+  it('rejects when the account id is left out', () => {
     expect.assertions(1)
 
-    TransactionsRepo.getGroupedTransactions.mockResolvedValueOnce([])
+    const request = chai.request(app).get('/transactions')
 
-    return chai.request(app)
-    .get('/transactions')
-    .then(() => {
-      expect(TransactionsRepo.getGroupedTransactions).toBeCalledWith(undefined)
+    return expect(request).resolves.toMatchObject({
+      status: 400,
+      body: {
+        msg: 'An account id must be provided using the `accountId` query parameter.'
+      }
     })
   })
 
   it('gets all transactions for an account', () => {
     expect.assertions(1)
 
-    TransactionsRepo.getGroupedTransactions.mockResolvedValueOnce([])
+    TransactionsService.getTransactionsForAccount.mockResolvedValueOnce({})
 
     return chai.request(app)
-    .get('/transactions?accountId=123')
-    .then(() => {
-      expect(TransactionsRepo.getGroupedTransactions).toBeCalledWith('123')
-    })
+      .get('/transactions?accountId=123')
+      .then(() => {
+        expect(TransactionsService.getTransactionsForAccount).toBeCalledWith('123', false)
+      })
+  })
+
+  it('gets all transactions for an account inline', () => {
+    expect.assertions(1)
+
+    TransactionsService.getTransactionsForAccount.mockResolvedValueOnce({})
+
+    return chai.request(app)
+      .get('/transactions?accountId=123&inline=true')
+      .then(() => {
+        expect(TransactionsService.getTransactionsForAccount).toBeCalledWith('123', true)
+      })
   })
 
   it('resolves when all transactions are loaded', () => {
     expect.assertions(1)
 
-    const transaction = {
-      id: 13,
-      amount: 23.12
-    }
-
-    TransactionsRepo.getGroupedTransactions.mockResolvedValueOnce({
-      '2020-07-06': [transaction]
+    TransactionsService.getTransactionsForAccount.mockResolvedValueOnce({
+      '2020-07-06': [
+        {
+          id: 13,
+          amount: 23.12
+        }
+      ]
     })
 
-    return chai.request(app)
-      .get('/transactions')
-      .then((res) => {
-        expect(res.body).toEqual({
-          '2020-07-06': [transaction]
-        })
-      })
+    const request = chai.request(app)
+      .get('/transactions?accountId=456')
+
+    return expect(request).resolves.toMatchObject({
+      body: {
+        '2020-07-06': [
+          {
+            id: 13,
+            amount: 23.12
+          }
+        ]
+      }
+    })
   })
 
   it('rejects when transactions cannot be loaded', () => {
-    expect.assertions(2)
+    expect.assertions(1)
 
-    TransactionsRepo.getGroupedTransactions.mockRejectedValueOnce()
+    TransactionsService.getTransactionsForAccount.mockRejectedValueOnce()
 
-    return chai.request(app)
-    .get('/transactions')
-    .then((res) => {
-      expect(res.status).toBe(500)
-      expect(res.body).toEqual({
+    const request = chai.request(app).get('/transactions?accountId=123')
+
+    return expect(request).resolves.toMatchObject({
+      status: 500,
+      body: {
         msg: 'Transactions could not be loaded for an unknown reason.'
-      })
+      }
     })
   })
 })
