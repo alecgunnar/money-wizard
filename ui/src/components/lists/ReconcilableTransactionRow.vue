@@ -38,7 +38,8 @@ export default {
     ...mapActions({
       togglePosted: 'reconcile/togglePosted'
     }),
-    toggle () {
+    toggle (e) {
+      e.stopPropagation()
       this.togglePosted(this.transaction.id)
     }
   },
