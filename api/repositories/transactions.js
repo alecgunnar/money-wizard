@@ -59,6 +59,9 @@ module.exports = {
   getTransactionsForAccount (AccountId) {
     return db['Transaction'].findAll({
       include: [db['Account']],
+      order: [
+        ['id', 'DESC']
+      ],
       where: {
         AccountId
       }

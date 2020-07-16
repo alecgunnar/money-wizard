@@ -236,18 +236,6 @@ describe('Transactions Repository', () => {
 
     return expect(results).resolves.toMatchObject([
       {
-        id: firstTransactionId,
-        accountId,
-        account: {
-          type: 'asset'
-        },
-        type: 'debit',
-        amount: 10.57,
-        date: '2020-06-18',
-        reason: 'sample',
-        notes: ''
-      },
-      {
         id: secondTransactionid,
         accountId,
         account: {
@@ -258,8 +246,46 @@ describe('Transactions Repository', () => {
         date: '2020-06-18',
         reason: 'sample',
         notes: ''
+      },
+      {
+        id: firstTransactionId,
+        accountId,
+        account: {
+          type: 'asset'
+        },
+        type: 'debit',
+        amount: 10.57,
+        date: '2020-06-18',
+        reason: 'sample',
+        notes: ''
       }
     ])
+  })
+
+  it('gets the transactions for an account in order by id', async () => {
+    const accountId = await accountsRepo.createAccount('Sample', 'asset')
+    const firstTransactionId = await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      10.57,
+      '2020-06-18',
+      'sample',
+      ''
+    )
+
+    const secondTransactionid = await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      44.02,
+      '2020-06-18',
+      'sample',
+      ''
+    )
+
+    const results = await transactionsRepo.getTransactionsForAccount(accountId)
+
+    expect(results[0].id).toBe(secondTransactionid)
+    expect(results[1].id).toBe(firstTransactionId)
   })
 
   it('deletes transaction', async () => {
