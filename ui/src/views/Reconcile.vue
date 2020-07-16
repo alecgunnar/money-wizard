@@ -8,13 +8,26 @@
           @canceled="formCanceled" />
       </div>
     </div>
-    <div v-if="account !== null"
-      class="summary">
+    <div v-if="account !== null">
       <h1>Reconciling <span data-qa="account-name">{{ account.name }}</span></h1>
-      <p v-if="expectedBalance !== null">The expected balance is <span style="font-weight: bold;"
-        data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</span>, and the reconciled balance is <span style="font-weight: bold;"
-          data-qa="reconciled-balance">{{ reconciledBalance | dollarAmount }}</span>. The difference between the two balances is <span style="font-weight: bold;"
-            data-qa="balance-difference">{{ balanceDifference | dollarAmount }}</span></p>
+      <ul v-if="expectedBalance !== null"
+        class="summary">
+        <li class="summary__item">
+          <div class="summary__label">Reconciled Balance</div>
+          <div class=""
+            data-qa="reconciled-balance">{{ reconciledBalance | dollarAmount }}</div>
+        </li>
+        <li class="summary__item">
+          <div class="summary__label">Expected Balance</div>
+          <div class="summary__amount"
+            data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</div>
+        </li>
+        <li class="summary__item">
+          <div class="summary__label">Difference</div>
+          <div class=""
+            data-qa="balance-difference">{{ balanceDifference | dollarAmount }}</div>
+        </li>
+      </ul>
     </div>
     <ReconcilableTransactionsList :transactions="transactions" />
   </div>
@@ -84,4 +97,38 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/modals.scss';
+
+.summary {
+  border: 1px solid #efefef;
+  padding: 1em;
+  list-style: none;
+  border-radius: 3px;
+}
+
+.summary__item {
+  display: flex;
+}
+
+.summary__label {
+  font-weight: bold;
+  flex: 1;
+}
+
+@media screen and (min-width: 480px) {
+  .summary {
+    display: flex;
+    padding: 0;
+  }
+
+  .summary__item {
+    flex: 1;
+    border-right: 1px solid #efefef;
+    padding: 1em;
+    box-sizing: border-box;
+
+    &:last-of-type {
+      border: 0;
+    }
+  }
+}
 </style>
