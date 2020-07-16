@@ -1,4 +1,5 @@
 const transactionsRepository = require('../repositories/transactions')
+const moment = require('moment')
 
 module.exports = {
   async getTransactionsForAccount (id, inline=false) {
@@ -6,10 +7,19 @@ module.exports = {
 
     if (inline) return transactions
 
-    return transactions.reduce((acc, transaction) => {
+    const groupedTransactions = transactions.reduce((acc, transaction) => {
       if (!acc.hasOwnProperty(transaction.date)) acc[transaction.date] = []
       acc[transaction.date].push(transaction)
       return acc
     }, {})
+
+    return Object.keys(groupedTransactions)
+      .sort((a, b) => {
+        return moment(b).isBefore(a)
+      })
+      .reduce((acc, date) => {
+        acc[date] = groupedTransactions[date]
+        return acc
+      }, {})
   }
 }

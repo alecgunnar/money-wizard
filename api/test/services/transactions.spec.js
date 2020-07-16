@@ -48,6 +48,29 @@ describe('transactions service', () => {
     })
   })
 
+  it('sorts transaction groups by date', async () => {
+    transactionsRepository.getTransactionsForAccount.mockResolvedValueOnce([
+      {
+        date: '2020-06-26',
+        amount: 19.68
+      },
+      {
+        date: '2020-05-28',
+        amount: 10.79
+      },
+      {
+        date: '2020-05-28',
+        amount: 19.94
+      }
+    ])
+
+    const result = await transactionsService.getTransactionsForAccount(51)
+
+    expect(
+      Object.keys(result)
+    ).toEqual(['2020-05-28', '2020-06-26'])
+  })
+
   it('does not group the transactions for the account when inline flag is set', () => {
     transactionsRepository.getTransactionsForAccount.mockResolvedValueOnce([
       {
