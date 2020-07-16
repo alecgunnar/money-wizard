@@ -9,15 +9,24 @@ const localVue = createLocalVue()
 localVue.use(Vuex)
 
 let store
+let reconciledBalance
 let reconcileAccount
 
 describe('Reconcile', () => {
   beforeEach(() => {
+    reconciledBalance = jest.fn()
     reconcileAccount = jest.fn()
+
+    reconciledBalance.mockReturnValueOnce(141)
+
     store = new Vuex.Store({
       modules: {
         reconcile: {
           ...ReconcileModule,
+          getters: {
+            ...ReconcileModule.getters,
+            reconciledBalance
+          },
           actions: {
             ...ReconcileModule.actions,
             reconcileAccount: reconcileAccount
@@ -187,6 +196,9 @@ describe('Reconcile', () => {
   })
 
   it('shows the reconciled balance', async () => {
+    jest.resetAllMocks()
+    reconciledBalance.mockReturnValueOnce(91.41)
+
     store.commit('reconcile/accountLoaded', {
       name: 'Sample Account',
       balance: 4.13
@@ -205,7 +217,7 @@ describe('Reconcile', () => {
     subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 10.99)
     await subject.vm.$nextTick()
 
-    expect(subject.find('[data-qa=reconciled-balance]').text()).toBe('$4.13')
+    expect(subject.find('[data-qa=reconciled-balance]').text()).toBe('$91.41')
   })
 
   it('does not show the reconciled balance before account data is loaded', async () => {
@@ -221,6 +233,9 @@ describe('Reconcile', () => {
   })
 
   it('renders the difference between the expected and the reconciled balances', async () => {
+    jest.resetAllMocks()
+    reconciledBalance.mockReturnValueOnce(4.75)
+
     store.commit('reconcile/accountLoaded', {
       name: 'Sample Account',
       balance: 4.13
@@ -239,7 +254,7 @@ describe('Reconcile', () => {
     subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 10.99)
     await subject.vm.$nextTick()
 
-    expect(subject.find('[data-qa=balance-difference]').text()).toBe('-$6.86')
+    expect(subject.find('[data-qa=balance-difference]').text()).toBe('-$6.24')
   })
 
   it('does not render the difference between the expected and the reconciled balances before an expected balance has been entered', async () => {

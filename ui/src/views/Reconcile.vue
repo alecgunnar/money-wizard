@@ -37,7 +37,7 @@
 import ExpectedBalanceForm from '@/components/forms/ExpectedBalanceForm'
 import ReconcilableTransactionsList from '@/components/lists/ReconcilableTransactionsList'
 import dollarAmount from '@/filters/dollarAmount'
-import {mapActions, mapState} from 'vuex'
+import {mapActions, mapState, mapGetters} from 'vuex'
 
 export default {
   name: 'reconcile',
@@ -55,8 +55,10 @@ export default {
   computed: {
     ...mapState({
       account: (state) => state.reconcile.account,
-      reconciledBalance: (state) => state.reconcile.balance,
       transactions: (state) => state.reconcile.transactions
+    }),
+    ...mapGetters({
+      reconciledBalance: 'reconcile/reconciledBalance'
     }),
     balanceDifference () {
       if (!this.expectedBalance) return 0
