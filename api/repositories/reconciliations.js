@@ -1,6 +1,8 @@
 const db = require('../models')
 
 const fromModel = (model) => {
+  if (!model) return null
+
   return {
     id: model.id,
     balance: model.balance,

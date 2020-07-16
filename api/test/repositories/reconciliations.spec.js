@@ -28,4 +28,12 @@ describe('Reconciliations Repository', () => {
       completed: '2020-07-06'
     })
   })
+
+  it('returns null when no reconciliation exists for an account', async () => {
+    const accountId = await AccountsRepository.createAccount('sample', 'asset')
+
+    return expect(
+      ReconciliationsRepository.getLatestReconciliationForAccount(accountId)
+    ).resolves.toBeNull()
+  })
 })
