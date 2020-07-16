@@ -6,6 +6,23 @@ const state = {
   transactions: null
 }
 
+const getters = {
+  reconciledBalance (state) {
+    return state.transactions
+      .filter(transaction => transaction.posted)
+      .map(transaction => {
+        const {type, amount, account} = transaction
+
+        if (account.type === 'asset') {
+          return type === 'debit' ? -1 * amount : amount
+        }
+
+        return type === 'credit' ? -1 * amount : amount
+      })
+      .reduce((acc, amount) => acc + amount, 0)
+  }
+}
+
 const mutations = {
   accountLoaded (state, account) {
     state.account = account
@@ -54,6 +71,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

@@ -194,10 +194,16 @@ describe('Reconcile Module', () => {
     RootClient.get.mockResolvedValueOnce({
       data: [
         {
+          account: {
+            type: 'asset'
+          },
           type: 'debit',
           amount: 10
         },
         {
+          account: {
+            type: 'asset'
+          },
           type: 'credit',
           amount: 14
         }
@@ -215,13 +221,19 @@ describe('Reconcile Module', () => {
 
     await subject.dispatch('reconcile/loadTransactions', 4521)
 
-    expect(subject.state.reconcile.transactions).toEqual([
+    expect(subject.state.reconcile.transactions).toMatchObject([
       {
+        account: {
+          type: 'asset'
+        },
         type: 'debit',
         amount: 10,
         posted: true
       },
       {
+        account: {
+          type: 'asset'
+        },
         type: 'credit',
         amount: 14,
         posted: true
@@ -234,6 +246,9 @@ describe('Reconcile Module', () => {
       data: [
         {
           id: 422,
+          account: {
+            type: 'asset'
+          },
           type: 'debit',
           amount: 10
         }
@@ -252,11 +267,8 @@ describe('Reconcile Module', () => {
     await subject.dispatch('reconcile/loadTransactions', 4521)
     await subject.dispatch('reconcile/togglePosted', 422)
 
-    expect(subject.state.reconcile.transactions).toEqual([
+    expect(subject.state.reconcile.transactions).toMatchObject([
       {
-        id: 422,
-        type: 'debit',
-        amount: 10,
         posted: false
       }
     ])
@@ -267,6 +279,9 @@ describe('Reconcile Module', () => {
       data: [
         {
           id: 422,
+          account: {
+            type: 'asset'
+          },
           type: 'debit',
           amount: 10
         }
@@ -286,13 +301,145 @@ describe('Reconcile Module', () => {
     await subject.dispatch('reconcile/togglePosted', 422)
     await subject.dispatch('reconcile/togglePosted', 422)
 
-    expect(subject.state.reconcile.transactions).toEqual([
+    expect(subject.state.reconcile.transactions).toMatchObject([
       {
-        id: 422,
-        type: 'debit',
-        amount: 10,
         posted: true
       }
     ])
+  })
+
+  it('calculates the reconciled balance for an asset account', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: 1,
+          account: {
+            type: 'asset'
+          },
+          type: 'debit',
+          amount: 10
+        },
+        {
+          id: 2,
+          account: {
+            type: 'asset'
+          },
+          type: 'credit',
+          amount: 14
+        },
+        {
+          id: 3,
+          account: {
+            type: 'asset'
+          },
+          type: 'credit',
+          amount: 28
+        }
+      ]
+    })
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    await subject.dispatch('reconcile/loadTransactions', 4521)
+    await subject.dispatch('reconcile/togglePosted', 2)
+
+    expect(subject.getters['reconcile/reconciledBalance']).toBe(18)
+  })
+
+  it('calculates the reconciled balance for a credit account', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: 1,
+          account: {
+            type: 'credit'
+          },
+          type: 'debit',
+          amount: 10
+        },
+        {
+          id: 2,
+          account: {
+            type: 'credit'
+          },
+          type: 'credit',
+          amount: 14
+        },
+        {
+          id: 3,
+          account: {
+            type: 'credit'
+          },
+          type: 'credit',
+          amount: 28
+        }
+      ]
+    })
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    await subject.dispatch('reconcile/loadTransactions', 4521)
+    await subject.dispatch('reconcile/togglePosted', 2)
+
+    expect(subject.getters['reconcile/reconciledBalance']).toBe(-18)
+  })
+
+  it('calculates the reconciled balance for a loan account', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: 1,
+          account: {
+            type: 'loan'
+          },
+          type: 'debit',
+          amount: 10
+        },
+        {
+          id: 2,
+          account: {
+            type: 'loan'
+          },
+          type: 'credit',
+          amount: 14
+        },
+        {
+          id: 3,
+          account: {
+            type: 'loan'
+          },
+          type: 'credit',
+          amount: 28
+        }
+      ]
+    })
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    await subject.dispatch('reconcile/loadTransactions', 4521)
+    await subject.dispatch('reconcile/togglePosted', 2)
+
+    expect(subject.getters['reconcile/reconciledBalance']).toBe(-18)
   })
 })
