@@ -7,5 +7,6 @@ require('./getAccount')(router)
 require('./createTransaction')(router)
 require('./getTransactions')(router)
 require('./deleteTransaction')(router)
+require('./reconcileAccount')(router)
 
 module.exports = router
