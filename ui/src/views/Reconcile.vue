@@ -11,7 +11,11 @@
     <div v-if="account !== null">
       <h1>Reconciling an Account</h1>
       <div>Account: <span data-qa="account-name">{{ account.name }}</span></div>
-      <ul class="summary">
+      <a name="summary"
+        ref="anchor"></a>
+      <ul class="summary"
+        :class="{stuck: stickSummary}"
+        ref="summary">
         <li class="summary__item">
           <div class="summary__label">Reconciled Balance</div>
           <div class=""
@@ -44,7 +48,8 @@ export default {
   data () {
     return {
       initialized: false,
-      expectedBalance: null
+      expectedBalance: null,
+      stickSummary: false
     }
   },
   props: {
@@ -68,6 +73,8 @@ export default {
   mounted () {
     this.reconcileAccount(this.id)
       .then(this.initializationComplete)
+
+    window.addEventListener('scroll', this.checkScroll)
   },
   methods: {
     ...mapActions({
@@ -86,7 +93,16 @@ export default {
     },
     initializationComplete () {
       this.initialized = true
+    },
+    checkScroll () {
+      const {anchor} = this.$refs
+      if (!anchor) return
+      const {y} = anchor.getBoundingClientRect()
+      this.stickSummary = y <= 0
     }
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.checkScroll)
   },
   filters: {
     dollarAmount
@@ -125,6 +141,20 @@ h1 {
   .summary {
     display: flex;
     padding: 0;
+
+    &.stuck {
+      background-color: #fff;
+      margin: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-top: 0;
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+      box-shadow: 10px 10px 10px #efefef;
+    }
   }
 
   .summary__item {

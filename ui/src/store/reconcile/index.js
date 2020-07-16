@@ -8,6 +8,7 @@ const state = {
 
 const getters = {
   reconciledBalance (state) {
+    if (!state.transaction) return 0
     return +state.transactions
       .filter(transaction => transaction.posted)
       .map(transaction => {
