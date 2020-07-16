@@ -232,10 +232,15 @@ describe('Transactions Repository', () => {
       ''
     )
 
-    return expect(transactionsRepo.getTransactionsForAccount(accountId)).resolves.toMatchObject([
+    const results = transactionsRepo.getTransactionsForAccount(accountId)
+
+    return expect(results).resolves.toMatchObject([
       {
         id: firstTransactionId,
-        accountId: accountId,
+        accountId,
+        account: {
+          type: 'asset'
+        },
         type: 'debit',
         amount: 10.57,
         date: '2020-06-18',
@@ -244,7 +249,10 @@ describe('Transactions Repository', () => {
       },
       {
         id: secondTransactionid,
-        accountId: accountId,
+        accountId,
+        account: {
+          type: 'asset'
+        },
         type: 'debit',
         amount: 44.02,
         date: '2020-06-18',
