@@ -55,7 +55,7 @@ describe('transactions service', () => {
         amount: 19.68
       },
       {
-        date: '2020-05-28',
+        date: '1994-05-28',
         amount: 10.79
       },
       {
@@ -68,7 +68,7 @@ describe('transactions service', () => {
 
     expect(
       Object.keys(result)
-    ).toEqual(['2020-05-28', '2020-06-26'])
+    ).toEqual(['2020-06-26', '2020-05-28', '1994-05-28'])
   })
 
   it('does not group the transactions for the account when inline flag is set', () => {

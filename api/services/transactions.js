@@ -15,7 +15,7 @@ module.exports = {
 
     return Object.keys(groupedTransactions)
       .sort((a, b) => {
-        return moment(b).isBefore(a)
+        return moment(a).isBefore(b)
       })
       .reduce((acc, date) => {
         acc[date] = groupedTransactions[date]
