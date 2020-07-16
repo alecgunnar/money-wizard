@@ -11,11 +11,13 @@ localVue.use(Vuex)
 let store
 let reconciledBalance
 let reconcileAccount
+let completeReconciliation
 
 describe('Reconcile', () => {
   beforeEach(() => {
     reconciledBalance = jest.fn()
     reconcileAccount = jest.fn()
+    completeReconciliation = jest.fn()
 
     reconciledBalance.mockReturnValueOnce(141)
 
@@ -29,7 +31,8 @@ describe('Reconcile', () => {
           },
           actions: {
             ...ReconcileModule.actions,
-            reconcileAccount: reconcileAccount
+            reconcileAccount,
+            completeReconciliation
           }
         }
       }
@@ -319,5 +322,126 @@ describe('Reconcile', () => {
         amount: 456
       })
     ])
+  })
+
+  it('once the balance difference is zero a submit button appears', async () => {
+    jest.resetAllMocks()
+    reconciledBalance.mockReturnValueOnce(4.13)
+
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 4.13)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=submit-reconciliation]').exists()).toBeTruthy()
+  })
+
+  it('the submit button does not appear if the balances are not the same', async () => {
+    jest.resetAllMocks()
+    reconciledBalance.mockReturnValueOnce(4.75)
+
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 14.21)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=submit-reconciliation]').exists()).toBeFalsy()
+  })
+
+  it('the action is triggered when the reconciliation is submitted', async () => {
+    jest.resetAllMocks()
+    reconciledBalance.mockReturnValueOnce(4.13)
+
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 4.13)
+    await subject.vm.$nextTick()
+
+    completeReconciliation.mockRejectedValueOnce()
+
+    subject.find('[data-qa=submit-reconciliation]').trigger('click')
+
+    expect(completeReconciliation).toBeCalled()
+  })
+
+  it('the user is redirected when the reconciliation is complete', async () => {
+    jest.resetAllMocks()
+    reconciledBalance.mockReturnValueOnce(4.13)
+
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
+    const push = jest.fn()
+
+    const subject = shallowMount(Reconcile, {
+      store,
+      localVue,
+      propsData: {
+        id: 1234
+      },
+      mocks: {
+        $router: {
+          push
+        }
+      }
+    })
+
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+    subject.findComponent(ExpectedBalanceForm).vm.$emit('submitted', 4.13)
+    await subject.vm.$nextTick()
+
+    completeReconciliation.mockResolvedValueOnce()
+
+    subject.find('[data-qa=submit-reconciliation]').trigger('click')
+    await subject.vm.$nextTick()
+
+    expect(push).toBeCalledWith({
+      name: 'account',
+      params: {
+        id: 1234
+      }
+    })
   })
 })

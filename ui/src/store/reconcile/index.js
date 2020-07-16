@@ -66,6 +66,9 @@ const actions = {
   },
   togglePosted ({commit}, id) {
     commit('togglePosted', id)
+  },
+  completeReconciliation () {
+    return Promise.resolve()
   }
 }
 

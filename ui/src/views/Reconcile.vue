@@ -9,8 +9,17 @@
       </div>
     </div>
     <div v-if="account !== null">
-      <h1>Reconciling an Account</h1>
-      <div>Account: <span data-qa="account-name">{{ account.name }}</span></div>
+      <div class="header">
+        <div class="header__title">
+          <h1>Reconciling an Account</h1>
+          <div>Account: <span data-qa="account-name">{{ account.name }}</span></div>
+        </div>
+        <div class="header__submit">
+          <button v-if="balanceDifference === 0"
+            @click="submit"
+            data-qa="submit-reconciliation">Complete</button>
+        </div>
+      </div>
       <div class="anchor"
         :class="{fill: stickSummary}"
         ref="anchor">&nbsp;</div>
@@ -78,7 +87,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      reconcileAccount: 'reconcile/reconcileAccount'
+      reconcileAccount: 'reconcile/reconcileAccount',
+      completeReconciliation: 'reconcile/completeReconciliation'
     }),
     balanceExpected (balance) {
       this.expectedBalance = balance
@@ -99,6 +109,19 @@ export default {
       if (!anchor) return
       const {y} = anchor.getBoundingClientRect()
       this.stickSummary = y <= 0
+    },
+    submit () {
+      this.completeReconciliation()
+        .then(this.submitComplete)
+        .catch(() => {})
+    },
+    submitComplete () {
+      this.$router.push({
+        name: 'account',
+        params: {
+          id: this.id
+        }
+      })
     }
   },
   beforeDestroy () {
@@ -121,6 +144,17 @@ h1 {
   margin: 0;
 }
 
+.header,
+.header__title,
+.summary {
+  margin: 0 0 1em;
+}
+
+.header__submit button {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
 .summary {
   border: 1px solid #efefef;
   padding: 1em;
@@ -138,6 +172,15 @@ h1 {
 }
 
 @media screen and (min-width: 480px) {
+  .header {
+    display: flex;
+  }
+
+  .header__title {
+    margin: 0;
+    flex: 1;
+  }
+
   .summary {
     display: flex;
     padding: 0;
