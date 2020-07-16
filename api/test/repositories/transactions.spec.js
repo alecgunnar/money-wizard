@@ -1,6 +1,7 @@
 const db = require('../../models')
 const accountsRepo = require('../../repositories/accounts')
 const transactionsRepo = require('../../repositories/transactions')
+const reconciliationsRepo = require('../../repositories/reconciliations')
 
 describe('Transactions Repository', () => {
   beforeEach(() => {
@@ -45,7 +46,8 @@ describe('Transactions Repository', () => {
       amount: 10.57,
       date: '2020-06-18',
       reason: 'sample',
-      notes: 'some notes'
+      notes: 'some notes',
+      reconciled: false
     })
   })
 
@@ -307,5 +309,28 @@ describe('Transactions Repository', () => {
 
   it('deletes transaction even if it does not exist', () => {
     expect(transactionsRepo.deleteTransaction('1234')).resolves.toBeUndefined()
+  })
+
+  it('updates the reconciliation', async () => {
+    const accountId = await accountsRepo.createAccount('Sample', 'asset')
+
+    const transactionId = await transactionsRepo.createTransaction(
+      accountId,
+      'debit',
+      10.57,
+      '2020-06-18',
+      'sample',
+      'some notes'
+    )
+
+    const reconciliationId = await reconciliationsRepo.createReconciliation(accountId, 10.11, '2020-05-28')
+
+    return expect(
+      transactionsRepo.updateReconciliation(transactionId, reconciliationId)
+        .then(() => transactionsRepo.getTransaction(transactionId))
+    ).resolves.toMatchObject({
+      id: transactionId,
+      reconciled: true
+    })
   })
 })

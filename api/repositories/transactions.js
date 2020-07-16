@@ -13,7 +13,8 @@ const fromModel = (transactionModel) => ({
   date: transactionModel.date,
   reason: transactionModel.reason,
   notes: transactionModel.notes,
-  account: fromAccountModel(transactionModel.Account)
+  account: fromAccountModel(transactionModel.Account),
+  reconciled: !!transactionModel.ReconciliationId
 })
 
 module.exports = {
@@ -72,5 +73,13 @@ module.exports = {
       .then((transaction) => {
         if (transaction) transaction.destroy()
       })
+  },
+  updateReconciliation (id, ReconciliationId) {
+    return db['Transaction'].update(
+      {ReconciliationId},
+      {
+        where: {id}
+      }
+    )
   }
 }
