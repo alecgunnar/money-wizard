@@ -42,6 +42,15 @@ describe('Balances Service', () => {
     expect(BalancesService.calculateBalanceForAccount(account)).resolves.toBe(-2)
   })
 
+  it('resolves with the balance for a loan account', () => {
+    const account = {
+      id: 1241,
+      type: 'loan'
+    }
+    TransactionsRepository.getTransactionsForAccount.mockResolvedValueOnce(transactions)
+    expect(BalancesService.calculateBalanceForAccount(account)).resolves.toBe(-2)
+  })
+
   it('resolves when the respository fails', () => {
     const account = {
       id: 1241,
