@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Transaction.associate = function(models) {
     Transaction.belongsTo(models.Account)
+    Transaction.belongsTo(models.Reconciliation)
   };
   return Transaction;
 };
