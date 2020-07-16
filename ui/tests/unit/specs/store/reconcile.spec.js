@@ -228,4 +228,71 @@ describe('Reconcile Module', () => {
       }
     ])
   })
+
+  it('toggles the posted state of the transaction from posted to not posted', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: 422,
+          type: 'debit',
+          amount: 10
+        }
+      ]
+    })
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    await subject.dispatch('reconcile/loadTransactions', 4521)
+    await subject.dispatch('reconcile/togglePosted', 422)
+
+    expect(subject.state.reconcile.transactions).toEqual([
+      {
+        id: 422,
+        type: 'debit',
+        amount: 10,
+        posted: false
+      }
+    ])
+  })
+
+  it('toggles the posted state of the transaction from not posted to posted', async () => {
+    RootClient.get.mockResolvedValueOnce({
+      data: [
+        {
+          id: 422,
+          type: 'debit',
+          amount: 10
+        }
+      ]
+    })
+
+    const subject = new Vuex.Store({
+      mutations: {
+        encounteredServerError: jest.fn()
+      },
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    await subject.dispatch('reconcile/loadTransactions', 4521)
+    await subject.dispatch('reconcile/togglePosted', 422)
+    await subject.dispatch('reconcile/togglePosted', 422)
+
+    expect(subject.state.reconcile.transactions).toEqual([
+      {
+        id: 422,
+        type: 'debit',
+        amount: 10,
+        posted: true
+      }
+    ])
+  })
 })

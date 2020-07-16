@@ -21,6 +21,10 @@ const mutations = {
     state.account = null
     state.balance = null
     state.transactions = null
+  },
+  togglePosted (state, id) {
+    const transaction = state.transactions.find(transaction => transaction.id === id)
+    transaction.posted = !transaction.posted
   }
 }
 
@@ -41,6 +45,9 @@ const actions = {
       .then(resp => resp.data)
       .then(data => commit('transactionsLoaded', data))
       .catch(() => null)
+  },
+  togglePosted ({commit}, id) {
+    commit('togglePosted', id)
   }
 }
 

@@ -4,7 +4,9 @@
       <div data-qa="amount">{{ signedAmount | dollarAmount }}</div>
       <div data-qa="reason">{{ transaction.reason }}</div>
     </div>
-    <div class="transaction__postedIndicator">
+    <div class="transaction__postedIndicator"
+      data-qa="posted-indicator"
+      @click="toggle">
       <div class="indicator"></div>
     </div>
   </div>
@@ -12,6 +14,7 @@
 
 <script>
 import dollarAmount from '@/filters/dollarAmount'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'reconcilable-transaction-row',
@@ -29,6 +32,14 @@ export default {
       ) return this.transaction.amount * -1
 
       return this.transaction.amount
+    }
+  },
+  methods: {
+    ...mapActions({
+      togglePosted: 'reconcile/togglePosted'
+    }),
+    toggle () {
+      this.togglePosted(this.transaction.id)
     }
   },
   filters: {
@@ -56,6 +67,7 @@ export default {
   border-radius: 15px;
   box-sizing: border-box;
   padding: 2px;
+  cursor: pointer;
 
   .indicator {
     width: 22px;
