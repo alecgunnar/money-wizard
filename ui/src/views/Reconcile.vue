@@ -11,8 +11,7 @@
     <div v-if="account !== null">
       <h1>Reconciling an Account</h1>
       <div>Account: <span data-qa="account-name">{{ account.name }}</span></div>
-      <ul v-if="expectedBalance !== null"
-        class="summary">
+      <ul class="summary">
         <li class="summary__item">
           <div class="summary__label">Reconciled Balance</div>
           <div class=""
@@ -21,7 +20,7 @@
         <li class="summary__item">
           <div class="summary__label">Expected Balance</div>
           <div class="summary__amount"
-            data-qa="expected-balance">{{ expectedBalance | dollarAmount }}</div>
+            data-qa="expected-balance">{{ (expectedBalance || 0) | dollarAmount }}</div>
         </li>
         <li class="summary__item">
           <div class="summary__label">Difference</div>
@@ -60,6 +59,7 @@ export default {
       transactions: (state) => state.reconcile.transactions
     }),
     balanceDifference () {
+      if (!this.expectedBalance) return 0
       return this.reconciledBalance - this.expectedBalance
     }
   },

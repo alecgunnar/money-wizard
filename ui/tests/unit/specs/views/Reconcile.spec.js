@@ -27,6 +27,10 @@ describe('Reconcile', () => {
     })
   })
 
+  afterEach(() => {
+    store.commit('reconcile/reset')
+  })
+
   it('initializes the reconciliation', () => {
     shallowMount(Reconcile, {
       store,
@@ -129,6 +133,11 @@ describe('Reconcile', () => {
   })
 
   it('does not render an expected balance before one is entered', async () => {
+    store.commit('reconcile/accountLoaded', {
+      name: 'Sample Account',
+      balance: 4.13
+    })
+
     const subject = shallowMount(Reconcile, {
       store,
       localVue,
@@ -137,7 +146,10 @@ describe('Reconcile', () => {
       }
     })
 
-    expect(subject.find('[data-qa=expected-balance]').exists()).toBeFalsy()
+    reconcileAccount.mockResolvedValueOnce(true)
+    await subject.vm.$nextTick()
+
+    expect(subject.find('[data-qa=expected-balance]').text()).toBe('$0.00')
   })
 
   it('renders the account name', async () => {
@@ -196,12 +208,7 @@ describe('Reconcile', () => {
     expect(subject.find('[data-qa=reconciled-balance]').text()).toBe('$4.13')
   })
 
-  it('does not show the reconciled balance before an expected balance is entered', async () => {
-    store.commit('reconcile/accountLoaded', {
-      name: 'Sample Account',
-      balance: 4.13
-    })
-
+  it('does not show the reconciled balance before account data is loaded', async () => {
     const subject = shallowMount(Reconcile, {
       store,
       localVue,
@@ -209,9 +216,6 @@ describe('Reconcile', () => {
         id: 1234
       }
     })
-
-    reconcileAccount.mockResolvedValueOnce(true)
-    await subject.vm.$nextTick()
 
     expect(subject.find('[data-qa=reconciled-balance]').exists()).toBeFalsy()
   })
@@ -255,7 +259,7 @@ describe('Reconcile', () => {
     reconcileAccount.mockResolvedValueOnce(true)
     await subject.vm.$nextTick()
 
-    expect(subject.find('[data-qa=balance-difference]').exists()).toBeFalsy()
+    expect(subject.find('[data-qa=balance-difference]').text()).toBe('$0.00')
   })
 
   it('has a transactions list', () => {
