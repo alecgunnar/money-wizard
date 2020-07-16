@@ -4,5 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     balance: DataTypes.FLOAT,
     completed: DataTypes.DATEONLY
   }, {});
+  Reconciliation.associate = function(models) {
+    Reconciliation.belongsTo(models.Account)
+  };
   return Reconciliation;
 };
