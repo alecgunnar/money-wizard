@@ -486,4 +486,119 @@ describe('Reconcile Module', () => {
 
     expect(subject.getters['reconcile/reconciledBalance']).toBe(-32.16)
   })
+
+  it('makes a request to complete the reconciliation', async () => {
+    RootClient.post.mockResolvedValueOnce()
+
+    const subject = new Vuex.Store({
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    subject.commit('reconcile/accountLoaded', {
+      id: 1234
+    })
+
+    subject.commit('reconcile/transactionsLoaded', [
+      {
+        id: 1,
+        account: {
+          type: 'asset'
+        },
+        type: 'credit',
+        amount: 10
+      },
+      {
+        id: 2,
+        account: {
+          type: 'asset'
+        },
+        type: 'credit',
+        amount: 14
+      }
+    ])
+
+    await subject.dispatch('reconcile/togglePosted', 2)
+
+    subject.dispatch('reconcile/completeReconciliation')
+    expect(RootClient.post).toBeCalledWith('/accounts/1234/reconcile', {
+      balance: 10,
+      transactions: [1]
+    })
+  })
+
+  it('resolves when the reconciliation request resolves', async () => {
+    RootClient.post.mockResolvedValueOnce()
+
+    const subject = new Vuex.Store({
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    subject.commit('reconcile/accountLoaded', {
+      id: 1234
+    })
+
+    subject.commit('reconcile/transactionsLoaded', [
+      {
+        id: 1,
+        account: {
+          type: 'asset'
+        },
+        type: 'credit',
+        amount: 10
+      },
+      {
+        id: 2,
+        account: {
+          type: 'asset'
+        },
+        type: 'credit',
+        amount: 14
+      }
+    ])
+
+    return expect(
+      subject.dispatch('reconcile/completeReconciliation')
+    ).resolves.toBeUndefined()
+  })
+
+  it('rejects when the reconciliation request fails', async () => {
+    RootClient.post.mockRejectedValueOnce()
+
+    const subject = new Vuex.Store({
+      modules: {
+        reconcile: ReconcileModule
+      }
+    })
+
+    subject.commit('reconcile/accountLoaded', {
+      id: 1234
+    })
+
+    subject.commit('reconcile/transactionsLoaded', [
+      {
+        id: 1,
+        account: {
+          type: 'asset'
+        },
+        type: 'credit',
+        amount: 10
+      },
+      {
+        id: 2,
+        account: {
+          type: 'asset'
+        },
+        type: 'credit',
+        amount: 14
+      }
+    ])
+
+    return expect(
+      subject.dispatch('reconcile/completeReconciliation')
+    ).rejects.toBeUndefined()
+  })
 })

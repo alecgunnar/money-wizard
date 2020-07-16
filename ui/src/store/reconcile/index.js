@@ -67,8 +67,11 @@ const actions = {
   togglePosted ({commit}, id) {
     commit('togglePosted', id)
   },
-  completeReconciliation () {
-    return Promise.resolve()
+  completeReconciliation ({state, getters}) {
+    return RootClient.post(`/accounts/${state.account.id}/reconcile`, {
+      balance: getters.reconciledBalance,
+      transactions: state.transactions.filter(transaction => transaction.posted).map(transaction => transaction.id)
+    })
   }
 }
 
