@@ -9,7 +9,8 @@
       </div>
     </div>
     <div v-if="account !== null">
-      <h1>Reconciling <span data-qa="account-name">{{ account.name }}</span></h1>
+      <h1>Reconciling an Account</h1>
+      <div>Account: <span data-qa="account-name">{{ account.name }}</span></div>
       <ul v-if="expectedBalance !== null"
         class="summary">
         <li class="summary__item">
@@ -97,6 +98,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '../assets/modals.scss';
+
+h1 {
+  margin: 0;
+}
 
 .summary {
   border: 1px solid #efefef;
