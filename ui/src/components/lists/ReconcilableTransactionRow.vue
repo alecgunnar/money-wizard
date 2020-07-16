@@ -55,6 +55,11 @@ export default {
   box-sizing: border-box;
   display: flex;
   align-items: center;
+
+  &:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
 }
 
 .transaction__data {
