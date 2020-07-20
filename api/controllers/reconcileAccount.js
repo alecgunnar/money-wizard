@@ -4,13 +4,7 @@ const ReconciliationService = require('../services/reconciliation')
 
 module.exports = (router) => {
   router.post('/accounts/:id/reconcile', async (req, res) => {
-    const {balance, transactions} = req.body;
-
-    if (!balance) {
-      return res.status(400).json({
-        msg: 'A balance must be provided.'
-      })
-    }
+    const {transactions} = req.body;
 
     if (!transactions) {
       return res.status(400).json({
@@ -45,7 +39,7 @@ module.exports = (router) => {
       loadedTransactions.push(transaction)
     }
 
-    ReconciliationService.reconcileAccount(account, balance, loadedTransactions)
+    ReconciliationService.reconcileAccount(account, loadedTransactions)
       .then(() => res.sendStatus(201))
       .catch(() => res.sendStatus(500))
   })

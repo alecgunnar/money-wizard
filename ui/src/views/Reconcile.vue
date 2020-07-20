@@ -42,7 +42,7 @@
         </li>
       </ul>
     </div>
-    <div v-if="account.reconciledBalance !== 0"
+    <div v-if="!!account && account.reconciledBalance !== 0"
       class="carryoverBalance">
       <div class="carryoverBalance__label">Carryover Balance</div>
       <div class="carryoverBalance__amount">{{ account.reconciledBalance | dollarAmount }}</div>
@@ -81,7 +81,7 @@ export default {
     }),
     balanceDifference () {
       if (!this.expectedBalance) return 0
-      return this.reconciledBalance - this.expectedBalance
+      return this.reconciledBalance.toFixed(2) - this.expectedBalance.toFixed(2)
     }
   },
   mounted () {

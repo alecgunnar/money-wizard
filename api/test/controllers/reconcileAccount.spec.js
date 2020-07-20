@@ -57,23 +57,6 @@ describe('Reconcile Account Controller', () => {
     })
   })
 
-  it('responds with bad request if a balance is not provided', () => {
-    expect.assertions(1)
-
-    return expect(
-      chai.request(app)
-        .post('/accounts/123/reconcile')
-        .send({
-          transactions: [2]
-        })
-    ).resolves.toMatchObject({
-      status: 400,
-      body: {
-        msg: 'A balance must be provided.'
-      }
-    })
-  })
-
   it('responds with bad request if transactions are not provided', () => {
     expect.assertions(1)
 
@@ -178,11 +161,10 @@ describe('Reconcile Account Controller', () => {
     return chai.request(app)
       .post('/accounts/123/reconcile')
       .send({
-        balance: 10,
         transactions: [23]
       })
       .then(() => {
-        expect(ReconciliationService.reconcileAccount).toBeCalledWith(account, 10, [transaction])
+        expect(ReconciliationService.reconcileAccount).toBeCalledWith(account, [transaction])
       })
   })
 

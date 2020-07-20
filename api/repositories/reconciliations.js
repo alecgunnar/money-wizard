@@ -30,7 +30,7 @@ module.exports = {
         AccountId
       },
       order: [
-        ['completed', 'DESC']
+        ['id', 'DESC']
       ]
     }).then(results => fromModel(results[0]))
   }

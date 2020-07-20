@@ -17,8 +17,8 @@ describe('Reconciliations Repository', () => {
   it('retrieves the most recent reconciliation for an account', async () => {
     const accountId = await AccountsRepository.createAccount('sample', 'asset')
 
-    const mostRecent = await ReconciliationsRepository.createReconciliation(accountId, 34.11, '2020-07-06')
     await ReconciliationsRepository.createReconciliation(accountId, 54.13, '2020-07-05')
+    const mostRecent = await ReconciliationsRepository.createReconciliation(accountId, 34.11, '2020-07-06')
 
     return expect(
       ReconciliationsRepository.getLatestReconciliationForAccount(accountId)

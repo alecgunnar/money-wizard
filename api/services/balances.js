@@ -17,6 +17,6 @@ module.exports = {
   },
   async getReconciledBalance ({id}) {
     const latestReconciliation = await ReconciliationsRepository.getLatestReconciliationForAccount(id)
-    return latestReconciliation.balance
+    return !!latestReconciliation ? latestReconciliation.balance : 0
   }
 }

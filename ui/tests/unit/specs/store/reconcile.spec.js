@@ -347,6 +347,11 @@ describe('Reconcile Module', () => {
       }
     })
 
+    subject.commit('reconcile/accountLoaded', {
+      id: 1234,
+      reconciledBalance: 0
+    })
+
     await subject.dispatch('reconcile/loadTransactions', 4521)
     await subject.dispatch('reconcile/togglePosted', 2)
 
@@ -523,7 +528,6 @@ describe('Reconcile Module', () => {
 
     subject.dispatch('reconcile/completeReconciliation')
     expect(RootClient.post).toBeCalledWith('/accounts/1234/reconcile', {
-      balance: 10,
       transactions: [1]
     })
   })
