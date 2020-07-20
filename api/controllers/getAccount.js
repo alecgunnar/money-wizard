@@ -3,9 +3,11 @@ const BalanceService = require('../services/balances')
 
 const addBalanceToAccount = async (account) => {
   const balance = await BalanceService.calculateBalanceForAccount(account)
+  const reconciledBalance = await BalanceService.getReconciledBalance(account)
   return {
     ...account,
-    balance
+    balance,
+    reconciledBalance
   }
 }
 

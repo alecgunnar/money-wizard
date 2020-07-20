@@ -14,5 +14,9 @@ module.exports = {
     } catch (e) {
       return null
     }
+  },
+  async getReconciledBalance ({id}) {
+    const latestReconciliation = await ReconciliationsRepository.getLatestReconciliationForAccount(id)
+    return latestReconciliation.balance
   }
 }

@@ -9,7 +9,7 @@ const state = {
 const getters = {
   reconciledBalance (state) {
     if (!state.transactions) return 0
-    return +state.transactions
+    return state.account.reconciledBalance + +state.transactions
       .filter(transaction => transaction.posted)
       .map(transaction => {
         const {type, amount, account} = transaction

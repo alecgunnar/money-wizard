@@ -42,6 +42,11 @@
         </li>
       </ul>
     </div>
+    <div v-if="account.reconciledBalance !== 0"
+      class="carryoverBalance">
+      <div class="carryoverBalance__label">Carryover Balance</div>
+      <div class="carryoverBalance__amount">{{ account.reconciledBalance | dollarAmount }}</div>
+    </div>
     <ReconcilableTransactionsList :transactions="transactions" />
   </div>
 </template>
@@ -155,7 +160,8 @@ h1 {
   color: #fff;
 }
 
-.summary {
+.summary,
+.carryoverBalance {
   border: 1px solid #efefef;
   padding: 1em;
   list-style: none;
@@ -167,6 +173,16 @@ h1 {
 }
 
 .summary__label {
+  font-weight: bold;
+  flex: 1;
+}
+
+.carryoverBalance {
+  margin: 0 0 1em;
+  display: flex;
+}
+
+.carryoverBalance__label {
   font-weight: bold;
   flex: 1;
 }
