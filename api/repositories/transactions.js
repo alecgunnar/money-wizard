@@ -61,6 +61,7 @@ module.exports = {
     return db['Transaction'].findAll({
       include: [db['Account']],
       order: [
+        ['date', 'DESC'],
         ['id', 'DESC']
       ],
       where: {
