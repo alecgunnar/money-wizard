@@ -36,27 +36,6 @@ module.exports = {
     return db['Transaction'].findAll()
       .then((transactions) => transactions.map(fromModel))
   },
-  getGroupedTransactions (AccountId=null) {
-    const query = {
-      order: [
-        ['date', 'DESC'],
-        ['id', 'DESC']
-      ],
-      include: [db['Account']]
-    }
-
-    if (AccountId) {
-      query.where = {
-        AccountId
-      }
-    }
-
-    return db['Transaction'].findAll(query).then((transactions) => transactions.reduce((acc, transaction) => {
-      if (typeof acc[transaction.date] === 'undefined') acc[transaction.date] = []
-      acc[transaction.date].push(fromModel(transaction))
-      return acc
-    }, {}))
-  },
   getTransactionsForAccount (AccountId) {
     return db['Transaction'].findAll({
       include: [db['Account']],
